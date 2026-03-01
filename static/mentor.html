@@ -263,6 +263,50 @@ img{display:block;object-fit:cover}
   .content{margin-left:220px;flex:1}
   .ni-badge{right:auto;left:32px;top:8px}
 }
+
+/* ─── CHIP ─── */
+.chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;background:var(--s2);border:1.5px solid var(--border);color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit}
+.chip.active{background:var(--gold-d);border-color:var(--gold);color:var(--gold)}
+.chip:hover:not(.active){border-color:var(--border2);color:var(--text)}
+.btn-act{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:10px;background:var(--gold);color:#040810;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:opacity .15s;font-family:inherit}
+.btn-act:hover{opacity:.88}
+
+/* ─── NEWS CARDS ─── */
+.m-news-card{background:var(--s1);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:14px;cursor:pointer;transition:border-color .2s}
+.m-news-card:hover{border-color:var(--border2)}
+.m-news-card.p-critical{border-left:3px solid var(--red)}
+.m-news-card.p-high{border-left:3px solid var(--gold)}
+.mnc-img{width:100%;height:150px;object-fit:cover;display:block}
+.mnc-body{padding:14px 16px 16px}
+.mnc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.mnc-title{font-size:15px;font-weight:700;margin-bottom:6px;line-height:1.4}
+.mnc-desc{font-size:13px;color:var(--text2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.mnc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.mnc-link{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:8px;background:var(--gold-d);color:var(--gold);font-size:12px;font-weight:600;cursor:pointer}
+
+/* ─── VIDEO GRID ─── */
+.mentor-video-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mv-card{background:var(--s1);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
+.mv-card:hover{border-color:var(--border2)}
+.mv-thumb{width:100%;aspect-ratio:16/9;background:var(--s2);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.mv-thumb img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.mv-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3)}
+.mv-play{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center}
+.mv-body{padding:10px}
+.mv-title{font-size:12px;font-weight:600;line-height:1.4;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mv-meta{display:flex;align-items:center;justify-content:space-between}
+.mv-stats{font-size:10px;color:var(--text2)}
+
+/* ─── NOTIF ─── */
+.mnotif-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.mnotif-item.read{opacity:.6}
+.mni-icon{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px}
+.mni-body{flex:1;min-width:0}
+.mni-title{font-size:14px;font-weight:600;margin-bottom:3px}
+.mni-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.mni-time{font-size:11px;color:var(--text3);margin-top:3px}
+.mni-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:7px}
+@media(min-width:768px){.mentor-video-grid{grid-template-columns:1fr 1fr 1fr}}
 </style>
 </head>
 <body>
@@ -547,29 +591,88 @@ img{display:block;object-fit:cover}
     <div class="gap"></div>
   </div>
 
+  <!-- ══ YANGILIKLAR ══ -->
+  <div class="page" id="pg-news">
+    <div style="padding:20px 18px 8px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--text2);margin-bottom:4px">YANGILIKLAR</div>
+      <div style="font-size:22px;font-weight:800">Platforma yangiliklari</div>
+    </div>
+    <div style="padding:0 18px 8px;display:flex;gap:8px;flex-wrap:wrap" id="mentorNewsFilterBar">
+      <button class="chip active" onclick="filterMentorNews('all',this)">Hammasi</button>
+      <button class="chip" onclick="filterMentorNews('urgent',this)">⚠️ Muhim</button>
+      <button class="chip" onclick="filterMentorNews('event',this)">📅 Tadbir</button>
+      <button class="chip" onclick="filterMentorNews('update',this)">🔄 Yangilanish</button>
+    </div>
+    <div id="mentorNewsList" style="padding:0 18px 90px"></div>
+  </div>
+
+  <!-- ══ VIDEOLAR ══ -->
+  <div class="page" id="pg-videos">
+    <div style="padding:20px 18px 8px;display:flex;align-items:flex-start;justify-content:space-between">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--text2);margin-bottom:4px">VIDEO MATERIALLAR</div>
+        <div style="font-size:22px;font-weight:800">Mening videolarim</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:2px">Bepul va premium videolar joylash</div>
+      </div>
+      <button class="btn-act" onclick="openModal('videoModal')" style="margin-top:4px;flex-shrink:0">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        Video qo'shish
+      </button>
+    </div>
+    <div style="padding:0 18px 8px;display:flex;gap:8px;flex-wrap:wrap" id="mentorVideoFilterBar">
+      <button class="chip active" onclick="filterMentorVideos('all',this)">Hammasi</button>
+      <button class="chip" onclick="filterMentorVideos('free',this)">✓ Bepul</button>
+      <button class="chip" onclick="filterMentorVideos('premium',this)">⭐ Premium</button>
+    </div>
+    <div class="mentor-video-grid" id="mentorVideoList" style="padding:0 18px 90px"></div>
+  </div>
+
+  <!-- ══ BILDIRISHNOMALAR ══ -->
+  <div class="page" id="pg-notif">
+    <div style="padding:20px 18px 8px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--text2);margin-bottom:4px">BILDIRISHNOMALAR</div>
+      <div style="font-size:22px;font-weight:800">Xabarlar</div>
+    </div>
+    <div id="mentorNotifList" style="padding:0 18px 90px"></div>
+  </div>
+
 </div><!-- /content -->
 
 <!-- BOTTOM NAV -->
 <nav class="nav">
   <button class="ni active" id="ni-home" onclick="showPage('home')">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="9,22 9,12 15,12 15,22" stroke="currentColor" stroke-width="2"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="9,22 9,12 15,12 15,22" stroke="currentColor" stroke-width="2"/></svg>
     <span class="ni-label">Bosh sahifa</span>
   </button>
   <button class="ni" id="ni-sessions" onclick="showPage('sessions')">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     <span class="ni-label">Sessiyalar</span>
     <span class="ni-badge" id="sessionBadge">0</span>
   </button>
-  <button class="ni" id="ni-certs" onclick="showPage('certs')">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2"/><polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2"/></svg>
-    <span class="ni-label">Hujjatlar</span>
+  <button class="ni" id="ni-videos" onclick="showPage('videos')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polygon points="23,7 16,12 23,17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2"/></svg>
+    <span class="ni-label">Videolar</span>
+  </button>
+  <button class="ni" id="ni-news" onclick="showPage('news')">
+    <div style="position:relative;display:inline-flex">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2"/><path d="M17 20v-8H7v8M7 8h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span id="mNewsBadge" style="display:none;position:absolute;top:-3px;right:-5px;width:8px;height:8px;background:#FF4D6A;border-radius:50%;border:2px solid var(--bg)"></span>
+    </div>
+    <span class="ni-label">Yangiliklar</span>
+  </button>
+  <button class="ni" id="ni-notif" onclick="showPage('notif')">
+    <div style="position:relative;display:inline-flex">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span id="mNotifBadge" style="display:none;position:absolute;top:-3px;right:-5px;min-width:8px;height:8px;background:#FF4D6A;border-radius:50%;border:2px solid var(--bg)"></span>
+    </div>
+    <span class="ni-label">Xabarlar</span>
   </button>
   <button class="ni" id="ni-earnings" onclick="showPage('earnings')">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     <span class="ni-label">Daromad</span>
   </button>
   <button class="ni" id="ni-profile" onclick="showPage('profile')">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>
     <span class="ni-label">Profil</span>
   </button>
 </nav>
@@ -577,6 +680,54 @@ img{display:block;object-fit:cover}
 </div><!-- /shell -->
 
 <!-- ════ MODALS ════ -->
+
+<!-- VIDEO UPLOAD MODAL -->
+<div class="modal" id="videoModal" onclick="if(event.target===this)closeModal('videoModal')">
+  <div class="modal-sheet" style="max-height:90vh;overflow-y:auto">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Video qo'shish</div>
+    <div class="modal-sub">Abituriyentlar va premium foydalanuvchilar uchun kontent</div>
+    <!-- Access type -->
+    <div style="margin:12px 0 16px">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-weight:500">Ko'rish huquqi</div>
+      <div style="display:flex;gap:8px">
+        <div class="target-chip active" id="mvAccFree" onclick="setMvAccess('free',this)" style="flex:1;justify-content:center">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>
+          ✓ Bepul (hammaga)
+        </div>
+        <div class="target-chip" id="mvAccPrem" onclick="setMvAccess('premium',this)" style="flex:1;justify-content:center">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          ⭐ Premium (obuna kerak)
+        </div>
+      </div>
+    </div>
+    <div class="ef-field">
+      <label class="ef-label">Video sarlavhasi *</label>
+      <input class="ef-input" id="mvTitle" placeholder="DTM matematika: eng muhim formulalar">
+    </div>
+    <div class="ef-field">
+      <label class="ef-label">Video URL *</label>
+      <input class="ef-input" id="mvUrl" placeholder="https://youtube.com/watch?v=..." oninput="mvAutoThumb(this.value)">
+      <div style="font-size:11px;color:var(--text2);margin-top:3px">YouTube, Telegram yoki boshqa platformalar</div>
+    </div>
+    <div class="ef-field">
+      <label class="ef-label">Thumbnail (avtomatik YouTube'dan)</label>
+      <input class="ef-input" id="mvThumb" placeholder="https://...">
+      <div id="mvThumbPreview" style="display:none;margin-top:8px;border-radius:10px;overflow:hidden"><img id="mvThumbImg" style="width:100%;max-height:130px;object-fit:cover"></div>
+    </div>
+    <div class="ef-field">
+      <label class="ef-label">Qisqa tavsif</label>
+      <textarea class="ef-input" id="mvDesc" placeholder="Bu video nima haqida..." style="min-height:60px;resize:vertical"></textarea>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">
+      <button class="btn-ghost" onclick="closeModal('videoModal')" style="padding:12px;border-radius:10px;background:var(--s2);border:1px solid var(--border);color:var(--text2);cursor:pointer;font-family:inherit;font-size:14px;font-weight:600">Bekor</button>
+      <button class="btn-act" onclick="saveMentorVideo()" style="padding:12px;justify-content:center">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v13a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2"/></svg>
+        Saqlash
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- WITHDRAW MODAL -->
 <div class="modal" id="withdrawModal" onclick="if(event.target===this)closeModal('withdrawModal')">
@@ -1445,6 +1596,10 @@ function showPage(name) {
   const ni = document.getElementById('ni-'+name);
   if(ni) ni.classList.add('active');
   document.querySelector('.content')?.scrollTo(0,0);
+  // Lazy load new pages
+  if (name === 'news') loadMentorNews();
+  if (name === 'videos') loadMentorVideos();
+  if (name === 'notif') { loadMentorNotifs(); markMentorNotifsRead(); }
 }
 
 /* ─── MODAL ─── */
@@ -1519,6 +1674,258 @@ function showToast(msg, type='ok') {
   el.style.borderLeft = type==='err' ? '3px solid var(--red)' : '3px solid var(--teal)';
   el.style.opacity = '1';
   toastTimer = setTimeout(() => el.style.opacity='0', 2800);
+}
+
+/* ══════════════════════════════════════════
+   YANGILIKLAR — MENTOR SIDE
+══════════════════════════════════════════ */
+let _mNews = [], _mNewsLoaded = false;
+
+async function loadMentorNews() {
+  if (_mNewsLoaded) return;
+  const el = document.getElementById('mentorNewsList');
+  el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2)">Yuklanmoqda...</div>';
+  try {
+    const res = await fetch('/api/news?target=mentor');
+    const d = await res.json();
+    _mNews = d.success ? d.news : _demoMentorNews();
+  } catch { _mNews = _demoMentorNews(); }
+  _mNewsLoaded = true;
+  _renderMentorNews(_mNews);
+  _checkMentorNewsBadge();
+  _mNews.slice(0, 2).forEach(n => _addMentorNotif({
+    id:'news_'+n.id,type:'news',icon:'📰',iconBg:'rgba(240,165,0,0.12)',
+    title:n.title,desc:(n.content||'').slice(0,80)+'...',time:n.created_at,
+    read:false,onTap:()=>showPage('news')
+  }));
+}
+function _demoMentorNews() {
+  return [
+    {id:'m1',title:'📋 Yangi to\'lov tizimi ishga tushdi',content:'Endi sessiyangizdagi to\'lovlar 24 soat ichida balansga tushadi. Karta ulash uchun profil sahifasiga o\'ting.',image_url:'',link:'',category:'update',priority:'high',targets:['mentor'],created_at:new Date().toISOString()},
+    {id:'m2',title:'📅 Mentor webinari: Dars o\'tish texnikasi',content:'Kelasi juma kuni mentor webinari bo\'lib o\'tadi. Yangi dars o\'tish metodologiyasini o\'rganing.',image_url:'',link:'https://t.me/connectu_admin',category:'event',priority:'normal',targets:['mentor'],created_at:new Date(Date.now()-86400000*2).toISOString()},
+    {id:'m3',title:'⚠️ Profil to\'ldirilmagan mentorlar uchun',content:'30% dan kam to\'ldirilgan profil 3 kun ichida archivga o\'tkaziladi. Profilingizni to\'ldiring.',image_url:'',link:'',category:'urgent',priority:'critical',targets:['mentor'],created_at:new Date(Date.now()-86400000*3).toISOString()},
+  ];
+}
+function _renderMentorNews(list) {
+  const el = document.getElementById('mentorNewsList');
+  if (!list.length) { el.innerHTML = '<div style="text-align:center;padding:48px;color:var(--text2)"><div style="font-size:32px;margin-bottom:8px">📭</div>Yangiliklar yo\'q</div>'; return; }
+  const catIcon = {general:'📢',update:'🔄',event:'📅',urgent:'⚠️'};
+  const prioClass = {critical:'p-critical',high:'p-high'};
+  el.innerHTML = list.map(n => `
+    <div class="m-news-card ${prioClass[n.priority]||''}" ${n.link?`onclick="openExtM('${n.link}')"`:''}>
+      ${n.image_url?`<img class="mnc-img" src="${n.image_url}" alt="" loading="lazy">`:''}
+      <div class="mnc-body">
+        <div class="mnc-tags">
+          <span style="background:var(--gold-d);color:var(--gold);padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600">${catIcon[n.category]||'📢'} ${n.category==='update'?'Yangilanish':n.category==='event'?'Tadbir':n.category==='urgent'?'Muhim':'Umumiy'}</span>
+          ${n.priority==='critical'?'<span style="background:rgba(255,77,106,0.15);color:var(--red);padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600">📌 Pinned</span>':''}
+        </div>
+        <div class="mnc-title">${n.title}</div>
+        <div class="mnc-desc">${n.content||''}</div>
+        <div class="mnc-foot">
+          <span style="font-size:11px;color:var(--text2)">${_mTimeAgo(n.created_at)}</span>
+          ${n.link?`<span class="mnc-link"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" stroke="currentColor" stroke-width="2"/><polyline points="15,3 21,3 21,9" stroke="currentColor" stroke-width="2"/><line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2"/></svg> Batafsil</span>`:''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+function filterMentorNews(f, btn) {
+  document.querySelectorAll('#mentorNewsFilterBar .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const list = f === 'all' ? _mNews : _mNews.filter(n => n.category === f || n.priority === f);
+  _renderMentorNews(list);
+}
+function _checkMentorNewsBadge() {
+  const lastSeen = parseInt(localStorage.getItem('cu_mentor_news_seen')||'0');
+  const hasNew = _mNews.some(n => new Date(n.created_at).getTime() > lastSeen);
+  const b = document.getElementById('mNewsBadge');
+  if (b) b.style.display = hasNew ? 'block' : 'none';
+}
+
+/* ══════════════════════════════════════════
+   VIDEO MATERIALLAR — MENTOR SIDE
+══════════════════════════════════════════ */
+let _mVideos = [], _mVideosLoaded = false, _mvAccessVal = 'free';
+
+function setMvAccess(val, el) {
+  _mvAccessVal = val;
+  document.querySelectorAll('#mvAccFree,#mvAccPrem').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+}
+function mvAutoThumb(url) {
+  const m = (url||'').match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  if (m) {
+    const t = `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg`;
+    document.getElementById('mvThumb').value = t;
+    const img = document.getElementById('mvThumbImg');
+    img.src = t; document.getElementById('mvThumbPreview').style.display = 'block';
+  }
+}
+async function loadMentorVideos() {
+  if (_mVideosLoaded) return;
+  const el = document.getElementById('mentorVideoList');
+  el.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text2)">Yuklanmoqda...</div>';
+  try {
+    const mid = currentMentor?.id;
+    const res = await fetch(mid ? `/api/materials?mentor_id=${mid}` : '/api/materials');
+    const d = await res.json();
+    _mVideos = d.success ? d.materials.filter(m => !m.mentor_name || m.mentor_name === currentMentor?.name) : _demoMentorVideos();
+  } catch { _mVideos = _demoMentorVideos(); }
+  _mVideosLoaded = true;
+  _renderMentorVideos(_mVideos);
+}
+function _demoMentorVideos() {
+  return [
+    {id:'mv1',title:'Matematika formulalari — DTM 2025',url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',thumbnail:'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg',access:'free',views:124,likes:18},
+    {id:'mv2',title:'TDYU kirish imtihoniga tayyorlash',url:'',thumbnail:'',access:'premium',views:56,likes:9},
+  ];
+}
+function _mYtThumb(url) {
+  const m = (url||'').match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : null;
+}
+function _renderMentorVideos(list) {
+  const el = document.getElementById('mentorVideoList');
+  if (!list.length) {
+    el.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--text2)">
+      <div style="font-size:36px;margin-bottom:10px">🎬</div>
+      <div style="font-weight:700;margin-bottom:6px">Hali video yo'q</div>
+      <div style="font-size:13px;margin-bottom:16px">Birinchi videongizni qo'shing</div>
+      <button class="btn-act" onclick="openModal('videoModal')" style="margin:0 auto">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        Video qo'shish
+      </button></div>`;
+    return;
+  }
+  el.innerHTML = list.map(v => {
+    const isPrem = v.access === 'premium';
+    const thumb = v.thumbnail || _mYtThumb(v.url||'') || '';
+    return `<div class="mv-card">
+      <div class="mv-thumb">
+        ${thumb ? `<img src="${thumb}" alt="" loading="lazy">` : `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" opacity="0.2"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>`}
+        <div class="mv-overlay"><div class="mv-play"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="#040810"/></svg></div></div>
+        <div style="position:absolute;top:6px;right:6px">
+          <span style="font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700;background:${isPrem?'rgba(240,165,0,.9)':'rgba(0,191,166,.9)'};color:#040810">${isPrem?'⭐ Premium':'✓ Bepul'}</span>
+        </div>
+        <div style="position:absolute;bottom:6px;right:6px;display:flex;gap:4px">
+          <button onclick="deleteMentorVideo('${v.id}')" style="width:24px;height:24px;border-radius:6px;background:rgba(255,77,106,.8);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center" title="O'chirish">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><polyline points="3,6 5,6 21,6" stroke="white" stroke-width="2"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" stroke="white" stroke-width="2"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="mv-body">
+        <div class="mv-title">${v.title}</div>
+        <div class="mv-meta">
+          <span class="mv-stats">${v.views||0} ko'rildi · ${v.likes||0} ♥</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function filterMentorVideos(f, btn) {
+  document.querySelectorAll('#mentorVideoFilterBar .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const list = f === 'all' ? _mVideos : _mVideos.filter(v => v.access === f);
+  _renderMentorVideos(list);
+}
+async function saveMentorVideo() {
+  const title = document.getElementById('mvTitle').value.trim();
+  const url = document.getElementById('mvUrl').value.trim();
+  if (!title || !url) { showToast('Sarlavha va URL kiriting'); return; }
+  const payload = {
+    title, url, access: _mvAccessVal,
+    thumbnail: document.getElementById('mvThumb').value || null,
+    description: document.getElementById('mvDesc').value || '',
+    mentor_name: currentMentor?.name || '',
+    mentor_id: currentMentor?.id || null,
+  };
+  try {
+    await fetch('/api/mentor/materials', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload), credentials: 'include' });
+    closeModal('videoModal');
+    ['mvTitle','mvUrl','mvThumb','mvDesc'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('mvThumbPreview').style.display = 'none';
+    _mVideosLoaded = false;
+    loadMentorVideos();
+    showToast('✅ Video saqlandi');
+  } catch { showToast('Xatolik yuz berdi'); }
+}
+async function deleteMentorVideo(id) {
+  if (!confirm("Bu videoni o'chirasizmi?")) return;
+  try {
+    await fetch(`/api/materials/${id}`, { method: 'DELETE', credentials: 'include' });
+    _mVideos = _mVideos.filter(v => v.id !== id);
+    _renderMentorVideos(_mVideos);
+    showToast('O\'chirildi');
+  } catch { showToast('Xatolik'); }
+}
+
+/* ══════════════════════════════════════════
+   BILDIRISHNOMALAR — MENTOR SIDE
+══════════════════════════════════════════ */
+let _mNotifs = [];
+
+function _addMentorNotif(n) {
+  if (_mNotifs.find(x => x.id === n.id)) return;
+  _mNotifs.unshift(n);
+  _updateMentorBadge();
+}
+function _updateMentorBadge() {
+  const unread = _mNotifs.filter(n => !n.read).length;
+  const b = document.getElementById('mNotifBadge');
+  if (b) b.style.display = unread > 0 ? 'block' : 'none';
+}
+function loadMentorNotifs() {
+  if (!_mNotifs.find(n => n.id === 'sys_welcome')) {
+    _addMentorNotif({id:'sys_welcome',type:'system',icon:'🎉',iconBg:'rgba(0,191,166,0.12)',title:'Mentor paneliga xush kelibsiz!',desc:'Profilingizni to\'ldiring va birinchi sessiyani oling.',time:new Date(Date.now()-86400000*2).toISOString(),read:true});
+  }
+  _renderMentorNotifs();
+}
+function _renderMentorNotifs() {
+  const el = document.getElementById('mentorNotifList');
+  if (!_mNotifs.length) {
+    el.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--text2)"><div style="font-size:40px;margin-bottom:12px">🔔</div><div style="font-weight:600;margin-bottom:6px">Bildirishnomalar yo\'q</div><div style="font-size:13px">Yangiliklar va sessiya xabarlar shu yerda</div></div>';
+    return;
+  }
+  el.innerHTML = _mNotifs.map(n => `
+    <div class="mnotif-item ${n.read?'read':''}" onclick="_tapMentorNotif('${n.id}')">
+      <div class="mni-icon" style="background:${n.iconBg||'rgba(255,255,255,0.06)'}">${n.icon||'🔔'}</div>
+      <div class="mni-body">
+        <div class="mni-title">${n.title}</div>
+        <div class="mni-desc">${n.desc||''}</div>
+        <div class="mni-time">${_mTimeAgo(n.time)}</div>
+      </div>
+      ${!n.read ? '<div class="mni-dot"></div>' : '<div style="width:8px"></div>'}
+    </div>`).join('');
+}
+function _tapMentorNotif(id) {
+  const n = _mNotifs.find(x => x.id === id);
+  if (!n) return;
+  n.read = true;
+  _updateMentorBadge();
+  if (n.type === 'news') { showPage('news'); return; }
+  if (n.onTap) n.onTap();
+  _renderMentorNotifs();
+}
+function markMentorNotifsRead() {
+  localStorage.setItem('cu_mentor_news_seen', Date.now().toString());
+  setTimeout(() => {
+    _mNotifs.forEach(n => n.read = true);
+    _updateMentorBadge();
+    document.getElementById('mNewsBadge').style.display = 'none';
+    _renderMentorNotifs();
+  }, 4000);
+}
+function openExtM(url) {
+  if (window.Telegram?.WebApp?.openLink) Telegram.WebApp.openLink(url);
+  else window.open(url, '_blank');
+}
+function _mTimeAgo(str) {
+  if (!str) return '';
+  const d = new Date(str); const sec = Math.floor((Date.now()-d)/1000);
+  if (sec < 60) return 'Hozirgina';
+  if (sec < 3600) return Math.floor(sec/60) + ' daqiqa oldin';
+  if (sec < 86400) return Math.floor(sec/3600) + ' soat oldin';
+  if (sec < 7*86400) return Math.floor(sec/86400) + ' kun oldin';
+  return d.toLocaleDateString('uz-UZ');
 }
 
 /* ─── START ─── */

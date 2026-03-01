@@ -25,7 +25,6 @@ body{
     var(--bg);
 }
 
-/* ── Loading ── */
 #loadingScreen{
   position:fixed;inset:0;background:var(--bg);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:99;
@@ -35,20 +34,16 @@ body{
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin-sm{width:18px;height:18px;border-width:2px;animation:spin .7s linear infinite;border-radius:50%;border:2px solid rgba(255,255,255,.2);border-top-color:white;display:inline-block;vertical-align:middle}
 
-/* ── Wrap ── */
 .wrap{width:100%;max-width:400px}
 
-/* ── Logo ── */
 .logo{text-align:center;margin-bottom:28px}
 .logo-name{font-size:28px;font-weight:800;letter-spacing:-1px;color:var(--text)}
 .logo-name em{color:var(--gold);font-style:normal}
 .logo-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;margin-top:5px}
 
-/* ── Card ── */
 .card{background:var(--s1);border:1px solid var(--border);border-radius:18px;padding:26px;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,191,166,.03) 0%,transparent 60%);pointer-events:none}
+.card::before{content:'absolute';inset:0;background:linear-gradient(135deg,rgba(0,191,166,.03) 0%,transparent 60%);pointer-events:none}
 
-/* ── Session warn ── */
 .s-warn{
   background:rgba(255,77,106,.07);border:1px solid rgba(255,77,106,.18);
   border-radius:10px;padding:12px 14px;margin-bottom:16px;
@@ -57,7 +52,6 @@ body{
 .s-warn.show{display:block}
 .s-warn strong{color:var(--red)}
 
-/* ── Telegram auto state (inside WebApp) ── */
 #tgState{display:none;text-align:center;padding:8px 0 16px}
 .tg-av{
   width:62px;height:62px;border-radius:50%;
@@ -68,12 +62,10 @@ body{
 .tg-name{font-size:17px;font-weight:700;margin-bottom:3px}
 .tg-sub{font-size:12px;color:var(--text2);margin-bottom:18px}
 
-/* ── Tabs ── */
 .tabs{display:flex;gap:3px;background:var(--s2);border-radius:10px;padding:3px;margin-bottom:20px}
 .tab{flex:1;padding:9px 6px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text2);background:none;transition:all .2s;text-align:center}
 .tab.on{background:var(--s1);color:var(--text);box-shadow:0 1px 6px rgba(0,0,0,.4)}
 
-/* ── Deep Link ── */
 .dl-body{text-align:center;padding:4px 0}
 .dl-ico{font-size:36px;margin-bottom:10px}
 .dl-title{font-size:15px;font-weight:700;margin-bottom:6px}
@@ -98,7 +90,6 @@ body{
 .waiting strong{color:var(--teal)}
 .cancel-lnk{color:var(--text2);font-size:11px;text-decoration:underline;background:none;margin-top:8px;display:inline-block}
 
-/* ── QR ── */
 .qr-body{text-align:center;padding:4px 0}
 .qr-frame{
   background:white;border-radius:12px;padding:14px;display:inline-block;
@@ -121,19 +112,16 @@ body{
 .pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:p 1.4s ease-in-out infinite}
 @keyframes p{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
 
-/* ── Success ── */
 #successState{display:none;text-align:center;padding:12px 0}
 #successState.show{display:block}
 .s-icon{font-size:44px;margin-bottom:10px}
 .s-name{font-size:18px;font-weight:700;margin-bottom:4px}
 .s-role{font-size:12px;font-weight:600;color:var(--teal);letter-spacing:1px;text-transform:uppercase}
 
-/* ── Admin link ── */
 .admin-link{text-align:center;margin-top:18px;font-size:12px;color:var(--text2)}
 .admin-link a{color:var(--gold);font-weight:600;text-decoration:none}
 .admin-link a:hover{text-decoration:underline}
 
-/* ── Toast ── */
 #toast{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
   background:#1a2a4a;color:var(--red);
@@ -153,7 +141,7 @@ body{
 
 <div id="toast"></div>
 
-<div class="wrap" id="mainWrap">
+<div class="wrap">
   <div class="logo">
     <div class="logo-name">Connect<em>-U</em></div>
     <div class="logo-tag">Platform</div>
@@ -230,45 +218,13 @@ body{
 </div>
 
 <script>
-// ══════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════
 let pollTimer = null;
 let currentToken = null;
 let activeTab = 'dl';
 
-// ══════════════════════════════════════════
-// INIT & NATIVE APP SCANNER MODE
-// ══════════════════════════════════════════
 window.addEventListener('load', async function() {
   const tg = window.Telegram?.WebApp;
-  const urlParams = new URLSearchParams(window.location.search);
 
-  // MAXSUS QISM: Agar botdagi Skanerlash tugmasi orqali kirilsa
-  if (urlParams.get('mode') === 'scan' && tg) {
-    tg.ready();
-    tg.expand();
-    
-    // Ekranni tozalab kamerani ochish
-    document.getElementById('mainWrap').style.display = 'none';
-    document.getElementById('loadingScreen').innerHTML = '<div class="spin"></div><div style="font-size:14px;color:var(--text2);margin-top:15px;">Kamera ochilmoqda...</div>';
-    show('loadingScreen');
-
-    tg.showScanQrPopup({text: "Saytdagi QR kodni skanerlang"}, function(qrText) {
-      if(qrText && qrText.includes('start=qr_')) {
-        // Kod to'g'ri bo'lsa darhol Telegram havolaga yo'naltiramiz, bu avtomatik ravishda botni ochadi va tasdiqlaydi.
-        tg.openTelegramLink(qrText);
-        tg.close();
-      } else {
-        alert("Noto'g'ri QR kod skanerlandi!");
-        tg.close();
-      }
-      return true; // pop-up ni yopish uchun
-    });
-    return; // Pastdagi kodlar ishlamasligi uchun to'xtatamiz
-  }
-
-  // 1. Telegram WebApp ichida — initData bilan avtomatik login
   if (tg && tg.initData && tg.initDataUnsafe?.user) {
     tg.ready();
     tg.expand();
@@ -277,7 +233,6 @@ window.addEventListener('load', async function() {
     return;
   }
 
-  // 2. Backend session tekshiruvi
   try {
     const r = await fetch('/api/me', { credentials: 'include' });
     const d = await r.json();
@@ -294,14 +249,10 @@ window.addEventListener('load', async function() {
     console.log('Session tekshiruv xatosi:', e);
   }
 
-  // 3. Ko'rsatish
   hide('loadingScreen');
   show('browserState');
 });
 
-// ══════════════════════════════════════════
-// TELEGRAM WEBAPP LOGIN
-// ══════════════════════════════════════════
 function showTgState(u) {
   hide('loadingScreen');
   show('tgState');
@@ -335,40 +286,43 @@ async function doTgLogin(initData) {
   }
 }
 
-// ══════════════════════════════════════════
-// DEEP LINK (Variant A) - BaxaSaveBot
-// ══════════════════════════════════════════
 async function startDeepLink() {
   const btn = el('btnDL');
   btn.disabled = true;
+  
+  const originalHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-2.04 9.61c-.15.666-.543.832-1.1.517l-3.033-2.234-1.464 1.41c-.162.162-.298.298-.61.298l.217-3.09 5.622-5.08c.244-.217-.054-.338-.378-.12L7.25 14.18l-3.005-.938c-.652-.204-.666-.652.136-.967l11.734-4.526c.544-.197 1.02.133.447.499z"/></svg> Telegram orqali kirish`;
+  
   btn.innerHTML = '<div class="spin-sm"></div> Yuklanmoqda...';
 
   try {
     const r = await fetch('/api/auth/token', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
+      method: 'POST', 
+      headers: {'Content-Type':'application/json'},
       credentials: 'include'
     });
+    
     const d = await r.json();
     if (!d.success) throw new Error(d.error || 'Token xatosi');
 
     currentToken = d.token;
+    
     const link = `https://t.me/BaxaSaveBot?start=dl_${currentToken}`;
-    window.open(link, '_blank');
-
+    
     showWaiting();
     startPoll(currentToken);
+    
+    window.location.href = link;
+    
   } catch(e) {
     toast(e.message);
-  } finally {
     btn.disabled = false;
-    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-2.04 9.61c-.15.666-.543.832-1.1.517l-3.033-2.234-1.464 1.41c-.162.162-.298.298-.61.298l.217-3.09 5.622-5.08c.244-.217-.054-.338-.378-.12L7.25 14.18l-3.005-.938c-.652-.204-.666-.652.136-.967l11.734-4.526c.544-.197 1.02.133.447.499z"/></svg> Telegram orqali kirish`;
+    btn.innerHTML = originalHTML;
   }
 }
 
-// ══════════════════════════════════════════
-// QR LOGIN (Variant B) - BaxaSaveBot
-// ══════════════════════════════════════════
 async function initQR() {
+  console.log('QR init boshlandi');
+  
   const qrImg = document.getElementById('qrImg');
   const qrLoading = document.getElementById('qrLoading');
   const qrStatus = document.getElementById('qrStatus');
@@ -386,27 +340,42 @@ async function initQR() {
     });
     
     const data = await response.json();
-    if (!data.success) throw new Error(data.error || 'Token olinmadi');
+    console.log('Token javobi:', data);
+    
+    if (!data.success) {
+      throw new Error(data.error || 'Token olinmadi');
+    }
     
     currentToken = data.token;
+    console.log('Token olindi:', currentToken);
     
     const deepLink = `https://t.me/BaxaSaveBot?start=qr_${currentToken}`;
+    console.log('Deep link:', deepLink);
+    
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=176x176&data=${encodeURIComponent(deepLink)}&bgcolor=ffffff&color=040810&margin=2`;
+    console.log('QR URL:', qrCodeUrl);
     
     qrImg.src = qrCodeUrl;
+    
     qrImg.onload = function() {
+      console.log('QR kod yuklandi');
       qrImg.style.display = 'block';
       qrLoading.style.display = 'none';
       qrStatus.textContent = '📷 Skanlanishini kutmoqda...';
     };
+    
     qrImg.onerror = function() {
-      qrStatus.innerHTML = 'QR yuklanmadi. <button onclick="initQR()">Qayta urinish</button>';
+      console.error('QR kod yuklanmadi');
+      qrStatus.textContent = '❌ QR yuklanmadi, qayta urining';
       qrLoading.style.display = 'none';
+      
+      qrStatus.innerHTML = 'QR yuklanmadi. <button onclick="initQR()">Qayta urinish</button>';
     };
 
     startPoll(currentToken, 'qr');
     
   } catch (error) {
+    console.error('QR xatosi:', error);
     qrStatus.textContent = 'Xatolik: ' + error.message;
     qrLoading.style.display = 'none';
   }
@@ -425,13 +394,27 @@ function cancelQR() {
   qrStatus.textContent = 'QR kod tayyorlanmoqda...';
 }
 
-// ══════════════════════════════════════════
-// POLLING VA AVTOMATIK KIRITISH (Visibility API)
-// ══════════════════════════════════════════
 function startPoll(token) {
   clearInterval(pollTimer);
   pollTimer = setInterval(async function() {
-    await checkTokenInstant(token);
+    try {
+      const r = await fetch(`/api/auth/check?token=${token}`, { credentials: 'include' });
+      const d = await r.json();
+      if (d.success && d.user) {
+        clearInterval(pollTimer);
+        if (d.session_replaced) showWarn();
+        hideWaiting();
+        showSuccess(d.user);
+        setTimeout(function() { redirect(d.user); }, 1000);
+      } else if (d.expired) {
+        clearInterval(pollTimer);
+        el('qrStatus').textContent = 'QR muddati o\'tdi. Sahifani yangilang.';
+        hideWaiting();
+        toast('Token muddati o\'tdi');
+      }
+    } catch(e) {
+      console.log('Polling xatosi:', e);
+    }
   }, 2000);
 }
 
@@ -439,44 +422,13 @@ function cancelPoll() {
   clearInterval(pollTimer);
   hideWaiting();
   currentToken = null;
+  const btn = el('btnDL');
+  if(btn) {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-2.04 9.61c-.15.666-.543.832-1.1.517l-3.033-2.234-1.464 1.41c-.162.162-.298.298-.61.298l.217-3.09 5.622-5.08c.244-.217-.054-.338-.378-.12L7.25 14.18l-3.005-.938c-.652-.204-.666-.652.136-.967l11.734-4.526c.544-.197 1.02.133.447.499z"/></svg> Telegram orqali kirish`;
+  }
 }
 
-// Tokenni backenddan tekshirish logikasi
-async function checkTokenInstant(token) {
-  if (!token) return;
-  try {
-    const r = await fetch(`/api/auth/check?token=${token}`, { credentials: 'include' });
-    const d = await r.json();
-    if (d.success && d.user) {
-      clearInterval(pollTimer);
-      if (d.session_replaced) showWarn();
-      hideWaiting();
-      showSuccess(d.user);
-      setTimeout(function() { redirect(d.user); }, 500); // Darhol yo'naltirish
-    } else if (d.expired) {
-      clearInterval(pollTimer);
-      el('qrStatus') && (el('qrStatus').textContent = 'Muddati o\'tdi. Yangilang.');
-      hideWaiting();
-      toast('Token muddati o\'tdi');
-    }
-  } catch(e) { console.log('Polling xatosi:', e); }
-}
-
-// Foydalanuvchi Telegramdan brauzerga qaytganini taniyotgan sensor
-document.addEventListener("visibilitychange", function() {
-  if (!document.hidden && currentToken) {
-    checkTokenInstant(currentToken); // Qaytganda soniyaning ulushida tekshiradi
-  }
-});
-window.addEventListener("focus", function() {
-  if (currentToken) {
-    checkTokenInstant(currentToken);
-  }
-});
-
-// ══════════════════════════════════════════
-// TABS
-// ══════════════════════════════════════════
 function setTab(t) {
   activeTab = t;
   el('tabDL').classList.toggle('on', t === 'dl');
@@ -486,9 +438,6 @@ function setTab(t) {
   if (t === 'qr' && !currentToken) initQR();
 }
 
-// ══════════════════════════════════════════
-// UI HELPERS
-// ══════════════════════════════════════════
 function showSuccess(user) {
   hide('tgState'); hide('browserState'); hide('loadingScreen');
   const s = el('successState');

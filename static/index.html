@@ -945,7 +945,44 @@
     .cta-title { font-size: 32px; }
     .section-title { font-size: 32px; }
     .mobile-menu-links a { font-size: 24px; padding: 12px 0; }
+    .news-grid { grid-template-columns: 1fr; }
+    .ln-card.ln-featured { grid-column: 1; }
   }
+
+/* ─── NEWS SECTION ─── */
+.news-section {
+  background: var(--cream);
+  padding: 100px 60px;
+}
+.news-grid {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;
+}
+.ln-card {
+  background: white; border: 1.5px solid #E5E7EB;
+  border-radius: 20px; padding: 28px 28px 24px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: all .25s; cursor: default;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.ln-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); border-color: var(--gold); }
+.ln-card.ln-featured {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-color: transparent; color: white;
+}
+.ln-cat { font-size: 12px; font-weight: 700; letter-spacing: .5px; color: var(--gold); }
+.ln-card.ln-featured .ln-cat { color: var(--gold-light); }
+.ln-title { font-size: 18px; font-weight: 700; line-height: 1.4; color: var(--text); }
+.ln-card.ln-featured .ln-title { color: white; }
+.ln-desc { font-size: 14px; color: #6B7280; line-height: 1.6; flex: 1; }
+.ln-card.ln-featured .ln-desc { color: rgba(255,255,255,0.7); }
+.ln-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.ln-time { font-size: 12px; color: #9CA3AF; }
+.ln-card.ln-featured .ln-time { color: rgba(255,255,255,0.5); }
+.ln-link { font-size: 13px; font-weight: 600; color: var(--gold); text-decoration: none; }
+.ln-link:hover { text-decoration: underline; }
+@media(max-width:900px){ .news-section { padding: 60px 24px; } .news-grid { grid-template-columns: 1fr 1fr; } .ln-card.ln-featured { grid-column: 1/-1; } }
+@media(max-width:600px){ .news-grid { grid-template-columns: 1fr; } .ln-card.ln-featured { grid-column: 1; } }
 </style>
 </head>
 <body>
@@ -962,6 +999,7 @@
     <a href="#yechim">Yechim</a>
     <a href="#narxlar">Narxlar</a>
     <a href="#mentorlar">Mentorlar</a>
+    <a href="#yangiliklar" style="color:var(--gold);font-weight:600">Yangiliklar</a>
     <a href="#cta" class="nav-cta">Boshlash</a>
   </div>
   <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -1334,6 +1372,39 @@
   </div>
 </section>
 
+<!-- NEWS / YANGILIKLAR -->
+<section class="news-section" id="yangiliklar">
+  <div class="section-header" style="text-align:center;margin-bottom:48px">
+    <span class="section-tag reveal" style="color:var(--gold)">07 — YANGILIKLAR</span>
+    <h2 class="section-title reveal">Platform <em>yangiliklari</em></h2>
+    <p class="section-sub reveal" style="max-width:400px;margin:0 auto">Eng so'nggi tadbirlar, o'zgarishlar va abituriyentlarga foydali ma'lumotlar</p>
+  </div>
+  <div class="news-grid reveal" id="landingNewsList">
+    <!-- Demo cards — JS replaces with API data -->
+    <div class="ln-card ln-featured">
+      <div class="ln-cat">🔄 Yangilanish</div>
+      <h3 class="ln-title">Yangi mentorlar platformaga qo'shildi</h3>
+      <p class="ln-desc">TDYU, TATU va ODI universitetlaridan 8 ta yangi verifikatsiyalangan mentor qo'shildi.</p>
+      <div class="ln-foot"><span class="ln-time">Bugun</span></div>
+    </div>
+    <div class="ln-card">
+      <div class="ln-cat" style="color:var(--accent)">📅 Tadbir</div>
+      <h3 class="ln-title">DTM tayyorlash vebinari — Shanba</h3>
+      <p class="ln-desc">Bepul DTM tayyorlash vebinari barcha abituriyentlar uchun ochiq.</p>
+      <div class="ln-foot"><span class="ln-time">2 kun oldin</span><a href="#" class="ln-link">Batafsil →</a></div>
+    </div>
+    <div class="ln-card">
+      <div class="ln-cat" style="color:#e74c3c">⚠️ Muhim</div>
+      <h3 class="ln-title">Aprel 2025 kvota ro'yxati e'lon qilindi</h3>
+      <p class="ln-desc">Barcha universitetlar bo'yicha kvotalar yangilandi.</p>
+      <div class="ln-foot"><span class="ln-time">3 kun oldin</span></div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:32px">
+    <a href="abuturyent.html" class="btn-outline reveal" style="display:inline-block">Barcha yangiliklar →</a>
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-section" id="cta">
   <div class="cta-bg"></div>
@@ -1439,6 +1510,44 @@
       el.textContent = Math.floor(start).toLocaleString() + suffix;
     }, 16);
   }
+
+/* ─── LANDING NEWS LOADER ─── */
+async function loadLandingNews() {
+  try {
+    const res = await fetch('/api/news?target=landing');
+    const d = await res.json();
+    if (!d.success || !d.news.length) return;
+    const list = d.news.slice(0, 3);
+    const catIcon = {general:'📢',update:'🔄',event:'📅',urgent:'⚠️'};
+    const catLabel = {general:'Umumiy',update:'Yangilanish',event:'Tadbir',urgent:'Muhim'};
+    const catColor = {general:'var(--gold)',update:'var(--accent)',event:'var(--gold)',urgent:'#e74c3c'};
+    function timeAgo(str) {
+      const sec = Math.floor((Date.now()-new Date(str))/1000);
+      if(sec<3600) return Math.floor(sec/60)+' daqiqa oldin';
+      if(sec<86400) return Math.floor(sec/3600)+' soat oldin';
+      return Math.floor(sec/86400)+' kun oldin';
+    }
+    document.getElementById('landingNewsList').innerHTML = list.map((n, i) => `
+      <div class="ln-card ${i===0?'ln-featured':''}" ${n.link?`onclick="window.open('${n.link}','_blank')" style="cursor:pointer"`:''}>
+        <div class="ln-cat" style="color:${i===0?'var(--gold-light)':catColor[n.category]||'var(--gold)'}">
+          ${catIcon[n.category]||'📢'} ${catLabel[n.category]||'Yangilik'}
+        </div>
+        <h3 class="ln-title">${n.title}</h3>
+        <p class="ln-desc">${(n.content||'').slice(0,100)}${n.content?.length>100?'...':''}</p>
+        <div class="ln-foot">
+          <span class="ln-time">${timeAgo(n.created_at)}</span>
+          ${n.link?`<a href="${n.link}" target="_blank" class="ln-link" onclick="event.stopPropagation()">Batafsil →</a>`:''}
+        </div>
+      </div>`).join('');
+  } catch(e) { /* keep demo cards */ }
+}
+
+// Load news when news section is visible
+const newsObserver = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) { loadLandingNews(); newsObserver.disconnect(); }
+}, { threshold: 0.1 });
+const newsEl = document.getElementById('landingNewsList');
+if (newsEl) newsObserver.observe(newsEl);
 </script>
 </body>
 </html>

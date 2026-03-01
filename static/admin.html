@@ -22,8 +22,6 @@
   --text:#EEF2FF;--text2:#6B7FA0;--text3:#2D3F5A;
   --r:12px;--r-sm:8px;--sidebar:240px;
 }
-
-/* ── OQ TEMA ── */
 body.light-theme {
   --bg:#F4F7FA;--s1:#FFFFFF;--s2:#F8FAFC;--s3:#E2E8F0;
   --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
@@ -32,7 +30,6 @@ body.light-theme {
 }
 body { transition: background 0.3s, color 0.3s; }
 .sidebar, .topbar { transition: background 0.3s; }
-
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
 body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
@@ -43,7 +40,6 @@ input,select,textarea{font-family:inherit}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 img{display:block;object-fit:cover}
 
-/* ═══ SIDEBAR ═══ */
 .sidebar{
   width:var(--sidebar);flex-shrink:0;
   background:var(--s1);border-right:1px solid var(--border);
@@ -92,10 +88,8 @@ img{display:block;object-fit:cover}
 .sf-info h4{font-size:13px;font-weight:600}
 .sf-info p{font-size:11px;color:var(--text2)}
 
-/* ═══ MAIN ═══ */
 .main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh}
 
-/* ── TOP BAR ── */
 .topbar{
   position:sticky;top:0;z-index:50;
   background:rgba(4,8,16,.92);backdrop-filter:blur(20px);
@@ -122,13 +116,11 @@ body.light-theme .topbar { background:rgba(244,247,250,0.92); }
 .tb-btn:hover{border-color:var(--border2);color:var(--text)}
 .tb-notif{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid var(--bg)}
 
-/* ═══ CONTENT ═══ */
 .page-content{flex:1;padding:24px;overflow-y:auto}
 .page{display:none}
 .page.active{display:block;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* ─── KPI GRID ─── */
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
 .kpi-card{
   background:var(--s1);border:1px solid var(--border);border-radius:var(--r);
@@ -142,12 +134,10 @@ body.light-theme .topbar { background:rgba(244,247,250,0.92); }
 .kpi-val{font-size:28px;font-weight:800;line-height:1;margin-bottom:4px}
 .kpi-label{font-size:12px;color:var(--text2);margin-bottom:8px}
 
-/* ─── SECTION HEADER ─── */
 .sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .sec-title{font-size:16px;font-weight:700}
 .sec-sub{font-size:13px;color:var(--text2);margin-top:2px}
 
-/* ─── TABLES ─── */
 .table-wrap{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:24px}
 .table-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 table{width:100%;border-collapse:collapse}
@@ -161,7 +151,6 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
 .td-info h4{font-size:13px;font-weight:600;margin-bottom:1px}
 .td-info p{font-size:11px;color:var(--text2)}
 
-/* ─── BADGES ─── */
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
 .b-gold{background:var(--gold-d);color:var(--gold);border:1px solid rgba(240,165,0,.15)}
 .b-teal{background:var(--teal-d);color:var(--teal)}
@@ -171,7 +160,6 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
 .b-blue{background:var(--blue-d);color:var(--blue)}
 .b-gray{background:rgba(255,255,255,.05);color:var(--text2)}
 
-/* ─── BUTTONS ─── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 14px;border-radius:var(--r-sm);font-family:inherit;font-size:13px;font-weight:600;border:none;transition:all .15s;cursor:pointer}
 .btn-gold{background:var(--gold);color:#040810}
 .btn-gold:hover{background:#FFB830}
@@ -182,13 +170,12 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
 .btn-red{background:var(--red-d);color:var(--red);border:1px solid rgba(255,77,106,.2)}
 .btn-green{background:var(--green-d);color:var(--green);border:1px solid rgba(34,197,94,.2)}
 .btn-icon{width:32px;height:32px;padding:0;border-radius:6px}
+.btn-sm{padding:5px 10px;font-size:12px}
 
-/* ─── FILTERS ─── */
 .filters{display:flex;gap:8px;flex-wrap:wrap}
 .filter-chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;background:var(--s2);border:1.5px solid var(--border);color:var(--text2);transition:all .15s;cursor:pointer}
 .filter-chip.active{background:var(--gold-d);border-color:var(--gold);color:var(--gold)}
 
-/* ─── MODAL ─── */
 .modal-bg{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
 .modal-bg.open{display:flex}
 .modal-box{background:var(--s1);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:520px;overflow:hidden;animation:scaleIn .25s ease}
@@ -199,7 +186,6 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
 .modal-body{padding:20px}
 .modal-foot{padding:16px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
 
-/* ─── FORM ─── */
 .field{margin-bottom:14px}
 .field label{font-size:12px;color:var(--text2);display:block;margin-bottom:6px;font-weight:500}
 .f-input{width:100%;padding:10px 13px;background:var(--s2);border:1.5px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-family:inherit;font-size:13px;outline:none;transition:border-color .2s}
@@ -208,7 +194,6 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
 .f-select{appearance:none;cursor:pointer}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-/* ─── CHARTS ─── */
 .chart-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px}
 .chart-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:18px}
 .chart-title{font-size:14px;font-weight:600;margin-bottom:4px}
@@ -219,7 +204,6 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
 .bc-lbl{font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace}
 .bc-val{font-size:9px;font-weight:600;color:var(--text2)}
 
-/* Donut chart */
 .donut-wrap{display:flex;gap:16px;align-items:center}
 .donut{width:90px;height:90px;border-radius:50%;flex-shrink:0;background:conic-gradient(var(--gold) 0% 45%, var(--teal) 45% 72%, var(--purple) 72% 88%, var(--s3) 88% 100%)}
 .donut-hole{width:60px;height:60px;background:var(--s1);border-radius:50%;margin:15px}
@@ -227,7 +211,6 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
 .dl-item{display:flex;align-items:center;gap:8px;font-size:12px}
 .dl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-/* ─── UNI MANAGER ─── */
 .uni-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
 .uni-manage-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s;}
 .uni-manage-card:hover{border-color:var(--border2)}
@@ -237,7 +220,6 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
 .umc-name{font-size:13px;font-weight:600;margin-bottom:10px;line-height:1.3}
 .umc-actions{display:flex;gap:6px}
 
-/* ─── WITHDRAW CARDS ─── */
 .wd-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;}
 .wd-avatar{width:44px;height:44px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff}
 .wd-info{flex:1;min-width:0}
@@ -247,26 +229,51 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
 .wd-actions{display:flex;gap:8px}
 .wd-amount{font-size:20px;font-weight:800;color:var(--gold);text-align:right;white-space:nowrap}
 
-/* ─── BROADCAST ─── */
 .broadcast-form{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:24px}
 .target-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.target-chip{padding:7px 14px;border-radius:20px;font-size:13px;font-weight:500;background:var(--s2);border:1.5px solid var(--border);color:var(--text2);cursor:pointer;transition:all .15s}
+.target-chip{padding:7px 14px;border-radius:20px;font-size:13px;font-weight:500;background:var(--s2);border:1.5px solid var(--border);color:var(--text2);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
 .target-chip.active{background:var(--gold-d);border-color:var(--gold);color:var(--gold)}
 
-/* ─── DOCUMENT VIEWER ─── */
 .doc-frame{width:100%;height:400px;border:none;border-radius:var(--r);background:var(--s2)}
 .img-preview{width:100%;border-radius:var(--r);border:1px solid var(--border);overflow:hidden;margin-bottom:12px}
 .img-preview img{width:100%;height:auto;display:block}
 
-/* ─── NEW: MATS & NEWS CARDS ─── */
-.mat-card, .news-card {
-  background:var(--s1);border:1px solid var(--border);border-radius:var(--r);
-  padding:16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;
+.chip-filter{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;
+  background:var(--s2);border:1.5px solid var(--border);color:var(--text2);
+  cursor:pointer;transition:all .15s;white-space:nowrap;
 }
-.mat-info h4, .news-info h4 {font-size:15px;font-weight:600;margin-bottom:4px;}
-.mat-info p, .news-info p {font-size:12px;color:var(--text2);}
+.chip-filter.active{background:var(--gold-d);border-color:var(--gold);color:var(--gold)}
+.chip-filter:hover:not(.active){border-color:var(--border2);color:var(--text)}
 
-/* ─── MOBILE ─── */
+.mat-video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:24px}
+.mat-vcard{background:var(--s1);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s,transform .2s}
+.mat-vcard:hover{border-color:var(--border2);transform:translateY(-2px)}
+.mat-vthumb{width:100%;aspect-ratio:16/9;background:var(--s3);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.mat-vthumb img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.mat-vplay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3)}
+.mat-vbadge{position:absolute;top:8px;right:8px}
+.mat-vbody{padding:12px}
+.mat-vtitle{font-size:13px;font-weight:600;margin-bottom:4px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical}
+.mat-vdesc{font-size:11px;color:var(--text2);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mat-vfoot{display:flex;align-items:center;justify-content:space-between}
+.mat-vmentor{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+
+.news-card-full{background:var(--s1);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;margin-bottom:12px;transition:border-color .2s}
+.news-card-full:hover{border-color:var(--border2)}
+.ncf-img{width:110px;flex-shrink:0;background:var(--s3);object-fit:cover}
+.ncf-body{flex:1;padding:14px;display:flex;flex-direction:column;min-width:0}
+.ncf-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
+.ncf-title{font-size:14px;font-weight:700;margin-bottom:4px;line-height:1.4}
+.ncf-desc{font-size:12px;color:var(--text2);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical}
+.ncf-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--s1);border:1px solid var(--border2);border-radius:10px;padding:12px 18px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.err{border-color:var(--red);color:var(--red)}
+
 @media(max-width:1024px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.chart-row{grid-template-columns:1fr}.uni-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%);transition:transform .3s}.sidebar.open{transform:translateX(0)}
@@ -369,7 +376,6 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
 </aside>
 
 <main class="main">
-
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:12px">
       <button class="mobile-menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">
@@ -380,24 +386,29 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
     <div class="topbar-right">
       <div class="tb-search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input placeholder="Qidirish..." id="globalSearch" oninput="globalSearch(this.value)">
+        <input placeholder="Qidirish..." id="globalSearchInput" oninput="doGlobalSearch(this.value)">
       </div>
-      <div class="tb-btn" onclick="refreshCurrentPage()">
+      <button class="tb-btn" onclick="refreshCurrentPage()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
+      </button>
     </div>
   </div>
 
   <div class="page-content">
 
+    <!-- DASHBOARD -->
     <div class="page active" id="pg-dashboard">
       <div class="kpi-grid" id="statsGrid">
-        <div class="kpi-card"><div class="spinner" style="margin:20px auto"></div></div>
-        <div class="kpi-card"><div class="spinner" style="margin:20px auto"></div></div>
-        <div class="kpi-card"><div class="spinner" style="margin:20px auto"></div></div>
-        <div class="kpi-card"><div class="spinner" style="margin:20px auto"></div></div>
+        <div class="kpi-card" style="display:flex;align-items:center;justify-content:center"><div style="color:var(--text3)">Yuklanmoqda...</div></div>
+        <div class="kpi-card" style="display:flex;align-items:center;justify-content:center"><div style="color:var(--text3)">Yuklanmoqda...</div></div>
+        <div class="kpi-card" style="display:flex;align-items:center;justify-content:center"><div style="color:var(--text3)">Yuklanmoqda...</div></div>
+        <div class="kpi-card" style="display:flex;align-items:center;justify-content:center"><div style="color:var(--text3)">Yuklanmoqda...</div></div>
       </div>
-
+      <div id="wdAlert" style="background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.2);border-radius:var(--r);padding:14px 18px;display:none;align-items:center;gap:14px;margin-bottom:24px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="color:var(--gold);flex-shrink:0"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <div style="flex:1"><b style="color:var(--gold)" id="wdAlertText">0 ta withdrawal kutilmoqda</b></div>
+        <button class="btn btn-gold" onclick="showPage('withdrawals',null)">Ko'rish →</button>
+      </div>
       <div class="chart-row">
         <div class="chart-card">
           <div class="chart-title">Sessiyalar dinamikasi</div>
@@ -410,7 +421,6 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
           <div class="donut-wrap" id="donutChart"></div>
         </div>
       </div>
-
       <div class="sec-hdr">
         <div><div class="sec-title">So'nggi faoliyat</div></div>
         <button class="btn btn-ghost" onclick="showPage('sessions',null)">Barchasini ko'rish</button>
@@ -421,14 +431,9 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
           <tbody id="recentTable"></tbody>
         </table>
       </div>
-
-      <div id="wdAlert" style="background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.2);border-radius:var(--r);padding:14px 18px;display:none;align-items:center;gap:14px;margin-bottom:24px;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="color:var(--gold);flex-shrink:0"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <div style="flex:1"><b style="color:var(--gold)" id="wdAlertText">0 ta withdrawal kutilmoqda</b></div>
-        <button class="btn btn-gold" onclick="showPage('withdrawals',null)">Ko'rish →</button>
-      </div>
     </div>
 
+    <!-- ANALYTICS -->
     <div class="page" id="pg-analytics">
       <div class="sec-hdr"><div class="sec-title">Analitika</div></div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
@@ -457,6 +462,7 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
       </div>
     </div>
 
+    <!-- STUDENTS -->
     <div class="page" id="pg-students">
       <div class="sec-hdr">
         <div><div class="sec-title">Abituriyentlar</div><div class="sec-sub" id="studentsSub">0 ta ro'yxatdan o'tgan</div></div>
@@ -477,6 +483,7 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
       </div>
     </div>
 
+    <!-- MENTORS -->
     <div class="page" id="pg-mentors">
       <div class="sec-hdr">
         <div><div class="sec-title">Mentorlar</div><div class="sec-sub" id="mentorsSub">0 aktiv</div></div>
@@ -494,6 +501,7 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
       </div>
     </div>
 
+    <!-- VERIFY -->
     <div class="page" id="pg-verify">
       <div class="sec-hdr">
         <div><div class="sec-title">Verifikatsiya</div><div class="sec-sub">Guvohnoma yuklagan mentorlar</div></div>
@@ -511,6 +519,7 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
       </div>
     </div>
 
+    <!-- SESSIONS -->
     <div class="page" id="pg-sessions">
       <div class="sec-hdr">
         <div><div class="sec-title">Sessiyalar</div></div>
@@ -529,6 +538,7 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
       </div>
     </div>
 
+    <!-- WITHDRAWALS -->
     <div class="page" id="pg-withdrawals">
       <div class="sec-hdr">
         <div><div class="sec-title">Withdrawal so'rovlari</div></div>
@@ -542,6 +552,7 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
       <div id="wdList"></div>
     </div>
 
+    <!-- UNIVERSITIES -->
     <div class="page" id="pg-universities">
       <div class="sec-hdr">
         <div><div class="sec-title">Universitetlar boshqaruvi</div></div>
@@ -550,30 +561,62 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
       <div class="uni-grid" id="uniGrid"></div>
     </div>
 
+    <!-- MATERIALS -->
     <div class="page" id="pg-materials">
       <div class="sec-hdr">
-        <div class="sec-title">Video va Materiallar</div>
-        <button class="btn btn-gold" onclick="openModal('matModal')">+ Material qo'shish</button>
+        <div>
+          <div class="sec-title">Video va Materiallar</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">Abuturyent va mentor sahifalarida ko'rinadi</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <div style="display:flex;gap:6px;flex-wrap:wrap" id="matFilterRow">
+            <button class="chip-filter active" onclick="filterMats('all',this)">Hammasi</button>
+            <button class="chip-filter" onclick="filterMats('free',this)">✓ Bepul</button>
+            <button class="chip-filter" onclick="filterMats('premium',this)">⭐ Premium</button>
+            <button class="chip-filter" onclick="filterMats('admin',this)">Admin</button>
+            <button class="chip-filter" onclick="filterMats('mentor',this)">Mentor</button>
+          </div>
+          <button class="btn btn-gold" onclick="openModal('matModal')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            Material qo'shish
+          </button>
+        </div>
       </div>
-      <div id="materialsList"></div>
+      <div class="mat-video-grid" id="materialsList"></div>
     </div>
 
+    <!-- NEWS -->
     <div class="page" id="pg-news">
       <div class="sec-hdr">
-        <div class="sec-title">Platforma Yangiliklari</div>
-        <button class="btn btn-gold" onclick="openModal('newsModal')">+ Yangilik yozish</button>
+        <div>
+          <div class="sec-title">Platforma Yangiliklari</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">Qaysi sahifada ko'rinishini tanlang</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <div style="display:flex;gap:6px;flex-wrap:wrap" id="newsFilterRow">
+            <button class="chip-filter active" onclick="filterNews('all',this)">Hammasi</button>
+            <button class="chip-filter" onclick="filterNews('abuturyent',this)">Abituriyent</button>
+            <button class="chip-filter" onclick="filterNews('mentor',this)">Mentor</button>
+            <button class="chip-filter" onclick="filterNews('landing',this)">Landing</button>
+          </div>
+          <button class="btn btn-gold" onclick="openModal('newsModal')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            Yangilik yozish
+          </button>
+        </div>
       </div>
       <div id="newsList"></div>
     </div>
 
+    <!-- BROADCAST -->
     <div class="page" id="pg-broadcast">
       <div class="sec-hdr"><div class="sec-title">Xabar yuborish</div></div>
       <div class="broadcast-form">
         <div class="field"><label>Qabul qiluvchilar</label>
           <div class="target-chips" id="targetChips">
-            <div class="target-chip active" onclick="toggleTarget(this, 'all')">Barcha</div>
-            <div class="target-chip" onclick="toggleTarget(this, 'student')">Abituriyentlar</div>
-            <div class="target-chip" onclick="toggleTarget(this, 'mentor')">Mentorlar</div>
+            <div class="target-chip active" onclick="toggleTarget(this,'all')">Barcha</div>
+            <div class="target-chip" onclick="toggleTarget(this,'student')">Abituriyentlar</div>
+            <div class="target-chip" onclick="toggleTarget(this,'mentor')">Mentorlar</div>
           </div>
         </div>
         <div class="field"><label>Sarlavha</label>
@@ -589,49 +632,82 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
       </div>
     </div>
 
+    <!-- CLEANUP -->
     <div class="page" id="pg-cleanup">
       <div class="sec-hdr"><div class="sec-title">Tizim tozalash</div></div>
       <div style="max-width:700px;display:flex;flex-direction:column;gap:16px">
-        <div class="alert" style="background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.2);border-radius:var(--r);padding:14px 18px;">
-          <div style="flex:1"><b>Ogohlantirish:</b> Bu amalni qaytarib bo'lmaydi!</div>
+        <div style="background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.2);border-radius:var(--r);padding:14px 18px;">
+          <b>Ogohlantirish:</b> Bu amalni qaytarib bo'lmaydi!
         </div>
         <div class="table-wrap">
           <div class="table-header"><div class="sec-title">🗑 Tasdiqlanmagan mentorlarni o'chirish</div></div>
           <div style="padding:20px">
             <div id="cleanupPreview" style="margin-bottom:16px;color:var(--text2)"></div>
-            <button class="btn btn-red" onclick="runCleanup()">Cleanup ishga tushirish</button>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-ghost" onclick="previewCleanup()">Tekshirish</button>
+              <button class="btn btn-red" onclick="runCleanup()">Cleanup ishga tushirish</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-  </div></main>
+  </div>
+</main>
 
+<!-- MODALS -->
+
+<!-- Material Modal -->
 <div class="modal-bg" id="matModal" onclick="if(event.target===this)closeModal('matModal')">
-  <div class="modal-box">
+  <div class="modal-box" style="max-width:580px">
     <div class="modal-head">
-      <h3>Material qo'shish</h3>
+      <h3>Material / Video qo'shish</h3>
       <div class="modal-close" onclick="closeModal('matModal')">✕</div>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="max-height:72vh;overflow-y:auto;padding-right:4px">
       <div class="field">
-        <label>Material Sarlavhasi</label>
-        <input class="f-input" id="matTitle" placeholder="Masalan: DTM test tahlili">
+        <label>Ko'rish huquqi</label>
+        <div style="display:flex;gap:8px;margin-top:6px">
+          <div class="target-chip active" id="matAccFree" onclick="setMatAccess('free',this)">✓ Bepul (hammaga)</div>
+          <div class="target-chip" id="matAccPremium" onclick="setMatAccess('premium',this)">⭐ Premium (obuna kerak)</div>
+        </div>
       </div>
-      <div class="field">
-        <label>Material turi</label>
-        <select class="f-input" id="matType" onchange="toggleMatType()">
-          <option value="link">Video Link (YouTube, Telegram va hk)</option>
-          <option value="file">Fayl yuklash (MP4, PDF)</option>
-        </select>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="field">
+          <label>Sarlavha <span style="color:var(--red)">*</span></label>
+          <input class="f-input" id="matTitle" placeholder="DTM matematika tahlili">
+        </div>
+        <div class="field">
+          <label>Material turi</label>
+          <select class="f-input" id="matType" onchange="toggleMatType()">
+            <option value="link">Video Link (YouTube, Telegram)</option>
+            <option value="file">Fayl yuklash (MP4, PDF)</option>
+          </select>
+        </div>
       </div>
       <div class="field" id="matLinkDiv">
-        <label>Link URL</label>
-        <input class="f-input" id="matUrl" placeholder="https://...">
+        <label>Video URL</label>
+        <input class="f-input" id="matUrl" placeholder="https://youtube.com/watch?v=..." oninput="autoYtThumb(this.value)">
+        <div style="font-size:11px;color:var(--text2);margin-top:3px">YouTube, Telegram yoki boshqa platformalar</div>
       </div>
       <div class="field" id="matFileDiv" style="display:none">
         <label>Fayl tanlang</label>
-        <input class="f-input" type="file" id="matFile" style="padding: 7px 10px;">
+        <input class="f-input" type="file" id="matFile" accept="video/*,application/pdf" style="padding:7px 10px">
+      </div>
+      <div class="field">
+        <label>Thumbnail rasm URL <span style="font-size:10px;color:var(--text2)">(YouTube'dan avtomatik)</span></label>
+        <input class="f-input" id="matThumb" placeholder="https://... (ixtiyoriy)" oninput="previewThumb()">
+        <div id="matThumbPreview" style="margin-top:8px;border-radius:8px;overflow:hidden;display:none">
+          <img id="matThumbImg" style="width:100%;max-height:140px;object-fit:cover">
+        </div>
+      </div>
+      <div class="field">
+        <label>Qisqa tavsif</label>
+        <textarea class="f-input" id="matDesc" placeholder="Bu material nima haqida..." style="min-height:64px;resize:vertical"></textarea>
+      </div>
+      <div class="field">
+        <label>Mentor (kim tomonidan)</label>
+        <input class="f-input" id="matMentor" placeholder="Mentor ismi yoki bo'sh (admin material)">
       </div>
     </div>
     <div class="modal-foot">
@@ -641,29 +717,69 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
   </div>
 </div>
 
+<!-- News Modal -->
 <div class="modal-bg" id="newsModal" onclick="if(event.target===this)closeModal('newsModal')">
-  <div class="modal-box">
+  <div class="modal-box" style="max-width:600px">
     <div class="modal-head">
       <h3>Yangilik qo'shish</h3>
       <div class="modal-close" onclick="closeModal('newsModal')">✕</div>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="max-height:72vh;overflow-y:auto;padding-right:4px">
       <div class="field">
-        <label>Sarlavha</label>
-        <input class="f-input" id="newsTitle" placeholder="Muhim xabar!">
+        <label>Qayerda ko'rinsin? <span style="color:var(--red)">*</span> <span style="font-size:11px;font-weight:400;color:var(--text2)">(bir nechta tanlang)</span></label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px" id="newsTargets">
+          <div class="target-chip" onclick="this.classList.toggle('active')" data-target="abuturyent">Abituriyent</div>
+          <div class="target-chip" onclick="this.classList.toggle('active')" data-target="mentor">Mentor</div>
+          <div class="target-chip" onclick="this.classList.toggle('active')" data-target="landing">Landing (index)</div>
+        </div>
       </div>
       <div class="field">
-        <label>Matn</label>
-        <textarea class="f-input f-textarea" id="newsContent" placeholder="Batafsil ma'lumot..."></textarea>
+        <label>Sarlavha <span style="color:var(--red)">*</span></label>
+        <input class="f-input" id="newsTitle" placeholder="Yangi mentorlar qo'shildi! 🎉">
+      </div>
+      <div class="field">
+        <label>Qisqa tavsif <span style="color:var(--red)">*</span></label>
+        <textarea class="f-input f-textarea" id="newsContent" placeholder="Yangilik haqida qisqacha..." style="min-height:80px;resize:vertical"></textarea>
+      </div>
+      <div class="field">
+        <label>Rasm URL <span style="font-size:11px;font-weight:400;color:var(--text2)">(ixtiyoriy)</span></label>
+        <input class="f-input" id="newsImg" placeholder="https://..." oninput="previewNewsImg()">
+        <div id="newsImgPreview" style="margin-top:8px;border-radius:8px;overflow:hidden;display:none">
+          <img id="newsImgEl" style="width:100%;max-height:160px;object-fit:cover">
+        </div>
+      </div>
+      <div class="field">
+        <label>Batafsil ma'lumot linki <span style="font-size:11px;font-weight:400;color:var(--text2)">(ixtiyoriy)</span></label>
+        <input class="f-input" id="newsLink" placeholder="https://... yoki t.me/...">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="field">
+          <label>Kategoriya</label>
+          <select class="f-input" id="newsCat">
+            <option value="general">📢 Umumiy</option>
+            <option value="update">🔄 Yangilanish</option>
+            <option value="event">📅 Tadbir</option>
+            <option value="urgent">⚠️ Muhim</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Muhimlik</label>
+          <select class="f-input" id="newsPriority">
+            <option value="normal">Oddiy</option>
+            <option value="high">Yuqori</option>
+            <option value="critical">Kritik (pinned)</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeModal('newsModal')">Bekor</button>
-      <button class="btn btn-gold" onclick="saveNews()">Yuborish</button>
+      <button class="btn btn-gold" onclick="saveNews()">Nashr qilish</button>
     </div>
   </div>
 </div>
 
+<!-- Mentor Modal -->
 <div class="modal-bg" id="mentorModal" onclick="if(event.target===this)closeModal('mentorModal')">
   <div class="modal-box">
     <div class="modal-head">
@@ -672,12 +788,13 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
     </div>
     <div class="modal-body" id="mentorModalBody"></div>
     <div class="modal-foot">
-      <button class="btn btn-red" id="mmRejectBtn" onclick="rejectMentor()">Rad etish</button>
-      <button class="btn btn-green" id="mmApproveBtn" onclick="approveMentor()">✓ Tasdiqlash</button>
+      <button class="btn btn-red" onclick="rejectMentor()">Rad etish</button>
+      <button class="btn btn-green" onclick="approveMentor()">✓ Tasdiqlash</button>
     </div>
   </div>
 </div>
 
+<!-- Doc Modal -->
 <div class="modal-bg" id="docModal" onclick="if(event.target===this)closeModal('docModal')">
   <div class="modal-box" style="max-width:600px">
     <div class="modal-head">
@@ -686,19 +803,20 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
     </div>
     <div class="modal-body" id="docModalBody"></div>
     <div class="modal-foot">
-      <button class="btn btn-green" id="docApproveBtn" onclick="approveFromDoc()">Tasdiqlash</button>
-      <button class="btn btn-red" id="docRejectBtn" onclick="rejectFromDoc()">Rad etish</button>
+      <button class="btn btn-red" onclick="rejectFromDoc()">Rad etish</button>
+      <button class="btn btn-green" onclick="approveFromDoc()">Tasdiqlash</button>
     </div>
   </div>
 </div>
 
+<!-- Uni Modal -->
 <div class="modal-bg" id="uniModal" onclick="if(event.target===this)closeModal('uniModal')">
   <div class="modal-box" style="max-width:700px">
     <div class="modal-head">
       <h3 id="uniModalTitle">Universitet qo'shish</h3>
       <div class="modal-close" onclick="closeModal('uniModal')">✕</div>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="max-height:75vh;overflow-y:auto">
       <div style="margin-bottom:16px">
         <h4 style="font-size:14px;margin-bottom:12px">📋 Asosiy ma'lumotlar</h4>
         <div class="field-row">
@@ -712,7 +830,7 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
         </div>
         <div class="field"><label>Cover rasm URL</label><input class="f-input" id="uniImg" placeholder="https://..."></div>
       </div>
-      <div style="margin-bottom:16px">
+      <div>
         <div onclick="toggleAdvanced()" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px;background:var(--s2);border-radius:var(--r-sm)">
           <span style="font-size:13px;font-weight:600">⚙️ Kengaytirilgan sozlamalar (fakultetlar)</span>
         </div>
@@ -740,6 +858,7 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
   </div>
 </div>
 
+<!-- Reject Modal -->
 <div class="modal-bg" id="rejectModal" onclick="if(event.target===this)closeModal('rejectModal')">
   <div class="modal-box">
     <div class="modal-head">
@@ -756,47 +875,117 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
   </div>
 </div>
 
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
 <script>
-/* ═══ STATE ═══ */
-let currentUser = null;
-let allMentors = [];
-let allVerifyMentors = [];
-let allStudents = [];
-let allSessions = [];
-let allWithdrawals = [];
-let allUniversities = [];
-let allMaterials = [];
-let allNews = [];
-let currentMentorId = null;
-let currentDocMentorId = null;
-let currentVerifyFilter = 'pending';
-let dataLoaded = false;
-let editUniId = null;
+/* ═══════════════════════════════════════════
+   STATE — bitta joyda e'lon qilingan
+═══════════════════════════════════════════ */
+var currentUser = null;
+var allMentors = [];
+var allVerifyMentors = [];
+var allStudents = [];
+var allSessions = [];
+var allWithdrawals = [];
+var allUniversities = [];
+var allMaterials = [];
+var allNews = [];
+var currentMentorId = null;
+var currentDocMentorId = null;
+var currentVerifyFilter = 'pending';
+var dataLoaded = false;
+var editUniId = null;
+var matAccessVal = 'free';
+var currentPage = 'dashboard';
+var currentUniFaculties = [];
 
-/* ═══ INIT ═══ */
-window.addEventListener('load', async () => {
-  if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme');
-
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+window.addEventListener('load', async function() {
+  if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-theme');
   if (dataLoaded) return;
   try {
     const meRes = await fetch('/api/me', { credentials: 'include' });
     const meData = await meRes.json();
     if (!meData.success) { window.location.href = 'admin_login.html'; return; }
-    if (!['admin', 'superadmin'].includes(meData.user?.role)) { window.location.href = 'abuturyent.html'; return; }
-    
+    if (!['admin', 'superadmin'].includes(meData.user && meData.user.role)) { window.location.href = 'abuturyent.html'; return; }
     currentUser = meData.user;
     document.getElementById('adminName').textContent = currentUser.full_name || 'Admin';
     document.getElementById('adminRole').textContent = currentUser.role === 'superadmin' ? '@superadmin' : '@admin';
     document.getElementById('adminAvatar').textContent = (currentUser.full_name || 'A')[0];
-    
-    await Promise.all([ loadDashboard(), loadUniversities() ]);
+    await Promise.all([loadDashboard(), loadUniversities()]);
     dataLoaded = true;
-  } catch (error) { window.location.href = 'admin_login.html'; }
+  } catch (e) {
+    console.error(e);
+    window.location.href = 'admin_login.html';
+  }
 });
 
-/* ═══ THEME & LOGOUT ═══ */
+/* ═══════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════ */
+function showPage(name, btn) {
+  // Deactivate all pages and nav items
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+
+  var pg = document.getElementById('pg-' + name);
+  if (pg) pg.classList.add('active');
+  if (btn) btn.classList.add('active');
+
+  currentPage = name;
+
+  // Update topbar title
+  var titles = {
+    dashboard: 'Dashboard', analytics: 'Analitika', students: 'Abituriyentlar',
+    mentors: 'Mentorlar', verify: 'Verifikatsiya', sessions: 'Sessiyalar',
+    withdrawals: 'Withdrawallar', universities: 'Universitetlar',
+    materials: 'Material yuklash', news: 'Yangiliklar',
+    broadcast: 'Xabar yuborish', cleanup: 'Tizim tozalash'
+  };
+  document.getElementById('topbarTitle').textContent = titles[name] || name;
+
+  // Close mobile sidebar
+  document.getElementById('sidebar').classList.remove('open');
+
+  // Lazy load page data
+  if (name === 'analytics') loadAnalytics();
+  else if (name === 'students') loadStudents();
+  else if (name === 'mentors') loadMentors();
+  else if (name === 'verify') loadVerify();
+  else if (name === 'sessions') loadSessions();
+  else if (name === 'withdrawals') loadWd();
+  else if (name === 'materials') loadMaterials();
+  else if (name === 'news') loadNews();
+  else if (name === 'cleanup') previewCleanup();
+}
+
+function refreshCurrentPage() {
+  showPage(currentPage, null);
+  // Re-activate the correct nav item
+  document.querySelectorAll('.nav-item').forEach(function(n) {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + currentPage + "'")) {
+      n.classList.add('active');
+    }
+  });
+}
+
+function doGlobalSearch(val) {
+  // Simple client-side search
+  if (!val) return;
+}
+
+function exportData(type) {
+  showToast('Export tayyorlanmoqda...');
+}
+
+/* ═══════════════════════════════════════════
+   THEME & LOGOUT
+═══════════════════════════════════════════ */
 function toggleTheme() {
-  const isLight = document.body.classList.toggle('light-theme');
+  var isLight = document.body.classList.toggle('light-theme');
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
 }
 
@@ -807,336 +996,388 @@ async function logout() {
   window.location.href = 'admin_login.html';
 }
 
-/* ═══ DASHBOARD ═══ */
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type === 'err' ? ' err' : '');
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
+}
+
+/* ═══════════════════════════════════════════
+   MODAL HELPERS
+═══════════════════════════════════════════ */
+function openModal(id) {
+  var el = document.getElementById(id);
+  if (el) { el.style.display = 'flex'; setTimeout(function() { el.classList.add('open'); }, 10); }
+}
+function closeModal(id) {
+  var el = document.getElementById(id);
+  if (el) { el.classList.remove('open'); setTimeout(function() { el.style.display = 'none'; }, 300); }
+}
+
+/* ═══════════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════════ */
 async function loadDashboard() {
   try {
     const statsRes = await fetch('/api/admin/stats', { credentials: 'include' });
     const statsData = await statsRes.json();
     if (statsData.success) {
-      const s = statsData.stats;
-      document.getElementById('statsGrid').innerHTML = `
-        <div class="kpi-card"><div class="kpi-icon" style="background:var(--blue-d)">👨‍🎓</div><div class="kpi-val">${s.students || 0}</div><div class="kpi-label">Jami abituriyentlar</div></div>
-        <div class="kpi-card"><div class="kpi-icon" style="background:var(--purple-d)">👨‍🏫</div><div class="kpi-val">${s.mentors || 0}</div><div class="kpi-label">Aktiv mentorlar</div></div>
-        <div class="kpi-card"><div class="kpi-icon" style="background:var(--teal-d)">📅</div><div class="kpi-val">${s.sessions || 0}</div><div class="kpi-label">Jami sessiyalar</div></div>
-        <div class="kpi-card"><div class="kpi-icon" style="background:var(--gold-d)">💰</div><div class="kpi-val">${s.pending_withdrawals || 0}</div><div class="kpi-label">Kutilayotgan to'lovlar</div></div>
-      `;
+      var s = statsData.stats;
+      document.getElementById('statsGrid').innerHTML =
+        '<div class="kpi-card"><div class="kpi-icon" style="background:var(--blue-d)">👨‍🎓</div><div class="kpi-val">' + (s.students || 0) + '</div><div class="kpi-label">Jami abituriyentlar</div></div>' +
+        '<div class="kpi-card"><div class="kpi-icon" style="background:var(--purple-d)">👨‍🏫</div><div class="kpi-val">' + (s.mentors || 0) + '</div><div class="kpi-label">Aktiv mentorlar</div></div>' +
+        '<div class="kpi-card"><div class="kpi-icon" style="background:var(--teal-d)">📅</div><div class="kpi-val">' + (s.sessions || 0) + '</div><div class="kpi-label">Jami sessiyalar</div></div>' +
+        '<div class="kpi-card"><div class="kpi-icon" style="background:var(--gold-d)">💰</div><div class="kpi-val">' + (s.pending_withdrawals || 0) + '</div><div class="kpi-label">Kutilayotgan to\'lovlar</div></div>';
       document.getElementById('nc-students').textContent = s.students || 0;
       document.getElementById('nc-mentors').textContent = s.mentors || 0;
       document.getElementById('nc-wd').textContent = s.pending_withdrawals || 0;
       if (s.pending_withdrawals > 0) {
         document.getElementById('wdAlert').style.display = 'flex';
-        document.getElementById('wdAlertText').textContent = `${s.pending_withdrawals} ta withdrawal kutilmoqda`;
-      } else { document.getElementById('wdAlert').style.display = 'none'; }
+        document.getElementById('wdAlertText').textContent = s.pending_withdrawals + ' ta withdrawal kutilmoqda';
+      } else {
+        document.getElementById('wdAlert').style.display = 'none';
+      }
     }
-    
-    const sessionsRes = await fetch('/api/admin/sessions?limit=5', { credentials: 'include' });
-    const sessionsData = await sessionsRes.json();
-    if (sessionsData.success) {
-      const recent = sessionsData.sessions.slice(0, 5);
-      document.getElementById('recentTable').innerHTML = recent.length 
-        ? recent.map(s => `<tr><td>${s.student_name || '—'}</td><td>${s.mentor_name || '—'}</td><td>${s.session_type || '—'}</td><td>${formatDate(s.scheduled_at)}</td><td>${statusBadge(s.status)}</td><td>${fmt(s.points_awarded || 0)} so'm</td></tr>`).join('')
+    const sessRes = await fetch('/api/admin/sessions?limit=5', { credentials: 'include' });
+    const sessData = await sessRes.json();
+    if (sessData.success) {
+      var recent = sessData.sessions.slice(0, 5);
+      document.getElementById('recentTable').innerHTML = recent.length
+        ? recent.map(function(s) {
+            return '<tr><td>' + (s.student_name || '—') + '</td><td>' + (s.mentor_name || '—') + '</td><td>' + (s.session_type || '—') + '</td><td>' + formatDate(s.scheduled_at) + '</td><td>' + statusBadge(s.status) + '</td><td>' + fmt(s.points_awarded || 0) + ' so\'m</td></tr>';
+          }).join('')
         : '<tr><td colspan="6" style="text-align:center;padding:20px">Ma\'lumot yo\'q</td></tr>';
     }
     renderCharts();
-  } catch (error) { console.error(error); }
+  } catch (e) { console.error(e); }
 }
 
-/* ═══ CHARTS ═══ */
 function renderCharts() {
-  const vals = [18,24,31,19,28,35,22,40];
-  const max = Math.max(...vals);
-  document.getElementById('sessChart').innerHTML = vals.map((v,i)=>
-    `<div class="bc-col"><div class="bc-val">${v}</div><div class="bc-bar" style="height:${Math.round(v/max*100)}%"></div><div class="bc-lbl">H${i+1}</div></div>`
-  ).join('');
-  document.getElementById('donutChart').innerHTML = `
-    <div class="donut" style="position:relative;"><div class="donut-hole" style="position:absolute;top:15px;left:15px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">247</div></div>
-    <div class="donut-legend">
-      <div class="dl-item"><div class="dl-dot" style="background:var(--gold)"></div>1-on-1 Basic (45%)</div>
-      <div class="dl-item"><div class="dl-dot" style="background:var(--teal)"></div>Group Pro (27%)</div>
-      <div class="dl-item"><div class="dl-dot" style="background:var(--purple)"></div>Elite (16%)</div>
-      <div class="dl-item"><div class="dl-dot" style="background:var(--s3)"></div>Free (12%)</div>
-    </div>`;
+  var vals = [18,24,31,19,28,35,22,40];
+  var max = Math.max.apply(null, vals);
+  document.getElementById('sessChart').innerHTML = vals.map(function(v, i) {
+    return '<div class="bc-col"><div class="bc-val">' + v + '</div><div class="bc-bar" style="height:' + Math.round(v/max*100) + '%"></div><div class="bc-lbl">H' + (i+1) + '</div></div>';
+  }).join('');
+  document.getElementById('donutChart').innerHTML =
+    '<div class="donut" style="position:relative;"><div class="donut-hole" style="position:absolute;top:15px;left:15px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">247</div></div>' +
+    '<div class="donut-legend">' +
+    '<div class="dl-item"><div class="dl-dot" style="background:var(--gold)"></div>1-on-1 Basic (45%)</div>' +
+    '<div class="dl-item"><div class="dl-dot" style="background:var(--teal)"></div>Group Pro (27%)</div>' +
+    '<div class="dl-item"><div class="dl-dot" style="background:var(--purple)"></div>Elite (16%)</div>' +
+    '<div class="dl-item"><div class="dl-dot" style="background:var(--s3)"></div>Free (12%)</div>' +
+    '</div>';
 }
 
-/* ═══ ANALYTICS ═══ */
+/* ═══════════════════════════════════════════
+   ANALYTICS
+═══════════════════════════════════════════ */
 function loadAnalytics() {
-  const revVals = [2.1,2.8,3.2,2.9,3.8,4.1,3.5,4.8];
-  const revMax = Math.max(...revVals);
-  document.getElementById('revenueChart').innerHTML = revVals.map(v => `<div class="bc-col"><div class="bc-val">${v}M</div><div class="bc-bar" style="height:${v/revMax*100}%"></div></div>`).join('');
-  
-  const regVals = [12,18,9,24,15,30,21,18];
-  const regMax = Math.max(...regVals);
-  document.getElementById('registChart').innerHTML = regVals.map(v => `<div class="bc-col"><div class="bc-val">${v}</div><div class="bc-bar" style="height:${v/regMax*100}%"></div></div>`).join('');
-  
-  const topMentors = allMentors.filter(m => m.is_verified).sort((a,b) => (b.total_sessions||0) - (a.total_sessions||0)).slice(0,5);
-  document.getElementById('topMentorsChart').innerHTML = topMentors.map(m => `
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <div style="width:24px;height:24px;border-radius:50%;background:${strColor(m.full_name)}">${(m.full_name||'M')[0]}</div>
-      <div style="flex:1"><div>${m.full_name}</div><div style="height:4px;background:var(--s3);border-radius:2px"><div style="width:${Math.min(100, (m.total_sessions||0)/55*100)}%;height:4px;background:var(--gold);border-radius:2px"></div></div></div>
-      <div style="color:var(--gold)">${m.total_sessions||0}</div>
-    </div>`).join('');
-  
-  document.getElementById('analyticsUniTable').innerHTML = allUniversities.slice(0,5).map(u => {
-    const uniMentors = allMentors.filter(m => m.university === u.short_name);
-    return `<tr><td><span class="badge b-gold">${u.short_name}</span></td><td>${uniMentors.length}</td><td>—</td><td>${uniMentors.reduce((s,m)=>s + (m.total_sessions||0), 0)}</td><td>—</td><td>${(uniMentors.reduce((s,m)=>s + (m.rating||0), 0) / (uniMentors.length||1)).toFixed(1)}★</td></tr>`;
+  var revVals = [2.1,2.8,3.2,2.9,3.8,4.1,3.5,4.8];
+  var revMax = Math.max.apply(null, revVals);
+  document.getElementById('revenueChart').innerHTML = revVals.map(function(v) {
+    return '<div class="bc-col"><div class="bc-val">' + v + 'M</div><div class="bc-bar" style="height:' + (v/revMax*100) + '%"></div></div>';
+  }).join('');
+  var regVals = [12,18,9,24,15,30,21,18];
+  var regMax = Math.max.apply(null, regVals);
+  document.getElementById('registChart').innerHTML = regVals.map(function(v) {
+    return '<div class="bc-col"><div class="bc-val">' + v + '</div><div class="bc-bar" style="height:' + (v/regMax*100) + '%"></div></div>';
+  }).join('');
+  var topMentors = allMentors.filter(function(m) { return m.is_verified; }).sort(function(a,b) { return (b.total_sessions||0)-(a.total_sessions||0); }).slice(0,5);
+  document.getElementById('topMentorsChart').innerHTML = topMentors.map(function(m) {
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+      '<div style="width:24px;height:24px;border-radius:50%;background:' + strColor(m.full_name) + ';display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">' + (m.full_name||'M')[0] + '</div>' +
+      '<div style="flex:1"><div style="font-size:12px">' + m.full_name + '</div><div style="height:4px;background:var(--s3);border-radius:2px"><div style="width:' + Math.min(100,(m.total_sessions||0)/55*100) + '%;height:4px;background:var(--gold);border-radius:2px"></div></div></div>' +
+      '<div style="color:var(--gold);font-size:13px">' + (m.total_sessions||0) + '</div></div>';
+  }).join('');
+  document.getElementById('analyticsUniTable').innerHTML = allUniversities.slice(0,5).map(function(u) {
+    var uniMentors = allMentors.filter(function(m) { return m.university === u.short_name; });
+    return '<tr><td><span class="badge b-gold">' + u.short_name + '</span></td><td>' + uniMentors.length + '</td><td>—</td><td>' + uniMentors.reduce(function(s,m) { return s+(m.total_sessions||0); }, 0) + '</td><td>—</td><td>' + (uniMentors.reduce(function(s,m) { return s+(m.rating||0); }, 0)/(uniMentors.length||1)).toFixed(1) + '★</td></tr>';
   }).join('');
 }
 
-/* ═══ STUDENTS ═══ */
+/* ═══════════════════════════════════════════
+   STUDENTS
+═══════════════════════════════════════════ */
 async function loadStudents() {
   try {
     const res = await fetch('/api/admin/students', { credentials: 'include' });
     const data = await res.json();
     if (data.success) {
       allStudents = data.students || [];
-      document.getElementById('studentsSub').textContent = `${allStudents.length} ta ro'yxatdan o'tgan`;
+      document.getElementById('studentsSub').textContent = allStudents.length + " ta ro'yxatdan o'tgan";
       renderStudents(allStudents);
     }
-  } catch (error) { console.error(error); }
+  } catch (e) { console.error(e); }
 }
 function renderStudents(list) {
-  const tierMap = { free:'b-gray', group:'b-teal', basic:'b-gold', elite:'b-purple' };
+  var tierMap = { free:'b-gray', group:'b-teal', basic:'b-gold', elite:'b-purple' };
   document.getElementById('studentsTable').innerHTML = list.length
-    ? list.map(s => `<tr>
-        <td><div class="td-name"><div class="td-avatar" style="background:${strColor(s.full_name)}">${(s.full_name||'U')[0]}</div><div class="td-info"><h4>${s.full_name||'—'}</h4><p>${s.username||''}</p></div></div></td>
-        <td>${s.phone||'—'}</td><td><span class="badge ${tierMap[s.subscription_tier]||'b-gray'}">${(s.subscription_tier||'free').toUpperCase()}</span></td>
-        <td>${s.total_sessions||0}</td><td>${formatDate(s.created_at)}</td>
-        <td><span class="badge ${s.is_active ? 'b-green' : 'b-red'}">${s.is_active ? 'Aktiv' : 'Bloklangan'}</span></td>
-      </tr>`).join('')
+    ? list.map(function(s) {
+        return '<tr><td><div class="td-name"><div class="td-avatar" style="background:' + strColor(s.full_name) + '">' + (s.full_name||'U')[0] + '</div><div class="td-info"><h4>' + (s.full_name||'—') + '</h4><p>' + (s.username||'') + '</p></div></div></td>' +
+          '<td>' + (s.phone||'—') + '</td><td><span class="badge ' + (tierMap[s.subscription_tier]||'b-gray') + '">' + (s.subscription_tier||'free').toUpperCase() + '</span></td>' +
+          '<td>' + (s.total_sessions||0) + '</td><td>' + formatDate(s.created_at) + '</td>' +
+          '<td><span class="badge ' + (s.is_active ? 'b-green' : 'b-red') + '">' + (s.is_active ? 'Aktiv' : 'Bloklangan') + '</span></td></tr>';
+      }).join('')
     : '<tr><td colspan="6" style="text-align:center">Ma\'lumot yo\'q</td></tr>';
 }
 function filterStudents(filter, btn) {
-  document.querySelectorAll('#pg-students .filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('#pg-students .filter-chip').forEach(function(c) { c.classList.remove('active'); });
   btn.classList.add('active');
-  let filtered = allStudents;
-  if (filter === 'active') filtered = allStudents.filter(s => s.is_active);
-  if (filter === 'premium') filtered = allStudents.filter(s => s.subscription_tier && s.subscription_tier !== 'free');
+  var filtered = allStudents;
+  if (filter === 'active') filtered = allStudents.filter(function(s) { return s.is_active; });
+  if (filter === 'premium') filtered = allStudents.filter(function(s) { return s.subscription_tier && s.subscription_tier !== 'free'; });
   renderStudents(filtered);
 }
 
-/* ═══ MENTORS ═══ */
+/* ═══════════════════════════════════════════
+   MENTORS
+═══════════════════════════════════════════ */
 async function loadMentors() {
   try {
     const res = await fetch('/api/admin/mentors', { credentials: 'include' });
     const data = await res.json();
     if (data.success) {
       allMentors = data.mentors || [];
-      document.getElementById('mentorsSub').textContent = `${allMentors.filter(m => m.is_verified).length} aktiv, ${allMentors.filter(m => !m.is_verified).length} kutilmoqda`;
+      document.getElementById('mentorsSub').textContent = allMentors.filter(function(m) { return m.is_verified; }).length + ' aktiv, ' + allMentors.filter(function(m) { return !m.is_verified; }).length + ' kutilmoqda';
       renderMentors(allMentors);
     }
-  } catch (error) { console.error(error); }
+  } catch (e) { console.error(e); }
 }
 function renderMentors(list) {
   document.getElementById('mentorsTable').innerHTML = list.length
-    ? list.map(m => `<tr>
-        <td><div class="td-name"><div class="td-avatar" style="background:${strColor(m.full_name)}">${(m.full_name||'M')[0]}</div><div class="td-info"><h4>${m.full_name||'—'}</h4><p>${m.faculty||''}</p></div></div></td>
-        <td>${m.university||'—'}</td><td>${m.rating ? '★ ' + m.rating : '—'}</td><td style="color:var(--gold)">${fmt(m.balance||0)} so'm</td><td>${m.total_sessions||0}</td>
-        <td>${m.is_verified ? '<span class="badge b-green">✓ Tasdiqlangan</span>' : '<span class="badge b-gold">⏳ Kutilmoqda</span>'}</td>
-        <td><button class="btn btn-ghost btn-sm" onclick="openMentorModal('${m.id}')">Ko'rish</button></td>
-      </tr>`).join('')
+    ? list.map(function(m) {
+        return '<tr><td><div class="td-name"><div class="td-avatar" style="background:' + strColor(m.full_name) + '">' + (m.full_name||'M')[0] + '</div><div class="td-info"><h4>' + (m.full_name||'—') + '</h4><p>' + (m.faculty||'') + '</p></div></div></td>' +
+          '<td>' + (m.university||'—') + '</td><td>' + (m.rating ? '★ '+m.rating : '—') + '</td><td style="color:var(--gold)">' + fmt(m.balance||0) + ' so\'m</td><td>' + (m.total_sessions||0) + '</td>' +
+          '<td>' + (m.is_verified ? '<span class="badge b-green">✓ Tasdiqlangan</span>' : '<span class="badge b-gold">⏳ Kutilmoqda</span>') + '</td>' +
+          '<td><button class="btn btn-ghost btn-sm" onclick="openMentorModal(\'' + m.id + '\')">Ko\'rish</button></td></tr>';
+      }).join('')
     : '<tr><td colspan="7" style="text-align:center">Ma\'lumot yo\'q</td></tr>';
 }
 function filterMentors(filter, btn) {
-  document.querySelectorAll('#pg-mentors .filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('#pg-mentors .filter-chip').forEach(function(c) { c.classList.remove('active'); });
   btn.classList.add('active');
-  let filtered = allMentors;
-  if (filter === 'pending') filtered = allMentors.filter(m => !m.is_verified);
-  if (filter === 'verified') filtered = allMentors.filter(m => m.is_verified);
+  var filtered = allMentors;
+  if (filter === 'pending') filtered = allMentors.filter(function(m) { return !m.is_verified; });
+  if (filter === 'verified') filtered = allMentors.filter(function(m) { return m.is_verified; });
   renderMentors(filtered);
 }
 function openMentorModal(id) {
   currentMentorId = id;
-  const m = allMentors.find(x => x.id === id);
-  if(!m) return;
-  document.getElementById('mentorModalBody').innerHTML = `
-      <div style="font-size:13px; line-height:1.6;">
-        <p><b>Ismi:</b> ${m.full_name || '—'}</p>
-        <p><b>Universitet:</b> ${m.university || '—'}</p>
-        <p><b>Fakultet:</b> ${m.faculty || '—'}</p>
-        <p><b>Telefon:</b> ${m.phone || '—'}</p>
-        <p><b>Telegram ID:</b> ${m.telegram_id || '—'}</p>
-      </div>`;
+  var m = allMentors.find(function(x) { return x.id === id; });
+  if (!m) return;
+  document.getElementById('mentorModalBody').innerHTML =
+    '<div style="font-size:13px;line-height:1.8">' +
+    '<p><b>Ismi:</b> ' + (m.full_name||'—') + '</p>' +
+    '<p><b>Universitet:</b> ' + (m.university||'—') + '</p>' +
+    '<p><b>Fakultet:</b> ' + (m.faculty||'—') + '</p>' +
+    '<p><b>Telefon:</b> ' + (m.phone||'—') + '</p>' +
+    '<p><b>Telegram ID:</b> ' + (m.telegram_id||'—') + '</p>' +
+    '<p><b>Balans:</b> <span style="color:var(--gold)">' + fmt(m.balance||0) + ' so\'m</span></p>' +
+    '<p><b>Sessiyalar:</b> ' + (m.total_sessions||0) + '</p>' +
+    '</div>';
   openModal('mentorModal');
 }
 function approveMentor() { verifyMentor(currentMentorId, false); closeModal('mentorModal'); }
 function rejectMentor() { closeModal('mentorModal'); openRejectModal(currentMentorId); }
 
-/* ═══ VERIFY ═══ */
+/* ═══════════════════════════════════════════
+   VERIFY
+═══════════════════════════════════════════ */
 async function loadVerify() {
   try {
     const res = await fetch('/api/admin/mentors/verify', { credentials: 'include' });
     const data = await res.json();
     if (data.success) {
       allVerifyMentors = data.mentors || [];
-      document.getElementById('nc-verify').textContent = allVerifyMentors.filter(m => !m.is_verified).length;
+      document.getElementById('nc-verify').textContent = allVerifyMentors.filter(function(m) { return !m.is_verified; }).length;
       renderVerify(currentVerifyFilter);
     }
-  } catch (error) { console.error(error); }
+  } catch (e) { console.error(e); }
 }
 function renderVerify(filter) {
-  let list = allVerifyMentors;
-  if (filter === 'pending') list = allVerifyMentors.filter(m => !m.is_verified);
-  if (filter === 'verified') list = allVerifyMentors.filter(m => m.is_verified);
-  
+  var list = allVerifyMentors;
+  if (filter === 'pending') list = allVerifyMentors.filter(function(m) { return !m.is_verified; });
+  if (filter === 'verified') list = allVerifyMentors.filter(function(m) { return m.is_verified; });
   document.getElementById('verifyTable').innerHTML = list.length
-    ? list.map(m => {
-        const created = new Date(m.created_at || Date.now());
-        const deadline = new Date(created.getTime() + 3*24*60*60*1000);
-        const now = new Date();
-        const daysLeft = Math.max(0, Math.ceil((deadline-now)/86400000));
-        return `<tr>
-          <td><div class="td-name"><div class="td-avatar" style="background:${strColor(m.full_name)}">${(m.full_name||'M')[0]}</div><div><h4>${m.full_name||'—'}</h4><p>${m.phone||''}</p></div></div></td>
-          <td>${m.university||'—'}</td><td>${m.year ? m.year+'-kurs' : '—'}</td><td>${formatDate(m.student_id_uploaded_at || m.created_at)}</td>
-          <td>${m.is_verified ? '—' : daysLeft > 0 ? daysLeft + ' kun' : '<span style="color:var(--red)">Muddati o\'tgan</span>'}</td>
-          <td>${m.is_verified ? '<span class="badge b-green">Tasdiqlangan</span>' : '<span class="badge b-gold">Kutilmoqda</span>'}</td>
-          <td>
-            ${m.student_id_url ? `<button class="btn btn-ghost btn-sm" onclick="openDocModal('${m.id}')">Guvohnoma</button>` : ''}
-            ${!m.is_verified && m.student_id_url ? `<button class="btn btn-green btn-sm" onclick="verifyMentor('${m.id}')">✓</button><button class="btn btn-red btn-sm" onclick="openRejectModal('${m.id}')">✕</button>` : ''}
-          </td>
-        </tr>`;
+    ? list.map(function(m) {
+        var created = new Date(m.created_at || Date.now());
+        var deadline = new Date(created.getTime() + 3*24*60*60*1000);
+        var now = new Date();
+        var daysLeft = Math.max(0, Math.ceil((deadline-now)/86400000));
+        return '<tr>' +
+          '<td><div class="td-name"><div class="td-avatar" style="background:' + strColor(m.full_name) + '">' + (m.full_name||'M')[0] + '</div><div><h4>' + (m.full_name||'—') + '</h4><p>' + (m.phone||'') + '</p></div></div></td>' +
+          '<td>' + (m.university||'—') + '</td>' +
+          '<td>' + (m.year ? m.year+'-kurs' : '—') + '</td>' +
+          '<td>' + formatDate(m.student_id_uploaded_at || m.created_at) + '</td>' +
+          '<td>' + (m.is_verified ? '—' : daysLeft > 0 ? daysLeft+' kun' : '<span style="color:var(--red)">Muddati o\'tgan</span>') + '</td>' +
+          '<td>' + (m.is_verified ? '<span class="badge b-green">Tasdiqlangan</span>' : '<span class="badge b-gold">Kutilmoqda</span>') + '</td>' +
+          '<td style="display:flex;gap:4px;align-items:center">' +
+          (m.student_id_url ? '<button class="btn btn-ghost btn-sm" onclick="openDocModal(\'' + m.id + '\')">Guvohnoma</button>' : '') +
+          (!m.is_verified && m.student_id_url ? '<button class="btn btn-green btn-sm" onclick="verifyMentor(\'' + m.id + '\')">✓</button><button class="btn btn-red btn-sm" onclick="openRejectModal(\'' + m.id + '\')">✕</button>' : '') +
+          '</td></tr>';
       }).join('')
     : '<tr><td colspan="7" style="text-align:center">Ma\'lumot yo\'q</td></tr>';
 }
 function filterVerify(filter, btn) {
   currentVerifyFilter = filter;
-  document.querySelectorAll('#pg-verify .filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('#pg-verify .filter-chip').forEach(function(c) { c.classList.remove('active'); });
   btn.classList.add('active');
   renderVerify(filter);
 }
 function openDocModal(id) {
   currentDocMentorId = id;
-  const m = allVerifyMentors.find(x => x.id === id);
+  var m = allVerifyMentors.find(function(x) { return x.id === id; });
   if (!m || !m.student_id_url) return;
-  const isImg = /\.(jpg|jpeg|png|gif|webp)$/i.test(m.student_id_url);
-  const isPdf = /\.pdf$/i.test(m.student_id_url);
-  
-  document.getElementById('docModalBody').innerHTML = `
-    <div style="margin-bottom:16px">
-      <div class="av-wrap" style="display:flex;gap:10px;align-items:center">
-        <div class="td-avatar" style="width:40px;height:40px;background:${strColor(m.full_name)}">${(m.full_name||'M')[0]}</div>
-        <div><h4>${m.full_name}</h4><p style="color:var(--text2)">${m.university} · ${m.faculty}</p></div>
-      </div>
-    </div>
-    ${isImg ? `<div class="img-preview"><img src="${m.student_id_url}" alt="Guvohnoma"/></div>` : ''}
-    ${isPdf ? `<iframe class="doc-frame" src="${m.student_id_url}"></iframe>` : ''}
-    ${!isImg && !isPdf ? `<a href="${m.student_id_url}" target="_blank" class="btn btn-ghost">Faylni ochish</a>` : ''}
-  `;
+  var isImg = /\.(jpg|jpeg|png|gif|webp)$/i.test(m.student_id_url);
+  var isPdf = /\.pdf$/i.test(m.student_id_url);
+  document.getElementById('docModalBody').innerHTML =
+    '<div style="margin-bottom:16px;display:flex;gap:10px;align-items:center">' +
+    '<div class="td-avatar" style="width:40px;height:40px;background:' + strColor(m.full_name) + '">' + (m.full_name||'M')[0] + '</div>' +
+    '<div><h4>' + m.full_name + '</h4><p style="color:var(--text2)">' + (m.university||'') + ' · ' + (m.faculty||'') + '</p></div></div>' +
+    (isImg ? '<div class="img-preview"><img src="' + m.student_id_url + '" alt="Guvohnoma"/></div>' : '') +
+    (isPdf ? '<iframe class="doc-frame" src="' + m.student_id_url + '"></iframe>' : '') +
+    (!isImg && !isPdf ? '<a href="' + m.student_id_url + '" target="_blank" class="btn btn-ghost">Faylni ochish</a>' : '');
   openModal('docModal');
 }
-async function verifyMentor(id, fromModal = false) {
+async function verifyMentor(id, fromModal) {
   if (!confirm('Mentorni tasdiqlaysizmi?')) return;
   try {
-    const res = await fetch(`/api/admin/mentors/${id}/verify`, { method: 'POST', credentials: 'include' });
+    const res = await fetch('/api/admin/mentors/' + id + '/verify', { method: 'POST', credentials: 'include' });
     const data = await res.json();
     if (data.success) {
       if (fromModal) closeModal('docModal');
       await loadVerify();
       showToast('✅ Tasdiqlandi');
     }
-  } catch (error) { showToast('Xatolik', 'err'); }
+  } catch (e) { showToast('Xatolik', 'err'); }
 }
 function openRejectModal(id) { currentMentorId = id; openModal('rejectModal'); }
 async function confirmReject() {
-  const reason = document.getElementById('rejectReason').value;
+  var reason = document.getElementById('rejectReason').value;
   try {
-    const res = await fetch(`/api/admin/mentors/${currentMentorId}/suspend`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }), credentials: 'include' });
+    const res = await fetch('/api/admin/mentors/' + currentMentorId + '/suspend', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({reason: reason}), credentials: 'include'
+    });
     const data = await res.json();
     if (data.success) { closeModal('rejectModal'); await loadVerify(); showToast('Rad etildi'); }
-  } catch (error) { showToast('Xatolik', 'err'); }
+  } catch (e) { showToast('Xatolik', 'err'); }
 }
-function approveFromDoc() { if (currentDocMentorId) { verifyMentor(currentDocMentorId, true); closeModal('docModal'); } }
+function approveFromDoc() { if (currentDocMentorId) { verifyMentor(currentDocMentorId, true); } }
 function rejectFromDoc() { if (currentDocMentorId) { closeModal('docModal'); openRejectModal(currentDocMentorId); } }
 
-/* ═══ SESSIONS ═══ */
+/* ═══════════════════════════════════════════
+   SESSIONS
+═══════════════════════════════════════════ */
 async function loadSessions() {
   try {
     const res = await fetch('/api/admin/sessions', { credentials: 'include' });
     const data = await res.json();
     if (data.success) { allSessions = data.sessions || []; renderSessions('all'); }
-  } catch (error) { console.error(error); }
+  } catch (e) { console.error(e); }
 }
 function renderSessions(filter) {
-  let list = allSessions;
-  if (filter !== 'all') list = allSessions.filter(s => s.status === filter);
+  var list = filter === 'all' ? allSessions : allSessions.filter(function(s) { return s.status === filter; });
   document.getElementById('sessionsTable').innerHTML = list.length
-    ? list.map(s => `<tr><td>${s.student_name || '—'}</td><td>${s.mentor_name || '—'}</td><td>${s.session_type || '—'}</td><td>${formatDate(s.scheduled_at)}</td><td>${s.points_awarded || 0}</td><td>${statusBadge(s.status)}</td></tr>`).join('')
+    ? list.map(function(s) {
+        return '<tr><td>' + (s.student_name||'—') + '</td><td>' + (s.mentor_name||'—') + '</td><td>' + (s.session_type||'—') + '</td><td>' + formatDate(s.scheduled_at) + '</td><td>' + (s.points_awarded||0) + '</td><td>—</td><td>' + statusBadge(s.status) + '</td></tr>';
+      }).join('')
     : '<tr><td colspan="7" style="text-align:center">Ma\'lumot yo\'q</td></tr>';
 }
 function filterSessions(filter, btn) {
-  document.querySelectorAll('#pg-sessions .filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('#pg-sessions .filter-chip').forEach(function(c) { c.classList.remove('active'); });
   btn.classList.add('active');
   renderSessions(filter);
 }
 
-/* ═══ WITHDRAWALS ═══ */
+/* ═══════════════════════════════════════════
+   WITHDRAWALS
+═══════════════════════════════════════════ */
 async function loadWd() {
   try {
     const res = await fetch('/api/admin/withdrawals?status=all', { credentials: 'include' });
     const data = await res.json();
     if (data.success) { allWithdrawals = data.withdrawals || []; renderWithdrawals('all'); }
-  } catch (error) { console.error(error); }
+  } catch (e) { console.error(e); }
 }
 function renderWithdrawals(filter) {
-  let list = allWithdrawals;
-  if (filter !== 'all') list = allWithdrawals.filter(w => w.status === filter);
+  var list = filter === 'all' ? allWithdrawals : allWithdrawals.filter(function(w) { return w.status === filter; });
   document.getElementById('wdList').innerHTML = list.length
-    ? list.map(w => `<div class="wd-card">
-        <div class="wd-avatar" style="background:${strColor(w.mentor_name)}">${(w.mentor_name||'M')[0]}</div>
-        <div class="wd-info"><div class="wd-name">${w.mentor_name}</div><div class="wd-meta">${formatDate(w.created_at)}</div><div class="wd-card-num">${w.card_last4 ? '**** '+w.card_last4 : '—'}</div>
-          <div class="wd-actions">
-            ${w.status === 'pending' ? `<button class="btn btn-green" onclick="approveWD('${w.id}')">✓ Tasdiqlash</button><button class="btn btn-red" onclick="rejectWD('${w.id}')">Rad</button>` : `<span class="badge ${w.status === 'approved' || w.status === 'paid' ? 'b-green' : 'b-red'}">${w.status === 'approved' || w.status === 'paid' ? 'To\'langan' : 'Rad'}</span>`}
-          </div>
-        </div>
-        <div class="wd-amount">${fmt(w.amount)}<br><span style="font-size:11px">so'm</span></div>
-      </div>`).join('')
+    ? list.map(function(w) {
+        return '<div class="wd-card">' +
+          '<div class="wd-avatar" style="background:' + strColor(w.mentor_name) + '">' + (w.mentor_name||'M')[0] + '</div>' +
+          '<div class="wd-info"><div class="wd-name">' + (w.mentor_name||'—') + '</div><div class="wd-meta">' + formatDate(w.created_at) + '</div>' +
+          '<div class="wd-card-num">' + (w.card_last4 ? '**** '+w.card_last4 : '—') + '</div>' +
+          '<div class="wd-actions">' +
+          (w.status === 'pending'
+            ? '<button class="btn btn-green" onclick="approveWD(\'' + w.id + '\')">✓ Tasdiqlash</button><button class="btn btn-red" onclick="rejectWD(\'' + w.id + '\')">Rad</button>'
+            : '<span class="badge ' + (w.status==='approved'||w.status==='paid' ? 'b-green' : 'b-red') + '">' + (w.status==='approved'||w.status==='paid' ? "To'langan" : 'Rad') + '</span>') +
+          '</div></div>' +
+          '<div class="wd-amount">' + fmt(w.amount) + '<br><span style="font-size:11px">so\'m</span></div>' +
+          '</div>';
+      }).join('')
     : '<div style="padding:24px;text-align:center">So\'rov yo\'q</div>';
 }
 function filterWithdrawals(filter, btn) {
-  document.querySelectorAll('#pg-withdrawals .filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('#pg-withdrawals .filter-chip').forEach(function(c) { c.classList.remove('active'); });
   btn.classList.add('active');
   renderWithdrawals(filter);
 }
 async function approveWD(id) {
-  if (!confirm('To\'lovni tasdiqlaysizmi?')) return;
+  if (!confirm("To'lovni tasdiqlaysizmi?")) return;
   try {
-    const res = await fetch(`/api/admin/withdrawals/${id}/approve`, { method: 'POST', credentials: 'include' });
+    const res = await fetch('/api/admin/withdrawals/' + id + '/approve', { method: 'POST', credentials: 'include' });
     const data = await res.json();
     if (data.success) { await loadWd(); showToast('✅ Tasdiqlandi'); }
-  } catch (error) { showToast('Xatolik', 'err'); }
+  } catch (e) { showToast('Xatolik', 'err'); }
 }
 async function rejectWD(id) {
   if (!confirm('Rad etasizmi?')) return;
   try {
-    const res = await fetch(`/api/admin/withdrawals/${id}/reject`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ reason: 'Admin bekor qildi' }), credentials: 'include' });
+    const res = await fetch('/api/admin/withdrawals/' + id + '/reject', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({reason: 'Admin bekor qildi'}), credentials: 'include'
+    });
     const data = await res.json();
     if (data.success) { await loadWd(); showToast('Rad etildi'); }
-  } catch (error) { showToast('Xatolik', 'err'); }
+  } catch (e) { showToast('Xatolik', 'err'); }
 }
 
-/* ═══ UNIVERSITIES ═══ */
-let currentUniFaculties = [];
+/* ═══════════════════════════════════════════
+   UNIVERSITIES
+═══════════════════════════════════════════ */
 async function loadUniversities() {
   try {
     const res = await fetch('/api/universities', { credentials: 'include' });
     const data = await res.json();
     if (data.success) { allUniversities = data.universities || []; renderUniGrid(allUniversities); }
-  } catch (error) { console.error(error); }
+  } catch (e) { console.error(e); }
 }
 function renderUniGrid(list) {
-  document.getElementById('uniGrid').innerHTML = list.length 
-    ? list.map(u => `<div class="uni-manage-card"><img class="umc-img" src="${u.cover_url || ''}" alt="Cover"><div class="umc-body"><div class="umc-short">${u.short_name || '—'}</div><div class="umc-name">${u.full_name || '—'}</div><div class="umc-actions"><button class="btn btn-surface btn-sm" onclick="openUniModal('${u.id}')">Tahrirlash</button><button class="btn btn-red btn-sm" onclick="deleteUni('${u.id}')">O'chirish</button></div></div></div>`).join('')
-    : '<div style="grid-column:1/-1;text-align:center;padding:20px;">Universitetlar kiritilmagan</div>';
+  document.getElementById('uniGrid').innerHTML = list.length
+    ? list.map(function(u) {
+        return '<div class="uni-manage-card">' +
+          (u.cover_url ? '<img class="umc-img" src="' + u.cover_url + '" alt="Cover">' : '<div class="umc-img" style="display:flex;align-items:center;justify-content:center;font-size:32px">🏛</div>') +
+          '<div class="umc-body"><div class="umc-short">' + (u.short_name||'—') + '</div><div class="umc-name">' + (u.full_name||'—') + '</div>' +
+          '<div class="umc-actions"><button class="btn btn-surface btn-sm" onclick="openUniModal(\'' + u.id + '\')">Tahrirlash</button><button class="btn btn-red btn-sm" onclick="deleteUni(\'' + u.id + '\')">O\'chirish</button></div></div></div>';
+      }).join('')
+    : '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text2)">Universitetlar kiritilmagan</div>';
 }
 function toggleAdvanced() {
-  const section = document.getElementById('advancedSection');
-  section.style.display = section.style.display === 'none' ? 'block' : 'none';
+  var s = document.getElementById('advancedSection');
+  s.style.display = s.style.display === 'none' ? 'block' : 'none';
 }
 function openUniModal(id) {
   editUniId = id || null;
   if (id) {
-    fetch(`/api/universities/${id}`, { credentials: 'include' }).then(res => res.json()).then(data => {
+    fetch('/api/universities/' + id, { credentials: 'include' }).then(function(r) { return r.json(); }).then(function(data) {
       if (data.success) {
-        const u = data.university;
+        var u = data.university;
         document.getElementById('uniShort').value = u.short_name || '';
         document.getElementById('uniName').value = u.full_name || '';
         document.getElementById('uniDesc').value = u.description || '';
@@ -1149,206 +1390,374 @@ function openUniModal(id) {
       }
     });
   } else {
-    document.getElementById('uniShort').value = '';
-    document.getElementById('uniName').value = '';
-    document.getElementById('uniDesc').value = '';
-    document.getElementById('uniWeb').value = '';
-    document.getElementById('uniTg').value = '';
-    document.getElementById('uniImg').value = '';
+    ['uniShort','uniName','uniDesc','uniWeb','uniTg','uniImg'].forEach(function(id) { document.getElementById(id).value = ''; });
     currentUniFaculties = [];
     renderFaculties();
-    document.getElementById('uniModalTitle').textContent = 'Universitet qo\'shish';
+    document.getElementById('uniModalTitle').textContent = "Universitet qo'shish";
   }
+  document.getElementById('advancedSection').style.display = 'none';
   openModal('uniModal');
 }
 function renderFaculties() {
-  if (!currentUniFaculties.length) { document.getElementById('facultiesList').innerHTML = '<div style="color:var(--text2);padding:12px;text-align:center">Fakultet qo\'shilmagan</div>'; return; }
-  document.getElementById('facultiesList').innerHTML = currentUniFaculties.map((f, idx) => `
-    <div style="background:var(--s2);border-radius:var(--r-sm);padding:12px;margin-bottom:8px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-weight:600">${f.name}</span><button class="btn btn-red btn-icon" onclick="removeFaculty(${idx})" style="width:28px;height:28px">✕</button></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
-        <div>Kvota: <input type="number" class="f-input" value="${f.quota || ''}" onchange="updateFaculty(${idx}, 'quota', this.value)" style="width:80px;padding:4px"></div>
-        <div>Bandlik: <input type="number" class="f-input" value="${f.employment_pct || ''}" onchange="updateFaculty(${idx}, 'employment_pct', this.value)" style="width:80px;padding:4px"></div>
-        <div>Maosh: <input type="number" class="f-input" value="${f.avg_salary_mln || ''}" onchange="updateFaculty(${idx}, 'avg_salary_mln', this.value)" style="width:80px;padding:4px"></div>
-      </div>
-      <div style="margin-top:8px"><div style="font-size:11px;color:var(--text2);margin-bottom:4px">Ball statistikasi:</div>
-        <div style="display:flex;gap:8px">
-          ${[2024,2023,2022].map(year => {
-            const stat = (f.stats || []).find(s => s.year === year) || {year, min_score: '', max_score: '', applicants: '', quota: ''};
-            return `<div style="flex:1;background:var(--s1);border-radius:4px;padding:8px"><div style="font-size:10px;font-weight:600;margin-bottom:4px">${year}</div><input type="number" placeholder="Min" value="${stat.min_score || ''}" onchange="updateFacultyStat(${idx}, ${year}, 'min_score', this.value)" style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:4px;padding:4px;margin-bottom:2px;font-size:11px"><input type="number" placeholder="Max" value="${stat.max_score || ''}" onchange="updateFacultyStat(${idx}, ${year}, 'max_score', this.value)" style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:4px;padding:4px;margin-bottom:2px;font-size:11px"><input type="number" placeholder="Talabalar" value="${stat.applicants || ''}" onchange="updateFacultyStat(${idx}, ${year}, 'applicants', this.value)" style="width:100%;background:var(--s2);border:1px solid var(--border);border-radius:4px;padding:4px;font-size:11px"></div>`;
-          }).join('')}
-        </div>
-      </div>
-    </div>`).join('');
+  var el = document.getElementById('facultiesList');
+  if (!currentUniFaculties.length) {
+    el.innerHTML = '<div style="color:var(--text2);padding:12px;text-align:center">Fakultet qo\'shilmagan</div>';
+    return;
+  }
+  el.innerHTML = currentUniFaculties.map(function(f, idx) {
+    return '<div style="background:var(--s2);border-radius:var(--r-sm);padding:12px;margin-bottom:8px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-weight:600">' + f.name + '</span>' +
+      '<button class="btn btn-red btn-sm" onclick="removeFaculty(' + idx + ')" style="padding:2px 8px">✕</button></div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">' +
+      '<div>Kvota: <input type="number" class="f-input" value="' + (f.quota||'') + '" onchange="updateFaculty(' + idx + ',\'quota\',this.value)" style="width:80px;padding:4px 6px"></div>' +
+      '<div>Bandlik %: <input type="number" class="f-input" value="' + (f.employment_pct||'') + '" onchange="updateFaculty(' + idx + ',\'employment_pct\',this.value)" style="width:80px;padding:4px 6px"></div>' +
+      '<div>Maosh (M): <input type="number" class="f-input" value="' + (f.avg_salary_mln||'') + '" onchange="updateFaculty(' + idx + ',\'avg_salary_mln\',this.value)" style="width:80px;padding:4px 6px"></div>' +
+      '</div></div>';
+  }).join('');
 }
 function addFaculty() {
-  const name = document.getElementById('newFacultyName').value;
-  if (!name) return showToast('Fakultet nomini kiriting', 'err');
-  currentUniFaculties.push({ id: 'new_' + Date.now(), name: name, quota: parseInt(document.getElementById('newFacultyQuota').value) || 0, employment_pct: parseInt(document.getElementById('newFacultyEmployment').value) || 0, avg_salary_mln: parseFloat(document.getElementById('newFacultySalary').value) || 0, stats: [] });
-  document.getElementById('newFacultyName').value = ''; document.getElementById('newFacultyQuota').value = ''; document.getElementById('newFacultyEmployment').value = ''; document.getElementById('newFacultySalary').value = '';
+  var name = document.getElementById('newFacultyName').value;
+  if (!name) { showToast('Fakultet nomini kiriting', 'err'); return; }
+  currentUniFaculties.push({
+    id: 'new_' + Date.now(), name: name,
+    quota: parseInt(document.getElementById('newFacultyQuota').value) || 0,
+    employment_pct: parseInt(document.getElementById('newFacultyEmployment').value) || 0,
+    avg_salary_mln: parseFloat(document.getElementById('newFacultySalary').value) || 0,
+    stats: []
+  });
+  ['newFacultyName','newFacultyQuota','newFacultyEmployment','newFacultySalary'].forEach(function(id) { document.getElementById(id).value = ''; });
   renderFaculties();
 }
 function removeFaculty(idx) { currentUniFaculties.splice(idx, 1); renderFaculties(); }
-function updateFaculty(idx, field, value) { currentUniFaculties[idx][field] = field === 'avg_salary_mln' ? parseFloat(value) : parseInt(value); }
-function updateFacultyStat(facultyIdx, year, field, value) {
-  let faculty = currentUniFaculties[facultyIdx];
-  if (!faculty.stats) faculty.stats = [];
-  let stat = faculty.stats.find(s => s.year === year);
-  if (!stat) { stat = {year}; faculty.stats.push(stat); }
-  stat[field] = value ? parseInt(value) : null;
+function updateFaculty(idx, field, value) {
+  currentUniFaculties[idx][field] = field === 'avg_salary_mln' ? parseFloat(value) : parseInt(value);
 }
 async function saveUni() {
-  const uniData = { short_name: document.getElementById('uniShort').value, full_name: document.getElementById('uniName').value, description: document.getElementById('uniDesc').value, website: document.getElementById('uniWeb').value, telegram: document.getElementById('uniTg').value, cover_url: document.getElementById('uniImg').value };
-  if (!uniData.short_name || !uniData.full_name) return showToast('Qisqa nom va to\'liq nom kiriting', 'err');
+  var uniData = {
+    short_name: document.getElementById('uniShort').value,
+    full_name: document.getElementById('uniName').value,
+    description: document.getElementById('uniDesc').value,
+    website: document.getElementById('uniWeb').value,
+    telegram: document.getElementById('uniTg').value,
+    cover_url: document.getElementById('uniImg').value
+  };
+  if (!uniData.short_name || !uniData.full_name) { showToast("Qisqa nom va to'liq nom kiriting", 'err'); return; }
   try {
-    let uniId = editUniId;
-    let url = editUniId ? `/api/universities/${editUniId}` : '/api/universities';
-    let method = editUniId ? 'PUT' : 'POST';
-    const uniRes = await fetch(url, { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(uniData), credentials: 'include' });
+    var url = editUniId ? '/api/universities/' + editUniId : '/api/universities';
+    var method = editUniId ? 'PUT' : 'POST';
+    const uniRes = await fetch(url, { method: method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(uniData), credentials: 'include' });
     const uniResult = await uniRes.json();
-    if (!uniResult.success) return showToast(uniResult.error || 'Xatolik', 'err');
-    uniId = uniResult.university?.id || editUniId;
-    for (const faculty of currentUniFaculties) {
-      let facultyId = faculty.id && !faculty.id.toString().startsWith('new_') ? faculty.id : null;
-      let facultyUrl = facultyId ? `/api/faculties/${facultyId}` : `/api/universities/${uniId}/faculties`;
-      let facultyMethod = facultyId ? 'PUT' : 'POST';
-      const facultyRes = await fetch(facultyUrl, { method: facultyMethod, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(faculty), credentials: 'include' });
-      const facultyResult = await facultyRes.json();
-      if (facultyResult.success && faculty.stats) {
-        facultyId = facultyResult.faculty?.id;
-        for (const stat of faculty.stats) {
-          if (stat.min_score || stat.max_score || stat.applicants) {
-            await fetch(`/api/faculties/${facultyId}/stats`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(stat), credentials: 'include' });
-          }
-        }
-      }
+    if (!uniResult.success) { showToast(uniResult.error || 'Xatolik', 'err'); return; }
+    var uniId = (uniResult.university && uniResult.university.id) || editUniId;
+    for (var i = 0; i < currentUniFaculties.length; i++) {
+      var faculty = currentUniFaculties[i];
+      var facultyId = faculty.id && !faculty.id.toString().startsWith('new_') ? faculty.id : null;
+      var facultyUrl = facultyId ? '/api/faculties/' + facultyId : '/api/universities/' + uniId + '/faculties';
+      var facultyMethod = facultyId ? 'PUT' : 'POST';
+      await fetch(facultyUrl, { method: facultyMethod, headers: {'Content-Type':'application/json'}, body: JSON.stringify(faculty), credentials: 'include' });
     }
-    closeModal('uniModal'); await loadUniversities(); showToast('✅ Muvaffaqiyatli saqlandi');
-  } catch (error) { showToast('Xatolik yuz berdi', 'err'); }
+    closeModal('uniModal');
+    await loadUniversities();
+    showToast('✅ Muvaffaqiyatli saqlandi');
+  } catch (e) { showToast('Xatolik yuz berdi', 'err'); }
 }
 async function deleteUni(id) {
-  if (!confirm('Universitetni o\'chirishni tasdiqlaysizmi?')) return;
+  if (!confirm("Universitetni o'chirishni tasdiqlaysizmi?")) return;
   try {
-    const res = await fetch(`/api/universities/${id}`, { method: 'DELETE', credentials: 'include' });
+    const res = await fetch('/api/universities/' + id, { method: 'DELETE', credentials: 'include' });
     const data = await res.json();
-    if (data.success) { allUniversities = allUniversities.filter(u => u.id !== id); renderUniGrid(allUniversities); showToast('✅ O\'chirildi'); }
-  } catch (error) { showToast('Xatolik', 'err'); }
+    if (data.success) {
+      allUniversities = allUniversities.filter(function(u) { return u.id !== id; });
+      renderUniGrid(allUniversities);
+      showToast("✅ O'chirildi");
+    }
+  } catch (e) { showToast('Xatolik', 'err'); }
 }
 
-/* ═══ MATERIALS (NEW) ═══ */
-async function loadMaterials() {
-  const res = await fetch('/api/materials'); const d = await res.json();
-  if (d.success) {
-    allMaterials = d.materials;
-    document.getElementById('materialsList').innerHTML = allMaterials.map(m => `
-      <div class="mat-card">
-        <div class="mat-info"><h4>${m.title}</h4><p><span class="badge b-teal">${m.type.toUpperCase()}</span> ${m.url}</p></div>
-        <div>
-          ${m.type === 'link' ? `<a href="${m.url}" target="_blank" class="btn btn-surface btn-sm">Ochish</a>` : `<a href="${m.url}" target="_blank" class="btn btn-surface btn-sm">Yuklash</a>`}
-          <button class="btn btn-red btn-sm" onclick="delMat('${m.id}')">O'chirish</button>
-        </div>
-      </div>`
-    ).join('');
-  }
+/* ═══════════════════════════════════════════
+   MATERIALS
+═══════════════════════════════════════════ */
+function setMatAccess(val, el) {
+  matAccessVal = val;
+  document.getElementById('matAccFree').classList.remove('active');
+  document.getElementById('matAccPremium').classList.remove('active');
+  el.classList.add('active');
+}
+function getYtThumb(url) {
+  var m = (url||'').match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  return m ? 'https://img.youtube.com/vi/' + m[1] + '/hqdefault.jpg' : null;
+}
+function autoYtThumb(url) {
+  var t = getYtThumb(url);
+  if (t) { document.getElementById('matThumb').value = t; previewThumb(); }
+}
+function previewThumb() {
+  var val = document.getElementById('matThumb').value;
+  var wrap = document.getElementById('matThumbPreview');
+  var img = document.getElementById('matThumbImg');
+  if (val) { img.src = val; wrap.style.display = 'block'; img.onerror = function() { wrap.style.display = 'none'; }; }
+  else { wrap.style.display = 'none'; }
+}
+function previewNewsImg() {
+  var val = document.getElementById('newsImg').value;
+  var wrap = document.getElementById('newsImgPreview');
+  var img = document.getElementById('newsImgEl');
+  if (val) { img.src = val; wrap.style.display = 'block'; img.onerror = function() { wrap.style.display = 'none'; }; }
+  else { wrap.style.display = 'none'; }
 }
 function toggleMatType() {
-  const t = document.getElementById('matType').value;
+  var t = document.getElementById('matType').value;
   document.getElementById('matLinkDiv').style.display = t === 'link' ? 'block' : 'none';
   document.getElementById('matFileDiv').style.display = t === 'file' ? 'block' : 'none';
 }
+async function loadMaterials() {
+  try {
+    const res = await fetch('/api/materials');
+    const d = await res.json();
+    allMaterials = d.success ? d.materials : getDemoMats();
+  } catch(e) { allMaterials = getDemoMats(); }
+  renderMatGrid(allMaterials);
+}
+function getDemoMats() {
+  return [
+    {id:'m1',title:'DTM matematika: 10 ta xato',url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',thumbnail:'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg',access:'free',mentor_name:'',description:"Abituriyentlar ko'p yo'l qo'yadigan xatolar"},
+    {id:'m2',title:"TDYU ichki hayot — insider",url:'',thumbnail:'',access:'premium',mentor_name:'Aziz K.',description:'Premium kurs'}
+  ];
+}
+function renderMatGrid(list) {
+  var el = document.getElementById('materialsList');
+  if (!list.length) { el.innerHTML = '<div style="grid-column:1/-1;padding:48px;text-align:center;color:var(--text2)">Hech qanday material yo\'q</div>'; return; }
+  el.innerHTML = list.map(function(m) {
+    var thumb = m.thumbnail || getYtThumb(m.url||'') || '';
+    var isPrem = m.access === 'premium';
+    var byMentor = !!m.mentor_name;
+    return '<div class="mat-vcard">' +
+      '<div class="mat-vthumb">' +
+      (thumb ? '<img src="' + thumb + '" alt="" loading="lazy">' : '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" opacity="0.2"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>') +
+      '<div class="mat-vplay"><div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="#040810"/></svg></div></div>' +
+      '<div class="mat-vbadge"><span class="badge ' + (isPrem ? 'b-gold' : 'b-teal') + '" style="font-size:10px">' + (isPrem ? '⭐ Premium' : '✓ Bepul') + '</span></div>' +
+      (byMentor ? '<div style="position:absolute;top:8px;left:8px"><span class="badge b-purple" style="font-size:10px">👨‍🏫 Mentor</span></div>' : '') +
+      '</div>' +
+      '<div class="mat-vbody">' +
+      '<div class="mat-vtitle">' + m.title + '</div>' +
+      (m.description ? '<div class="mat-vdesc">' + m.description + '</div>' : '') +
+      '<div class="mat-vfoot">' +
+      '<div class="mat-vmentor"><div style="width:18px;height:18px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700">' + (m.mentor_name||'A')[0] + '</div>' + (m.mentor_name || 'Admin') + '</div>' +
+      '<div style="display:flex;gap:4px">' +
+      (m.url ? '<a href="' + m.url + '" target="_blank" class="btn btn-ghost btn-sm" style="padding:4px 8px">▶</a>' : '') +
+      '<button class="btn btn-red btn-sm" style="padding:4px 8px" onclick="delMat(\'' + m.id + '\')">🗑</button>' +
+      '</div></div></div></div>';
+  }).join('');
+}
+function filterMats(f, btn) {
+  document.querySelectorAll('#matFilterRow .chip-filter').forEach(function(c) { c.classList.remove('active'); });
+  btn.classList.add('active');
+  var list = allMaterials;
+  if (f === 'free') list = allMaterials.filter(function(m) { return m.access !== 'premium'; });
+  if (f === 'premium') list = allMaterials.filter(function(m) { return m.access === 'premium'; });
+  if (f === 'mentor') list = allMaterials.filter(function(m) { return !!m.mentor_name; });
+  if (f === 'admin') list = allMaterials.filter(function(m) { return !m.mentor_name; });
+  renderMatGrid(list);
+}
 async function saveMaterial() {
-  const fd = new FormData();
-  fd.append('title', document.getElementById('matTitle').value);
-  const type = document.getElementById('matType').value;
+  var title = document.getElementById('matTitle').value.trim();
+  if (!title) { showToast('Sarlavha kiriting', 'err'); return; }
+  var fd = new FormData();
+  fd.append('title', title);
+  fd.append('access', matAccessVal);
+  fd.append('description', document.getElementById('matDesc').value || '');
+  fd.append('mentor_name', document.getElementById('matMentor').value || '');
+  var type = document.getElementById('matType').value;
   fd.append('type', type);
-  
   if (type === 'link') {
-    fd.append('url', document.getElementById('matUrl').value);
+    var url = document.getElementById('matUrl').value;
+    fd.append('url', url);
+    var thumb = document.getElementById('matThumb').value || getYtThumb(url) || '';
+    fd.append('thumbnail', thumb);
   } else {
-    const fileInput = document.getElementById('matFile');
-    if(fileInput.files.length > 0) fd.append('file', fileInput.files[0]);
+    var fi = document.getElementById('matFile');
+    if (fi.files.length > 0) fd.append('file', fi.files[0]);
+    fd.append('thumbnail', document.getElementById('matThumb').value || '');
   }
-  
-  await fetch('/api/admin/materials', { method: 'POST', body: fd });
-  closeModal('matModal');
-  document.getElementById('matTitle').value = '';
-  document.getElementById('matUrl').value = '';
-  loadMaterials();
+  try {
+    await fetch('/api/admin/materials', { method: 'POST', body: fd });
+    closeModal('matModal');
+    ['matTitle','matUrl','matDesc','matThumb','matMentor'].forEach(function(id) { document.getElementById(id).value = ''; });
+    matAccessVal = 'free';
+    document.getElementById('matAccFree').classList.add('active');
+    document.getElementById('matAccPremium').classList.remove('active');
+    document.getElementById('matThumbPreview').style.display = 'none';
+    loadMaterials();
+    showToast('✅ Material saqlandi');
+  } catch(e) { showToast('Xatolik', 'err'); }
 }
 async function delMat(id) {
-  if(!confirm("O'chirasizmi?")) return;
-  await fetch(`/api/admin/materials/${id}`, { method: 'DELETE' });
+  if (!confirm("O'chirasizmi?")) return;
+  try { await fetch('/api/admin/materials/' + id, { method: 'DELETE' }); } catch(e) {}
   loadMaterials();
+  showToast("O'chirildi");
 }
 
-/* ═══ NEWS (NEW) ═══ */
+/* ═══════════════════════════════════════════
+   NEWS
+═══════════════════════════════════════════ */
 async function loadNews() {
-  const res = await fetch('/api/news'); const d = await res.json();
-  if (d.success) {
-    allNews = d.news;
-    document.getElementById('newsList').innerHTML = allNews.map(n => `
-      <div class="news-card">
-        <div class="news-info"><p style="color:var(--gold);margin-bottom:2px">${fmtDate(n.created_at)}</p><h4>${n.title}</h4><p>${n.content.slice(0, 80)}...</p></div>
-        <button class="btn btn-red btn-sm" onclick="delNews('${n.id}')">O'chirish</button>
-      </div>`
-    ).join('');
-  }
+  try {
+    const res = await fetch('/api/news');
+    const d = await res.json();
+    allNews = d.success ? d.news : getDemoNews();
+  } catch(e) { allNews = getDemoNews(); }
+  renderNewsList(allNews);
+}
+function getDemoNews() {
+  return [
+    {id:'n1',title:"Yangi mentorlar qo'shildi! 🎉",content:"TDYU va TATU'dan 5 ta yangi mentor qo'shildi.",image_url:'',link:'',category:'update',priority:'high',targets:['abuturyent','landing'],created_at:new Date().toISOString()},
+    {id:'n2',title:'Ish yuritish yangilandi',content:'Mentor dashboard yangilandi.',image_url:'',link:'',category:'update',priority:'normal',targets:['mentor'],created_at:new Date(Date.now()-86400000).toISOString()}
+  ];
+}
+function renderNewsList(list) {
+  var el = document.getElementById('newsList');
+  if (!list.length) { el.innerHTML = '<div style="padding:48px;text-align:center;color:var(--text2)">Yangiliklar yo\'q</div>'; return; }
+  var catIcon = {general:'📢',update:'🔄',event:'📅',urgent:'⚠️'};
+  var targetColors = {abuturyent:'b-teal',mentor:'b-purple',landing:'b-gold'};
+  var targetLabel = {abuturyent:'Abituriyent',mentor:'Mentor',landing:'Landing'};
+  el.innerHTML = list.map(function(n) {
+    var tgs = (n.targets||['abuturyent']).map(function(t) {
+      return '<span class="badge ' + (targetColors[t]||'b-gray') + '" style="font-size:10px">' + (targetLabel[t]||t) + '</span>';
+    }).join('');
+    return '<div class="news-card-full">' +
+      (n.image_url
+        ? '<img class="ncf-img" src="' + n.image_url + '" alt="" loading="lazy">'
+        : '<div class="ncf-img" style="display:flex;align-items:center;justify-content:center;font-size:28px;min-height:80px">' + (catIcon[n.category]||'📢') + '</div>') +
+      '<div class="ncf-body">' +
+      '<div class="ncf-tags">' + tgs + '<span class="badge b-gray" style="font-size:10px">' + (catIcon[n.category]||'📢') + ' ' + (n.category||'general') + '</span>' +
+      (n.priority==='critical' ? '<span class="badge b-red" style="font-size:10px">📌 Pinned</span>' : n.priority==='high' ? '<span class="badge b-gold" style="font-size:10px">↑ Muhim</span>' : '') +
+      '</div>' +
+      '<div class="ncf-title">' + n.title + '</div>' +
+      '<div class="ncf-desc">' + (n.content||'') + '</div>' +
+      '<div class="ncf-foot">' +
+      '<span style="font-size:11px;color:var(--text2)">' + formatDate(n.created_at) + '</span>' +
+      '<div style="display:flex;gap:6px;align-items:center">' +
+      (n.link ? '<a href="' + n.link + '" target="_blank" class="btn btn-ghost btn-sm">Link →</a>' : '') +
+      '<button class="btn btn-red btn-sm" onclick="delNews(\'' + n.id + '\')">O\'chirish</button>' +
+      '</div></div></div></div>';
+  }).join('');
+}
+function filterNews(f, btn) {
+  document.querySelectorAll('#newsFilterRow .chip-filter').forEach(function(c) { c.classList.remove('active'); });
+  btn.classList.add('active');
+  var list = f === 'all' ? allNews : allNews.filter(function(n) { return (n.targets||[]).indexOf(f) !== -1; });
+  renderNewsList(list);
 }
 async function saveNews() {
-  await fetch('/api/admin/news', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: document.getElementById('newsTitle').value, content: document.getElementById('newsContent').value })
+  var title = document.getElementById('newsTitle').value.trim();
+  var content = document.getElementById('newsContent').value.trim();
+  if (!title || !content) { showToast('Sarlavha va tavsif kiriting', 'err'); return; }
+  var targets = [];
+  document.querySelectorAll('#newsTargets .target-chip.active').forEach(function(el) {
+    if (el.dataset.target) targets.push(el.dataset.target);
   });
-  closeModal('newsModal');
-  document.getElementById('newsTitle').value = '';
-  document.getElementById('newsContent').value = '';
-  loadNews();
+  if (!targets.length) { showToast("Kamida 1 ta ko'rsatish joyini tanlang", 'err'); return; }
+  var payload = {
+    title: title, content: content, targets: targets,
+    image_url: document.getElementById('newsImg').value.trim() || null,
+    link: document.getElementById('newsLink').value.trim() || null,
+    category: document.getElementById('newsCat').value,
+    priority: document.getElementById('newsPriority').value
+  };
+  try {
+    await fetch('/api/admin/news', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    closeModal('newsModal');
+    ['newsTitle','newsContent','newsImg','newsLink'].forEach(function(id) { document.getElementById(id).value = ''; });
+    document.querySelectorAll('#newsTargets .target-chip').forEach(function(c) { c.classList.remove('active'); });
+    document.getElementById('newsImgPreview').style.display = 'none';
+    loadNews();
+    showToast('✅ Yangilik nashr qilindi');
+  } catch(e) { showToast('Xatolik', 'err'); }
 }
 async function delNews(id) {
-  if(!confirm("O'chirasizmi?")) return;
-  await fetch(`/api/admin/news/${id}`, { method: 'DELETE' });
+  if (!confirm("O'chirasizmi?")) return;
+  try { await fetch('/api/admin/news/' + id, { method: 'DELETE' }); } catch(e) {}
   loadNews();
+  showToast("O'chirildi");
 }
 
-/* ═══ BROADCAST & CLEANUP ═══ */
+/* ═══════════════════════════════════════════
+   BROADCAST & CLEANUP
+═══════════════════════════════════════════ */
 function toggleTarget(el, target) { el.classList.toggle('active'); }
 async function sendBroadcast() {
-  const title = document.getElementById('bcTitle').value; const text = document.getElementById('bcText').value;
-  if (!title || !text) return showToast('Sarlavha va matn kiriting', 'err');
+  var title = document.getElementById('bcTitle').value;
+  var text = document.getElementById('bcText').value;
+  if (!title || !text) { showToast('Sarlavha va matn kiriting', 'err'); return; }
   try {
-    const res = await fetch('/api/admin/broadcast', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, text, targets:['all'] }), credentials: 'include' });
+    const res = await fetch('/api/admin/broadcast', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({title: title, text: text, targets: ['all']}),
+      credentials: 'include'
+    });
     const data = await res.json();
-    if (data.success) { showToast(`✅ ${data.sent} ta foydalanuvchiga yuborildi`); document.getElementById('bcTitle').value = ''; document.getElementById('bcText').value = ''; }
-  } catch (error) { showToast('Xatolik', 'err'); }
+    if (data.success) {
+      showToast('✅ ' + (data.sent || 0) + ' ta foydalanuvchiga yuborildi');
+      document.getElementById('bcTitle').value = '';
+      document.getElementById('bcText').value = '';
+    }
+  } catch (e) { showToast('Xatolik', 'err'); }
 }
-function previewBroadcast() { showToast('Ko\'rib chiqish qismi tayyorlanmoqda'); }
-
+function previewBroadcast() { showToast("Ko'rib chiqish qismi tayyorlanmoqda"); }
 async function previewCleanup() {
   try {
     const res = await fetch('/api/admin/mentors/pending', { credentials: 'include' });
     const data = await res.json();
     if (data.success) {
-      const threeDaysAgo = new Date(Date.now() - 3*24*60*60*1000);
-      const toDelete = (data.mentors || []).filter(m => !m.is_verified && !m.student_id_url && new Date(m.created_at) < threeDaysAgo);
-      document.getElementById('cleanupPreview').innerHTML = toDelete.length ? `<span style="color:var(--red)">⚠ ${toDelete.length} ta mentor o'chiriladi</span>` : '<span style="color:var(--green)">✅ O\'chiriladigan mentor yo\'q</span>';
+      var threeDaysAgo = new Date(Date.now() - 3*24*60*60*1000);
+      var toDelete = (data.mentors||[]).filter(function(m) { return !m.is_verified && !m.student_id_url && new Date(m.created_at) < threeDaysAgo; });
+      document.getElementById('cleanupPreview').innerHTML = toDelete.length
+        ? '<span style="color:var(--red)">⚠ ' + toDelete.length + " ta mentor o'chiriladi</span>"
+        : '<span style="color:var(--green)">✅ O\'chiriladigan mentor yo\'q</span>';
     }
-  } catch (error) { console.error(error); }
+  } catch (e) { document.getElementById('cleanupPreview').innerHTML = '<span style="color:var(--text2)">Ma\'lumot yuklanmadi</span>'; }
 }
 async function runCleanup() {
-  if (!confirm('Tasdiqlanmagan mentorlarni o\'chirishni tasdiqlaysizmi?')) return;
+  if (!confirm("Tasdiqlanmagan mentorlarni o'chirishni tasdiqlaysizmi?")) return;
   try {
     const res = await fetch('/api/admin/cleanup-mentors', { method: 'POST', credentials: 'include' });
     const data = await res.json();
-    if (data.success) { showToast(`✅ ${data.deleted} ta mentor o'chirildi`); document.getElementById('cleanupPreview').innerHTML = `<span style="color:var(--green)">✅ ${data.deleted} ta o'chirildi</span>`; await loadMentors(); }
-  } catch (error) { showToast('Xatolik', 'err'); }
+    if (data.success) {
+      showToast('✅ ' + (data.deleted||0) + " ta mentor o'chirildi");
+      document.getElementById('cleanupPreview').innerHTML = '<span style="color:var(--green)">✅ ' + (data.deleted||0) + " ta o'chirildi</span>";
+      await loadMentors();
+    }
+  } catch (e) { showToast('Xatolik', 'err'); }
 }
 
-/* ═══ UTILS (COMMON) ═══ */
-function formatDate(dateStr) { if (!dateStr) return '—'; const d = new Date(dateStr); return `${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()}`; }
-function fmt(n) { if (!n) return '0'; return Math.abs(n).toLocaleString('uz-UZ'); }
-function strColor(str) { let hash = 0; for (let i = 0; i < (str || '').length; i++) { hash = str.charCodeAt(i) + ((hash << 5) - hash); } const colors = ['#1e3a6e', '#2d1b69', '#1a3a2a', '#3a1a2a', '#6e1e3a']; return colors[Math.abs(hash) % colors.length]; }
-function statusBadge(status) { const map = { pending: '<span class="badge b-gold">Kutilmoqda</span>', confirmed: '<span class="badge b-teal">Tasdiqlangan</span>', completed: '<span class="badge b-green">Tugallandi</span>', cancelled: '<span class="badge b-red">Bekor</span>' }; return map[status] || '<span class="badge b-gray">—</span>'; }
-
+/* ═══════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════ */
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  var d = new Date(dateStr);
+  return d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear();
+}
+function fmt(n) {
+  if (!n) return '0';
+  return Math.abs(n).toLocaleString('uz-UZ');
+}
+function strColor(str) {
+  var hash = 0;
+  for (var i = 0; i < (str||'').length; i++) { hash = str.charCodeAt(i) + ((hash << 5) - hash); }
+  var colors = ['#1e3a6e','#2d1b69','#1a3a2a','#3a1a2a','#6e1e3a'];
+  return colors[Math.abs(hash) % colors.length];
+}
+function statusBadge(status) {
+  var map = {
+    pending: '<span class="badge b-gold">Kutilmoqda</span>',
+    confirmed: '<span class="badge b-teal">Tasdiqlangan</span>',
+    completed: '<span class="badge b-green">Tugallandi</span>',
+    cancelled: '<span class="badge b-red">Bekor</span>'
+  };
+  return map[status] || '<span class="badge b-gray">—</span>';
+}
 </script>
 </body>
 </html>

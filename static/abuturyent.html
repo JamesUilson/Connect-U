@@ -759,6 +759,54 @@ img { display: block; }
 .sr-icon img { width:100%; height:100%; object-fit:cover; }
 .sr-text h4 { font-size: 14px; font-weight: 600; }
 .sr-text p { font-size: 12px; color: var(--text2); }
+
+/* ─── NEWS PAGE ─── */
+.user-news-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 16px; overflow: hidden; margin-bottom: 14px;
+  cursor: pointer; transition: border-color .2s, transform .15s;
+}
+.user-news-card:hover { border-color: var(--border2); transform: translateY(-1px); }
+.user-news-card.priority-critical { border-left: 3px solid var(--red); }
+.user-news-card.priority-high { border-left: 3px solid var(--gold); }
+.unc-img { width: 100%; height: 160px; object-fit: cover; display: block; }
+.unc-body { padding: 14px 16px 16px; }
+.unc-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px; }
+.unc-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; line-height: 1.4; }
+.unc-desc { font-size: 13px; color: var(--text2); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.unc-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+.unc-link-btn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 14px; border-radius: 8px; background: var(--gold-dim); color: var(--gold); font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid rgba(240,165,0,0.2); }
+
+/* ─── VIDEO GRID ─── */
+.video-grid-user { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.vid-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 14px; overflow: hidden; cursor: pointer;
+  transition: all .2s; position: relative;
+}
+.vid-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.vid-thumb { width: 100%; aspect-ratio: 16/9; background: var(--surface2); position: relative; overflow: hidden; }
+.vid-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.vid-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.25); transition: background .2s; }
+.vid-card:hover .vid-overlay { background: rgba(0,0,0,.4); }
+.vid-play { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.92); display: flex; align-items: center; justify-content: center; }
+.vid-lock { position: absolute; inset: 0; background: rgba(7,13,26,.78); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+.vid-body { padding: 10px; }
+.vid-title { font-size: 12px; font-weight: 600; line-height: 1.4; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.vid-meta { display: flex; align-items: center; justify-content: space-between; }
+.vid-mentor-name { font-size: 10px; color: var(--text2); }
+
+/* ─── NOTIF PAGE ─── */
+.notif-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+.notif-item.unread .ni-title { font-weight: 700; }
+.notif-item.read { opacity: 0.6; }
+.ni-icon { width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.ni-body { flex: 1; min-width: 0; }
+.ni-title { font-size: 14px; margin-bottom: 3px; }
+.ni-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.ni-time { font-size: 11px; color: var(--text3); margin-top: 3px; }
+.ni-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 7px; }
+@media(min-width:768px) { .video-grid-user { grid-template-columns: 1fr 1fr 1fr; } }
 </style>
 </head>
 <body>
@@ -1000,17 +1048,44 @@ img { display: block; }
           </div>
           <svg class="settings-row-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
-        <div class="settings-row">
-          <div class="settings-icon" style="background:rgba(255,255,255,0.05);">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="var(--text2)" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <div class="settings-group">
+          <div class="settings-row" onclick="showPage('news')">
+            <div class="settings-icon" style="background:rgba(240,165,0,0.12);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" stroke="#F0A500" stroke-width="2"/>
+                <path d="M17 20v-8H7v8M7 8h5" stroke="#F0A500" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="settings-row-text">
+              <h4 style="display:flex;align-items:center;gap:8px;">
+                Yangiliklar
+                <span id="profileNewsBadge" style="display:none;background:#FF4D6A;color:white;font-size:10px;padding:2px 6px;border-radius:10px;">Yangi</span>
+              </h4>
+              <p>Platforma yangiliklari va e'lonlar</p>
+            </div>
+            <svg class="settings-row-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+
+
+        <div class="settings-row" onclick="showPage('notif')">
+          <div class="settings-icon" style="background:rgba(255,77,106,0.1);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#FF4D6A" stroke-width="2" stroke-linecap="round"/>
+              <path d="M13.73 21a2 2 0 01-3.46 0" stroke="#FF4D6A" stroke-width="2" stroke-linecap="round"/>
+            </svg>
           </div>
           <div class="settings-row-text">
-            <h4>Bildirishnomalar</h4>
-            <p>Sessiya va yangiliklar</p>
+            <h4 style="display:flex;align-items:center;gap:8px;">
+              Bildirishnomalar
+              <span id="profileNotifBadge" style="display:none;background:#FF4D6A;color:white;font-size:10px;padding:2px 6px;border-radius:10px;">Yangi</span>
+            </h4>
+            <p>Sessiya eslatmalari va xabarlar</p>
           </div>
           <svg class="settings-row-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
       </div>
+     
 
       <div class="settings-group">
         <div class="settings-row">
@@ -1036,44 +1111,74 @@ img { display: block; }
       <div class="section-gap"></div>
     </div>
 
+    <!-- ══ YANGILIKLAR PAGE ══ -->
+    <div class="page" id="page-news">
+      <div class="page-header" style="padding-bottom:8px">
+        <div class="section-label">YANGILIKLAR</div>
+        <div class="page-title">Platforma yangiliklari</div>
+      </div>
+      <div style="padding:0 16px 8px;display:flex;gap:8px;flex-wrap:wrap" id="newsFilterBar">
+        <button class="chip active" onclick="filterUserNews('all',this)">Hammasi</button>
+        <button class="chip" onclick="filterUserNews('urgent',this)">⚠️ Muhim</button>
+        <button class="chip" onclick="filterUserNews('event',this)">📅 Tadbir</button>
+        <button class="chip" onclick="filterUserNews('update',this)">🔄 Yangilanish</button>
+      </div>
+      <div id="userNewsList" style="padding:0 16px 90px"></div>
+    </div>
+
+    <!-- ══ VIDEO MATERIALLAR PAGE ══ -->
+    <div class="page" id="page-videos">
+      <div class="page-header" style="padding-bottom:8px">
+        <div class="section-label">VIDEO MATERIALLAR</div>
+        <div class="page-title">O'rganish va tayyorlanish</div>
+        <div class="page-sub">Mentorlar va admin tamonidan tayyorlangan</div>
+      </div>
+      <div style="padding:0 16px 8px;display:flex;gap:8px;flex-wrap:wrap" id="videoFilterBar">
+        <button class="chip active" onclick="filterUserVideos('all',this)">Hammasi</button>
+        <button class="chip" onclick="filterUserVideos('free',this)">✓ Bepul</button>
+        <button class="chip" onclick="filterUserVideos('premium',this)">⭐ Premium</button>
+      </div>
+      <div class="video-grid-user" id="userVideoList" style="padding:0 16px 90px"></div>
+    </div>
+
+    <!-- ══ BILDIRISHNOMALAR PAGE ══ -->
+    <div class="page" id="page-notif">
+      <div class="page-header" style="padding-bottom:8px">
+        <div class="section-label">BILDIRISHNOMALAR</div>
+        <div class="page-title">Xabarlar va eslatmalar</div>
+      </div>
+      <div id="userNotifList" style="padding:0 16px 90px"></div>
+    </div>
+
   </div><!-- /content -->
 
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
-    <!-- Desktop only logo (hidden on mobile via CSS) -->
     <div class="desktop-sidebar-logo" style="display:none;">Connect<span>-U</span></div>
     <button class="nav-item active" id="nav-home" onclick="showPage('home')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
         <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
         <polyline points="9,22 9,12 15,12 15,22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
       </svg>
       <span class="nav-label">Asosiy</span>
     </button>
     <button class="nav-item" id="nav-mentors" onclick="showPage('mentors')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
         <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
         <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
       <span class="nav-label">Mentorlar</span>
     </button>
-    <button class="nav-item" id="nav-unis" onclick="showPage('unis')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M3 9l9-7 9 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M9 22V12h6v10M2 22h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <path d="M12 2L2 9h20L12 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <button class="nav-item" id="nav-videos" onclick="showPage('videos')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <polygon points="23,7 16,12 23,17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
       </svg>
-      <span class="nav-label">Universitetlar</span>
-    </button>
-    <button class="nav-item" id="nav-pricing" onclick="showPage('pricing')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
-        <path d="M1 10h22" stroke="currentColor" stroke-width="2"/>
-      </svg>
-      <span class="nav-label">Narxlar</span>
+      <span class="nav-label">Videolar</span>
     </button>
     <button class="nav-item" id="nav-profile" onclick="showPage('profile')">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
         <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
       </svg>
@@ -1130,6 +1235,8 @@ let activeFacultyIdx = 0;
 
 /* ═══ INIT ═══ */
 window.addEventListener('load', async () => {
+  console.log('🚀 Login tizimi ishga tushmoqda...');
+  
   try {
     // Joriy foydalanuvchini tekshirish
     const meRes = await fetch('/api/me', { credentials: 'include' });
@@ -1168,6 +1275,7 @@ window.addEventListener('load', async () => {
         launchApp();
       } else {
         // 3. Ikkalasi ham yo'q → login.html ga
+        console.log('Sessiya topilmadi, login sahifasiga o\'tish...');
         window.location.href = 'login.html';
       }
     }
@@ -1176,6 +1284,120 @@ window.addEventListener('load', async () => {
     window.location.href = 'login.html';
   }
 });
+
+/*
+// TEST DATA FUNKSIYASI
+async function loadTestData() {
+  try {
+    // Test mentorlar
+    mentors = [
+      {
+        id: 'm1',
+        mentor_profile_id: 'mp1',
+        full_name: 'Aziz Karimov',
+        university: 'TDYU',
+        faculty: 'Huquqshunoslik',
+        year: 4,
+        bio: 'TDYU 4-kurs talabasi. DTMda 185 ball. Mentorlik tajribam 2 yil.',
+        rating: 4.9,
+        total_sessions: 47,
+        total_reviews: 32,
+        is_verified: true
+      },
+      {
+        id: 'm2',
+        mentor_profile_id: 'mp2',
+        full_name: 'Malika Yusupova',
+        university: 'TATU',
+        faculty: 'Dasturiy injiniring',
+        year: 3,
+        bio: 'TATU, Dasturiy injiniring 3-kurs. IELTS 7.5. Mentor sifatida 30+ talabaga yordam bergan.',
+        rating: 5.0,
+        total_sessions: 38,
+        total_reviews: 28,
+        is_verified: true
+      },
+      {
+        id: 'm3',
+        mentor_profile_id: 'mp3',
+        full_name: 'Jasur Tursunov',
+        university: 'ODI',
+        faculty: 'Iqtisodiyot',
+        year: 4,
+        bio: 'ODI Iqtisodiyot fakulteti 4-kurs. DTM 190+ ball. Mentorlik vaqti: hafta oxiri.',
+        rating: 4.8,
+        total_sessions: 25,
+        total_reviews: 19,
+        is_verified: true
+      }
+    ];
+    
+    // Test universitetlar
+    universities = [
+      {
+        id: 'u1',
+        short_name: 'TDYU',
+        full_name: 'Toshkent Davlat Yuridik Universiteti',
+        description: 'Oʻzbekistonning yetakchi yuridik oliy taʼlim muassasasi',
+        cover_url: 'https://images.unsplash.com/photo-1562774053-701939374585?w=600&q=80',
+        faculties: [
+          {
+            id: 'f1',
+            name: 'Huquqshunoslik',
+            description: 'Davlat va huquq nazariyasi, fuqarolik huquqi, jinoyat huquqi',
+            quota: 150,
+            employment_pct: 85,
+            avg_salary_mln: 4.5,
+            stats: [
+              { year: 2022, max_score: 165 },
+              { year: 2023, max_score: 172 },
+              { year: 2024, max_score: 180 }
+            ]
+          },
+          {
+            id: 'f2',
+            name: 'Xalqaro huquq',
+            description: 'Xalqaro huquq va diplomatiya',
+            quota: 50,
+            employment_pct: 90,
+            avg_salary_mln: 5.2,
+            stats: [
+              { year: 2022, max_score: 170 },
+              { year: 2023, max_score: 178 },
+              { year: 2024, max_score: 185 }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'u2',
+        short_name: 'TATU',
+        full_name: 'Toshkent Axborot Texnologiyalari Universiteti',
+        description: 'Axborot texnologiyalari sohasida kadrlar tayyorlaydi',
+        cover_url: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&q=80',
+        faculties: [
+          {
+            id: 'f3',
+            name: 'Dasturiy injiniring',
+            description: 'Dasturlash, veb texnologiyalar, mobil ilovalar',
+            quota: 120,
+            employment_pct: 95,
+            avg_salary_mln: 6.0,
+            stats: [
+              { year: 2022, max_score: 160 },
+              { year: 2023, max_score: 168 },
+              { year: 2024, max_score: 175 }
+            ]
+          }
+        ]
+      }
+    ];
+    
+    console.log('✅ Test ma\'lumotlari yuklandi');
+  } catch (error) {
+    console.error('Test ma\'lumotlarini yuklashda xato:', error);
+  }
+} */
 
 async function loadData() {
   try {
@@ -1328,6 +1550,11 @@ function showPage(name) {
   if (navEl) navEl.classList.add('active');
   
   document.querySelector('.content')?.scrollTo(0, 0);
+
+  // Lazy load new pages
+  if (name === 'news') loadUserNews();
+  if (name === 'videos') loadUserVideos();
+  if (name === 'notif') { loadUserNotifs(); markAllNotifsRead(); }
 }
 
 /* ═══ SEARCH ═══ */
@@ -1842,6 +2069,235 @@ function openGroupChat() {
   } else {
     window.open('https://t.me/connectu_admin', '_blank');
   }
+}
+
+/* ══════════════════════════════════════════
+   YANGILIKLAR — USER SIDE
+══════════════════════════════════════════ */
+let _userNews = [], _userNewsLoaded = false;
+
+async function loadUserNews() {
+  if (_userNewsLoaded) return;
+  const el = document.getElementById('userNewsList');
+  el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text2)">Yuklanmoqda...</div>';
+  try {
+    const res = await fetch('/api/news?target=abuturyent');
+    const d = await res.json();
+    _userNews = d.success ? d.news : _demoNews();
+  } catch { _userNews = _demoNews(); }
+  _userNewsLoaded = true;
+  _renderUserNews(_userNews);
+  _checkNewsBadge();
+  // Add news notifications
+  _userNews.slice(0, 3).forEach(n => _addNotif({
+    id: 'news_' + n.id, type: 'news', icon: '📰',
+    iconBg: 'rgba(240,165,0,0.12)', title: n.title,
+    desc: (n.content||'').slice(0,80) + '...', time: n.created_at,
+    read: false, onTap: () => showPage('news')
+  }));
+}
+function _demoNews() {
+  return [
+    {id:'n1',title:'🎉 Yangi mentorlar platformaga qo\'shildi!',content:'TDYU, TATU va ODI universitetlaridan 8 ta yangi verifikatsiyalangan mentor qo\'shildi. Ular bilan hoziroq sessiya buyurtma qiling.',image_url:'',link:'',category:'update',priority:'high',targets:['abuturyent'],created_at:new Date().toISOString()},
+    {id:'n2',title:'⚠️ Aprel kvota ro\'yxati e\'lon qilindi',content:'2025-yil aprel kvotalari barcha universitetlar bo\'yicha yangilandi. Balllar pasayishi kutilmoqda — hoziroq mentor bilan maslahatlashing.',image_url:'',link:'',category:'urgent',priority:'critical',targets:['abuturyent'],created_at:new Date(Date.now()-86400000).toISOString()},
+    {id:'n3',title:'📅 DTM tayyorlash vebinari — Shanba',content:'Kelasi shanba kuni bepul DTM tayyorlash vebinari o\'tkaziladi. Barcha abituriyentlar uchun ochiq.',image_url:'',link:'https://t.me/connectu_admin',category:'event',priority:'normal',targets:['abuturyent'],created_at:new Date(Date.now()-2*86400000).toISOString()},
+  ];
+}
+function _renderUserNews(list) {
+  const el = document.getElementById('userNewsList');
+  if (!list.length) { el.innerHTML = '<div style="text-align:center;padding:48px;color:var(--text2)"><div style="font-size:32px;margin-bottom:8px">📭</div>Yangiliklar yo\'q</div>'; return; }
+  const catIcon = {general:'📢',update:'🔄',event:'📅',urgent:'⚠️'};
+  const prioClass = {critical:'priority-critical',high:'priority-high'};
+  el.innerHTML = list.map(n => `
+    <div class="user-news-card ${prioClass[n.priority]||''}" onclick="${n.link?`openExternal('${n.link}')`:''}" >
+      ${n.image_url ? `<img class="unc-img" src="${n.image_url}" alt="" loading="lazy">` : ''}
+      <div class="unc-body">
+        <div class="unc-tags">
+          <span style="background:var(--gold-dim);color:var(--gold);padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600">${catIcon[n.category]||'📢'} ${n.category==='update'?'Yangilanish':n.category==='event'?'Tadbir':n.category==='urgent'?'Muhim':'Umumiy'}</span>
+          ${n.priority==='critical'?'<span style="background:rgba(255,77,106,0.15);color:var(--red);padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600">📌 Pinned</span>':''}
+          ${n.priority==='high'&&n.priority!=='critical'?'<span style="background:var(--gold-dim);color:var(--gold);padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600">↑ Muhim</span>':''}
+        </div>
+        <div class="unc-title">${n.title}</div>
+        <div class="unc-desc">${n.content||''}</div>
+        <div class="unc-foot">
+          <span style="font-size:11px;color:var(--text3)">${_timeAgo(n.created_at)}</span>
+          ${n.link ? `<span class="unc-link-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" stroke="currentColor" stroke-width="2"/><polyline points="15,3 21,3 21,9" stroke="currentColor" stroke-width="2"/><line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2"/></svg> Batafsil</span>` : ''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+function filterUserNews(f, btn) {
+  document.querySelectorAll('#newsFilterBar .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const list = f === 'all' ? _userNews : _userNews.filter(n => n.category === f || n.priority === f);
+  _renderUserNews(list);
+}
+function _checkNewsBadge() {
+  const lastSeen = parseInt(localStorage.getItem('cu_news_seen')||'0');
+  const hasNew = _userNews.some(n => new Date(n.created_at).getTime() > lastSeen);
+  
+  // Profildagi yangiliklar badge
+  const profileNewsBadge = document.getElementById('profileNewsBadge');
+  if (profileNewsBadge) {
+    profileNewsBadge.style.display = hasNew ? 'inline' : 'none';
+  }
+}
+
+/* ══════════════════════════════════════════
+   VIDEO MATERIALLAR — USER SIDE
+══════════════════════════════════════════ */
+let _userVideos = [], _userVideosLoaded = false;
+
+async function loadUserVideos() {
+  if (_userVideosLoaded) return;
+  const el = document.getElementById('userVideoList');
+  el.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text2)">Yuklanmoqda...</div>';
+  try {
+    const res = await fetch('/api/materials');
+    const d = await res.json();
+    _userVideos = d.success ? d.materials : _demoVideos();
+  } catch { _userVideos = _demoVideos(); }
+  _userVideosLoaded = true;
+  _renderUserVideos(_userVideos);
+}
+function _demoVideos() {
+  return [
+    {id:'v1',title:'DTM matematika: 10 ta eng ko\'p xato',url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',thumbnail:'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg',access:'free',mentor_name:'Aziz K.'},
+    {id:'v2',title:'TDYU haqida hamma narsa — insider guide',url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',thumbnail:'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg',access:'free',mentor_name:'Malika Y.'},
+    {id:'v3',title:'Ingliz tili: Chegara holatlari va IELTS strategiyasi',url:'',thumbnail:'',access:'premium',mentor_name:'Nilufar R.'},
+    {id:'v4',title:'Kimyo olimpiadasi: maxfiy metodlar to\'plami',url:'',thumbnail:'',access:'premium',mentor_name:'Jasur T.'},
+    {id:'v5',title:'Biologiya: DTM 2025 yangi shakllar tahlili',url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',thumbnail:'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg',access:'free',mentor_name:''},
+    {id:'v6',title:'Interview tayyorlash — universitetga kirish suhbati',url:'',thumbnail:'',access:'premium',mentor_name:'Kamola M.'},
+  ];
+}
+function _ytThumb(url) {
+  const m = (url||'').match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : null;
+}
+function _renderUserVideos(list) {
+  const el = document.getElementById('userVideoList');
+  if (!list.length) { el.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text2)"><div style="font-size:32px;margin-bottom:8px">🎬</div>Video materiallar yo\'q</div>'; return; }
+  const userTier = currentUser?.tier || currentUser?.subscription_tier || 'free';
+  const canPremium = userTier !== 'free';
+  el.innerHTML = list.map(v => {
+    const isPremium = v.access === 'premium';
+    const locked = isPremium && !canPremium;
+    const thumb = v.thumbnail || _ytThumb(v.url||'') || '';
+    return `<div class="vid-card" onclick="${locked ? "showPage('pricing')" : (v.url ? `_openVideo('${v.url}')` : '')}">
+      <div class="vid-thumb">
+        ${thumb ? `<img src="${thumb}" alt="" loading="lazy">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--surface2)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" opacity="0.2"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg></div>`}
+        ${locked
+          ? `<div class="vid-lock">
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="white" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+               <span style="color:var(--gold);font-size:10px;font-weight:700">⭐ Premium</span>
+               <span style="color:rgba(255,255,255,.6);font-size:9px">Obuna kerak</span>
+             </div>`
+          : `<div class="vid-overlay"><div class="vid-play"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="#040810"/></svg></div></div>`}
+        <div style="position:absolute;top:6px;${locked?'right':'left'}:6px">
+          <span style="font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700;background:${isPremium?'rgba(240,165,0,.9)':'rgba(0,191,166,.9)'};color:#040810">${isPremium?'⭐':'✓'}</span>
+        </div>
+      </div>
+      <div class="vid-body">
+        <div class="vid-title">${v.title}</div>
+        <div class="vid-meta">
+          <span class="vid-mentor-name">${v.mentor_name||'Admin'}</span>
+          ${locked ? '<span style="font-size:10px;color:var(--gold)">Obuna →</span>' : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function filterUserVideos(f, btn) {
+  document.querySelectorAll('#videoFilterBar .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const list = f === 'all' ? _userVideos : _userVideos.filter(v => v.access === f);
+  _renderUserVideos(list);
+}
+function _openVideo(url) {
+  if (tg?.openLink) tg.openLink(url);
+  else window.open(url, '_blank');
+}
+
+/* ══════════════════════════════════════════
+   BILDIRISHNOMALAR — USER SIDE
+══════════════════════════════════════════ */
+let _notifs = [];
+
+function _addNotif(n) {
+  if (_notifs.find(x => x.id === n.id)) return;
+  _notifs.unshift(n);
+  _updateNotifBadge();
+}
+function _updateNotifBadge() {
+  const unread = _notifs.filter(n => !n.read).length;
+  
+  // Profildagi bildirishnomalar badge
+  const profileNotifBadge = document.getElementById('profileNotifBadge');
+  if (profileNotifBadge) {
+    if (unread > 0) { 
+      profileNotifBadge.style.display = 'inline'; 
+      profileNotifBadge.textContent = unread > 9 ? '9+' : unread; 
+    } else profileNotifBadge.style.display = 'none';
+  }
+}
+
+function loadUserNotifs() {
+  // Add system notifs if first time
+  if (!_notifs.find(n => n.id === 'sys_welcome')) {
+    _addNotif({id:'sys_welcome',type:'system',icon:'🎉',iconBg:'rgba(0,191,166,0.12)',title:'ConnectU\'ga xush kelibsiz!',desc:'Birinchi sessiyangizda 20% chegirma. Mentor toping va hoziroq boshlang!',time:new Date(Date.now()-3600000*24*2).toISOString(),read:true,onTap:()=>showPage('mentors')});
+  }
+  _renderNotifs();
+}
+function _renderNotifs() {
+  const el = document.getElementById('userNotifList');
+  if (!_notifs.length) {
+    el.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--text2)"><div style="font-size:40px;margin-bottom:12px">🔔</div><div style="font-weight:600;margin-bottom:6px">Bildirishnomalar yo\'q</div><div style="font-size:13px">Yangiliklar va eslatmalar shu yerda ko\'rinadi</div></div>';
+    return;
+  }
+  el.innerHTML = _notifs.map(n => `
+    <div class="notif-item ${n.read ? 'read' : 'unread'}" onclick="_tapNotif('${n.id}')">
+      <div class="ni-icon" style="background:${n.iconBg||'rgba(255,255,255,0.06)'}">${n.icon||'🔔'}</div>
+      <div class="ni-body">
+        <div class="ni-title">${n.title}</div>
+        <div class="ni-desc">${n.desc||''}</div>
+        <div class="ni-time">${_timeAgo(n.time)}</div>
+      </div>
+      ${!n.read ? '<div class="ni-dot"></div>' : '<div style="width:8px"></div>'}
+    </div>`).join('');
+}
+function _tapNotif(id) {
+  const n = _notifs.find(x => x.id === id);
+  if (!n) return;
+  n.read = true;
+  _updateNotifBadge();
+  if (n.type === 'news') { showPage('news'); return; }
+  if (n.onTap) n.onTap();
+  _renderNotifs();
+}
+function markAllNotifsRead() {
+  localStorage.setItem('cu_news_seen', Date.now().toString());
+  setTimeout(() => {
+    _notifs.forEach(n => n.read = true);
+    _updateNotifBadge();
+    const badge = document.getElementById('newsBadge');
+    if (badge) badge.style.display = 'none';
+    _renderNotifs();
+  }, 4000);
+}
+
+/* ─── UTILS ─── */
+function _timeAgo(str) {
+  if (!str) return '';
+  const d = new Date(str); const sec = Math.floor((Date.now()-d)/1000);
+  if (sec < 60) return 'Hozirgina';
+  if (sec < 3600) return Math.floor(sec/60) + ' daqiqa oldin';
+  if (sec < 86400) return Math.floor(sec/3600) + ' soat oldin';
+  if (sec < 7*86400) return Math.floor(sec/86400) + ' kun oldin';
+  return d.toLocaleDateString('uz-UZ');
+}
+function openExternal(url) {
+  if (tg?.openLink) tg.openLink(url);
+  else window.open(url, '_blank');
 }
 </script>
 </body>
