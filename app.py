@@ -2487,14 +2487,9 @@ def delete_material(mat_id):
 #     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 10000)))
 
 if __name__ == '__main__':
-    # # Webhook o'rnatish
-    # webhook_url = "https://connect-u-2.onrender.com/webhook"
-    # bot.remove_webhook()
-    # bot.set_webhook(url=webhook_url)
-    
-    # # Flask serverni ishga tushirish
-    # app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 10000)))
-    print("🚀 Lokal server ishga tushmoqda...")
-    print(f"📊 Admin panel: http://localhost:5000/admin")
-    print(f"🔐 Login: http://localhost:5000/login.html")
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    # To'g'ridan-to'g'ri `python app.py` bilan ishga tushirilganda
+    # Produksiyada gunicorn ishlatiladi: gunicorn app:app
+    port = int(os.environ.get('PORT', 10000))
+    debug = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'
+    print(f"🚀 Server ishga tushmoqda — host=0.0.0.0, port={port}, debug={debug}")
+    app.run(host='0.0.0.0', port=port, debug=debug)
