@@ -14,7 +14,7 @@ class Config:
     
     # Telegram
     BOT_TOKEN = os.environ.get('BOT_TOKEN') or '8230210984:AAGld9gVSXps2zC22qyKH5gKXV946wdS2CM'
-    MINI_APP_URL = os.environ.get('MINI_APP_URL') or 'http://127.0.0.1:5000'
+    MINI_APP_URL = os.environ.get('MINI_APP_URL') or 'https://connect-u-2.onrender.com'
     
     # CORS
-    CORS_ORIGINS = ['http://127.0.0.1:5000', 'https://your-domain.com']
+    CORS_ORIGINS = ['http://127.0.0.1:5000', 'https://connect-u-2.onrender.com']

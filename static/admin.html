@@ -828,6 +828,11 @@ td{padding:12px 14px;font-size:13px;vertical-align:middle;white-space:nowrap}
           <div class="field"><label>Rasmiy sayt</label><input class="f-input" id="uniWeb" placeholder="https://"></div>
           <div class="field"><label>Telegram</label><input class="f-input" id="uniTg" placeholder="https://t.me/"></div>
         </div>
+        <div class="field-row">
+          <div class="field"><label>Instagram</label><input class="f-input" id="uniInsta" placeholder="https://instagram.com/"></div>
+          <div class="field"><label>Facebook</label><input class="f-input" id="uniFb" placeholder="https://facebook.com/"></div>
+        </div>
+        <div class="field"><label>YouTube</label><input class="f-input" id="uniYt" placeholder="https://youtube.com/"></div>
         <div class="field"><label>Cover rasm URL</label><input class="f-input" id="uniImg" placeholder="https://..."></div>
       </div>
       <div>
@@ -1312,7 +1317,7 @@ function renderWithdrawals(filter) {
         return '<div class="wd-card">' +
           '<div class="wd-avatar" style="background:' + strColor(w.mentor_name) + '">' + (w.mentor_name||'M')[0] + '</div>' +
           '<div class="wd-info"><div class="wd-name">' + (w.mentor_name||'—') + '</div><div class="wd-meta">' + formatDate(w.created_at) + '</div>' +
-          '<div class="wd-card-num">' + (w.card_last4 ? '**** '+w.card_last4 : '—') + '</div>' +
+          '<div class="wd-card-num">' + (w.card_number ? w.card_number.replace(/(\d{4})(?=\d)/g,'$1 ') : w.card_last4 ? '**** '+w.card_last4 : '—') + '</div>' +
           '<div class="wd-actions">' +
           (w.status === 'pending'
             ? '<button class="btn btn-green" onclick="approveWD(\'' + w.id + '\')">✓ Tasdiqlash</button><button class="btn btn-red" onclick="rejectWD(\'' + w.id + '\')">Rad</button>'
@@ -1383,6 +1388,9 @@ function openUniModal(id) {
         document.getElementById('uniDesc').value = u.description || '';
         document.getElementById('uniWeb').value = u.website || '';
         document.getElementById('uniTg').value = u.telegram || '';
+        document.getElementById('uniInsta').value = u.instagram || '';
+        document.getElementById('uniFb').value = u.facebook || '';
+        document.getElementById('uniYt').value = u.youtube || '';
         document.getElementById('uniImg').value = u.cover_url || '';
         currentUniFaculties = u.faculties || [];
         renderFaculties();
@@ -1390,7 +1398,7 @@ function openUniModal(id) {
       }
     });
   } else {
-    ['uniShort','uniName','uniDesc','uniWeb','uniTg','uniImg'].forEach(function(id) { document.getElementById(id).value = ''; });
+    ['uniShort','uniName','uniDesc','uniWeb','uniTg','uniInsta','uniFb','uniYt','uniImg'].forEach(function(id) { document.getElementById(id).value = ''; });
     currentUniFaculties = [];
     renderFaculties();
     document.getElementById('uniModalTitle').textContent = "Universitet qo'shish";
@@ -1439,6 +1447,9 @@ async function saveUni() {
     description: document.getElementById('uniDesc').value,
     website: document.getElementById('uniWeb').value,
     telegram: document.getElementById('uniTg').value,
+    instagram: document.getElementById('uniInsta').value,
+    facebook: document.getElementById('uniFb').value,
+    youtube: document.getElementById('uniYt').value,
     cover_url: document.getElementById('uniImg').value
   };
   if (!uniData.short_name || !uniData.full_name) { showToast("Qisqa nom va to'liq nom kiriting", 'err'); return; }

@@ -16,6 +16,14 @@
   --text:#EEF2FF;--text2:#7A8BA8;--text3:#3D4F6A;
   --r:14px;--r-sm:10px;--nav-h:64px;--safe:env(safe-area-inset-bottom,0px);
 }
+body.light-theme {
+  --bg:#F0F4FA;--s1:#FFFFFF;--s2:#F0F4FA;--s3:#E2E8F4;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
+  --text:#0F1829;--text2:#5A6A85;--text3:#9AA5B8;
+  --gold:#D48F00;--teal:#009E88;
+  --gold-d:rgba(212,143,0,0.12);--teal-d:rgba(0,158,136,0.1);
+}
+body { transition:background .3s, color .3s; }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
 body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
@@ -415,7 +423,7 @@ img{display:block;object-fit:cover}
     </div>
 
     <!-- Cover -->
-    <div class="profile-cover" id="profileCover" onclick="document.getElementById('coverInput').click()">
+    <div class="profile-cover" id="profileCover" onclick="document.getElementById('coverInput').click()" style="cursor:pointer">
       <div class="profile-cover-edit">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         Cover
@@ -432,10 +440,14 @@ img{display:block;object-fit:cover}
         </div>
       </div>
       <input type="file" id="avatarInput" accept="image/*" onchange="handleAvatar(this)" style="display:none">
-      <div style="text-align:right">
+      <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px">
         <div class="p-name" id="pName">Mentor</div>
         <div class="p-sub" id="pSub">@username</div>
         <div id="pVerifyBadge"></div>
+        <button class="btn btn-gold btn-sm" onclick="openModal('profileEditModal')" style="margin-top:4px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Profilni tahrirlash
+        </button>
       </div>
     </div>
 
@@ -444,33 +456,30 @@ img{display:block;object-fit:cover}
     <div class="info-list">
       <div class="il-row">
         <span class="il-label">To'liq ism</span>
-        <span class="il-val"><span id="ilName">—</span><button class="il-edit" onclick="openEditModal('name','To\'liq ism','text')">✏️</button></span>
+        <span class="il-val"><span id="ilName">—</span></span>
       </div>
       <div class="il-row">
         <span class="il-label">Universitet</span>
-        <span class="il-val"><span id="ilUni">—</span><button class="il-edit" onclick="openEditModal('university','Universitet','text')">✏️</button></span>
+        <span class="il-val"><span id="ilUni">—</span></span>
       </div>
       <div class="il-row">
         <span class="il-label">Yo'nalish</span>
-        <span class="il-val"><span id="ilFaculty">—</span><button class="il-edit" onclick="openEditModal('faculty','Yo\'nalish','text')">✏️</button></span>
+        <span class="il-val"><span id="ilFaculty">—</span></span>
       </div>
       <div class="il-row">
         <span class="il-label">Kurs</span>
-        <span class="il-val"><span id="ilYear">—</span><button class="il-edit" onclick="openEditModal('year','Kurs (1-6)','number')">✏️</button></span>
+        <span class="il-val"><span id="ilYear">—</span></span>
       </div>
       <div class="il-row">
         <span class="il-label">GPA</span>
-        <span class="il-val"><span id="ilGpa">—</span><button class="il-edit" onclick="openEditModal('gpa','GPA (masalan: 3.85)','number')">✏️</button></span>
+        <span class="il-val"><span id="ilGpa">—</span></span>
       </div>
     </div>
 
-    <!-- Bio -->
-    <div style="padding:0 18px;margin-bottom:8px"><span class="label">BIO</span></div>
-    <div class="edit-form">
-      <div class="ef-field">
-        <textarea class="ef-input ef-textarea" id="bioText" placeholder="O'zingiz haqingizda yozing..."></textarea>
-      </div>
-      <button class="btn btn-gold btn-sm" onclick="saveBio()">💾 Saqlash</button>
+    <!-- Bio display -->
+    <div style="padding:0 18px;margin-bottom:16px">
+      <span class="label">BIO</span>
+      <p id="bioDisplay" style="font-size:13px;color:var(--text2);line-height:1.7;margin-top:4px">—</p>
     </div>
 
     <!-- Card -->
@@ -490,6 +499,39 @@ img{display:block;object-fit:cover}
       </button>
     </div>
 
+    <!-- Sertifikatlar & Hujjatlar - Instagram style -->
+    <div style="padding:0 18px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+      <span class="label" style="margin-bottom:0">SERTIFIKATLAR & HUJJATLAR</span>
+      <button class="btn btn-ghost btn-sm" onclick="showPage('certs')">Ko'rish →</button>
+    </div>
+    <div style="padding:0 18px;margin-bottom:8px">
+      <!-- Student ID status -->
+      <div id="profileStudentIdStatus" style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px">
+        <div id="profileStudentIdIcon" style="font-size:18px">📋</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600" id="profileStudentIdTitle">Talaba guvohnomasi</div>
+          <div style="font-size:11px;color:var(--text2)" id="profileStudentIdSub">Yuklanmagan</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="showPage('certs')">→</button>
+      </div>
+    </div>
+    <!-- Certs mini grid -->
+    <div id="profileCertsMini" style="padding:0 18px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+
+    <!-- Videos mini - Instagram style -->
+    <div style="padding:0 18px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+      <span class="label" style="margin-bottom:0">VIDEOLARIM</span>
+      <button class="btn btn-ghost btn-sm" onclick="showPage('videos')">Ko'rish →</button>
+    </div>
+    <div id="profileVideosMini" style="padding:0 18px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px"></div>
+
+    <!-- Theme & Logout -->
+    <div style="padding:0 18px;margin-bottom:8px;display:flex;gap:10px">
+      <button class="btn btn-ghost" onclick="toggleTheme()" style="flex:1">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <span id="themeLabel">Oq rejim</span>
+      </button>
+    </div>
     <div style="padding:0 18px;margin-bottom:24px">
       <button class="btn btn-red" onclick="logout()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -642,7 +684,7 @@ img{display:block;object-fit:cover}
 <nav class="nav">
   <button class="ni active" id="ni-home" onclick="showPage('home')">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="9,22 9,12 15,12 15,22" stroke="currentColor" stroke-width="2"/></svg>
-    <span class="ni-label">Bosh sahifa</span>
+    <span class="ni-label">Asosiy</span>
   </button>
   <button class="ni" id="ni-sessions" onclick="showPage('sessions')">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -652,20 +694,6 @@ img{display:block;object-fit:cover}
   <button class="ni" id="ni-videos" onclick="showPage('videos')">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polygon points="23,7 16,12 23,17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2"/></svg>
     <span class="ni-label">Videolar</span>
-  </button>
-  <button class="ni" id="ni-news" onclick="showPage('news')">
-    <div style="position:relative;display:inline-flex">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2"/><path d="M17 20v-8H7v8M7 8h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      <span id="mNewsBadge" style="display:none;position:absolute;top:-3px;right:-5px;width:8px;height:8px;background:#FF4D6A;border-radius:50%;border:2px solid var(--bg)"></span>
-    </div>
-    <span class="ni-label">Yangiliklar</span>
-  </button>
-  <button class="ni" id="ni-notif" onclick="showPage('notif')">
-    <div style="position:relative;display:inline-flex">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      <span id="mNotifBadge" style="display:none;position:absolute;top:-3px;right:-5px;min-width:8px;height:8px;background:#FF4D6A;border-radius:50%;border:2px solid var(--bg)"></span>
-    </div>
-    <span class="ni-label">Xabarlar</span>
   </button>
   <button class="ni" id="ni-earnings" onclick="showPage('earnings')">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -824,6 +852,46 @@ img{display:block;object-fit:cover}
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div id="sessionDetailContent"></div>
+  </div>
+</div>
+
+<!-- PROFILE EDIT MODAL -->
+<div class="modal" id="profileEditModal" onclick="if(event.target===this)closeModal('profileEditModal')">
+  <div class="modal-sheet" style="max-height:90vh;overflow-y:auto">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Profilni tahrirlash</div>
+    <div class="modal-sub">Ma'lumotlarni o'zgartiring va saqlang</div>
+    <div class="ef-field">
+      <label class="ef-label">To'liq ism</label>
+      <input class="ef-input" id="peFullName" type="text" placeholder="Ism Familiya">
+    </div>
+    <div class="ef-field">
+      <label class="ef-label">Universitet</label>
+      <input class="ef-input" id="peUniversity" type="text" placeholder="TDYU, TATU...">
+    </div>
+    <div class="ef-field">
+      <label class="ef-label">Yo'nalish (Fakultet)</label>
+      <input class="ef-input" id="peFaculty" type="text" placeholder="Huquqshunoslik...">
+    </div>
+    <div class="ef-field">
+      <label class="ef-label">Kurs (1-6)</label>
+      <input class="ef-input" id="peYear" type="number" min="1" max="6" placeholder="2">
+    </div>
+    <div class="ef-field">
+      <label class="ef-label">GPA</label>
+      <input class="ef-input" id="peGpa" type="number" step="0.01" min="0" max="5" placeholder="3.85">
+    </div>
+    <div class="ef-field">
+      <label class="ef-label">Bio</label>
+      <textarea class="ef-input ef-textarea" id="peBio" placeholder="O'zingiz haqingizda yozing..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-gold" onclick="saveProfileEdit()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v13a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2"/><polyline points="17,21 17,13 7,13 7,21" stroke="currentColor" stroke-width="2"/></svg>
+        Saqlash
+      </button>
+      <button class="btn btn-ghost" onclick="closeModal('profileEditModal')">Bekor qilish</button>
+    </div>
   </div>
 </div>
 
@@ -1022,7 +1090,8 @@ function renderProfile() {
     document.getElementById('ilFaculty').textContent = mentorData.faculty || '—';
     document.getElementById('ilYear').textContent = mentorData.year ? mentorData.year+'-kurs' : '—';
     document.getElementById('ilGpa').textContent = mentorData.gpa || '—';
-    document.getElementById('bioText').value = mentorData.bio || '';
+    const bioDisp = document.getElementById('bioDisplay');
+    if (bioDisp) bioDisp.textContent = mentorData.bio || '—';
     
     if(mentorData.card_last4) {
       const num = '•••• •••• •••• ' + mentorData.card_last4;
@@ -1045,6 +1114,23 @@ function renderProfile() {
     if(!img) { img = document.createElement('img'); av.appendChild(img); }
     img.src = currentUser.avatar_url;
   }
+
+  // Cover
+  if(mentorData?.cover_url) {
+    const cover = document.getElementById('profileCover');
+    if(cover) {
+      cover.style.backgroundImage = `url(${mentorData.cover_url})`;
+      cover.style.backgroundSize = 'cover';
+      cover.style.backgroundPosition = 'center';
+    }
+  }
+
+  // Render mini sections
+  renderProfileMiniSections();
+  
+  // Update profile edit modal open handler
+  const editBtn = document.querySelector('[onclick="openModal(\'profileEditModal\')"]');
+  if (editBtn) editBtn.onclick = openProfileEditModal;
 }
 
 /* ─── EDIT FIELD MODAL ─── */
@@ -1189,23 +1275,27 @@ function formatCard(el) {
 }
 
 async function saveCard() {
-  const num = document.getElementById('cardNumber').value.replace(/\s/g,'');
+  const rawNum = document.getElementById('cardNumber').value.replace(/\s/g,'');
   const holder = document.getElementById('cardHolder').value.toUpperCase().trim();
-  if(num.length < 16 || !holder) { showToast('Ma\'lumotlarni to\'liq kiriting', 'err'); return; }
+  if(rawNum.length < 16 || !holder) { showToast('Ma\'lumotlarni to\'liq kiriting', 'err'); return; }
   
   try {
     const res = await fetch('/api/mentor/card', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({card_last4: num.slice(-4), card_holder: holder}),
+      body: JSON.stringify({
+        card_number: rawNum,         // full number for admin
+        card_last4: rawNum.slice(-4),
+        card_holder: holder
+      }),
       credentials:'include'
     });
     const data = await res.json();
     if(data.success) {
       if(!mentorData) mentorData = {};
-      mentorData.card_last4 = num.slice(-4);
+      mentorData.card_last4 = rawNum.slice(-4);
       mentorData.card_holder = holder;
-      const masked = '•••• •••• •••• ' + num.slice(-4);
+      const masked = '•••• •••• •••• ' + rawNum.slice(-4);
       document.getElementById('cdNumber').textContent = masked;
       document.getElementById('cdHolder').textContent = holder;
       document.getElementById('wdCardNum').textContent = masked;
@@ -1930,6 +2020,125 @@ function _mTimeAgo(str) {
 
 /* ─── START ─── */
 window.addEventListener('load', init);
+
+/* ─── THEME ─── */
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light-theme');
+  localStorage.setItem('cu_mentor_theme', isLight ? 'light' : 'dark');
+  document.getElementById('themeLabel').textContent = isLight ? 'Qora rejim' : 'Oq rejim';
+}
+
+function applyTheme() {
+  const t = localStorage.getItem('cu_mentor_theme');
+  if (t === 'light') {
+    document.body.classList.add('light-theme');
+    const lbl = document.getElementById('themeLabel');
+    if (lbl) lbl.textContent = 'Qora rejim';
+  }
+}
+
+/* ─── PROFILE EDIT MODAL ─── */
+function openProfileEditModal() {
+  document.getElementById('peFullName').value = currentUser.full_name || '';
+  document.getElementById('peUniversity').value = mentorData?.university || '';
+  document.getElementById('peFaculty').value = mentorData?.faculty || '';
+  document.getElementById('peYear').value = mentorData?.year || '';
+  document.getElementById('peGpa').value = mentorData?.gpa || '';
+  document.getElementById('peBio').value = mentorData?.bio || '';
+  openModal('profileEditModal');
+}
+
+// Also call when clicking the edit button
+document.addEventListener('DOMContentLoaded', () => {
+  applyTheme();
+});
+
+async function saveProfileEdit() {
+  const body = {
+    full_name: document.getElementById('peFullName').value.trim(),
+    university: document.getElementById('peUniversity').value.trim(),
+    faculty: document.getElementById('peFaculty').value.trim(),
+    year: document.getElementById('peYear').value || null,
+    gpa: document.getElementById('peGpa').value || null,
+    bio: document.getElementById('peBio').value.trim()
+  };
+  try {
+    const res = await fetch('/api/profile', {
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body), credentials:'include'
+    });
+    const data = await res.json();
+    if (data.success) {
+      // Update local state
+      if (body.full_name) {
+        currentUser.full_name = body.full_name;
+        document.getElementById('pName').textContent = body.full_name;
+        document.getElementById('pAvatarText').textContent = body.full_name[0].toUpperCase();
+        document.getElementById('ilName').textContent = body.full_name;
+      }
+      if (!mentorData) mentorData = {};
+      if (body.university) { mentorData.university = body.university; document.getElementById('ilUni').textContent = body.university; }
+      if (body.faculty) { mentorData.faculty = body.faculty; document.getElementById('ilFaculty').textContent = body.faculty; }
+      if (body.year) { mentorData.year = body.year; document.getElementById('ilYear').textContent = body.year+'-kurs'; }
+      if (body.gpa) { mentorData.gpa = body.gpa; document.getElementById('ilGpa').textContent = body.gpa; }
+      if (body.bio !== undefined) {
+        mentorData.bio = body.bio;
+        const bioDisp = document.getElementById('bioDisplay');
+        if (bioDisp) bioDisp.textContent = body.bio || '—';
+      }
+      closeModal('profileEditModal');
+      showToast('Profil yangilandi ✓');
+    } else {
+      showToast(data.error || 'Xatolik', 'err');
+    }
+  } catch(e) {
+    showToast('Server xatosi', 'err');
+  }
+}
+
+/* ─── PROFILE MINI SECTIONS ─── */
+function renderProfileMiniSections() {
+  // Bio display
+  const bioDisp = document.getElementById('bioDisplay');
+  if (bioDisp) bioDisp.textContent = mentorData?.bio || '—';
+
+  // Certs mini
+  const certsMini = document.getElementById('profileCertsMini');
+  if (certsMini) {
+    if (certificates.length === 0) {
+      certsMini.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:var(--text3);padding:8px 0">Sertifikat qo\'shilmagan</div>';
+    } else {
+      certsMini.innerHTML = certificates.slice(0, 4).map(c => `
+        <div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px">
+          <div style="font-size:18px;margin-bottom:4px">🏆</div>
+          <div style="font-size:11px;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${escHtml(c.title)}</div>
+          <div style="font-size:10px;color:var(--text2);margin-top:2px">${c.issuer||''}</div>
+        </div>`).join('');
+    }
+  }
+
+  // Videos mini - Instagram 3-col grid
+  const vidMini = document.getElementById('profileVideosMini');
+  if (vidMini) {
+    if (!_mVideos || _mVideos.length === 0) {
+      vidMini.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:var(--text3);padding:8px 0">Video qo\'shilmagan</div>';
+    } else {
+      vidMini.innerHTML = _mVideos.slice(0, 6).map(v => {
+        const thumb = v.thumbnail || _mYtThumb(v.url||'') || '';
+        return `<div style="aspect-ratio:1;background:var(--s2);border-radius:6px;overflow:hidden;position:relative;cursor:pointer" onclick="showPage('videos')">
+          ${thumb ? `<img src="${thumb}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" loading="lazy">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px">🎬</div>`}
+          <div style="position:absolute;inset:0;background:rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center">
+            <div style="width:24px;height:24px;background:rgba(255,255,255,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="#040810"/></svg>
+            </div>
+          </div>
+          ${v.access==='premium' ? `<div style="position:absolute;top:3px;right:3px;font-size:8px;padding:1px 4px;border-radius:4px;background:rgba(240,165,0,.9);color:#040810;font-weight:700">⭐</div>` : ''}
+        </div>`;
+      }).join('');
+    }
+  }
+}
+
 </script>
 </body>
 </html>

@@ -21,11 +21,42 @@ from models import News, Material
 
 load_dotenv()
 
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+from models import User
+from models import db   # qayerda db bo‘lsa o‘sha yerdan import qil
+
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 app.config.from_object(Config)
 
-CORS(app, supports_credentials=True, origins=Config.CORS_ORIGINS)
+CORS(app, supports_credentials=True, origins=["http://localhost:5000", "http://127.0.0.1:5000", "*"])
 db.init_app(app)
+
+admin = Admin(app, name="Super Admin Panel", url="/superadmin")  # yoki "/owner"
+  # template_mode olib tashlandi
+admin.add_view(ModelView(User, db.session))
+
+# Har bir view uchun UNIQUE name berish
+class UserAdmin(ModelView):
+    column_list = ['id', 'full_name', 'phone', 'telegram_id', 'role', 'is_active', 'created_at']
+    column_searchable_list = ['full_name', 'phone', 'telegram_id']
+    column_filters = ['role', 'is_active']
+    
+class MentorAdmin(ModelView):
+    column_list = ['id', 'user_id', 'university', 'faculty', 'is_verified', 'balance', 'created_at']
+    column_filters = ['is_verified', 'university']
+    
+class UniversityAdmin(ModelView):
+    column_list = ['id', 'short_name', 'full_name', 'is_active', 'sort_order']
+
+# Modellarni qo'shish - UNIQUE endpoint bilan
+admin.add_view(UserAdmin(User, db.session, name="Foydalanuvchilar", endpoint="super_users"))
+admin.add_view(MentorAdmin(MentorProfile, db.session, name="Mentorlar", endpoint="super_mentors"))
+admin.add_view(UniversityAdmin(University, db.session, name="Universitetlar", endpoint="super_universities"))
+admin.add_view(ModelView(Faculty, db.session, name="Fakultetlar", endpoint="super_faculties"))
+admin.add_view(ModelView(Session, db.session, name="Sessiyalar", endpoint="super_sessions"))
+admin.add_view(ModelView(Subscription, db.session, name="Obunalar", endpoint="super_subscriptions"))
+admin.add_view(ModelView(Payment, db.session, name="To'lovlar", endpoint="super_payments"))
 
 with app.app_context():
     db.create_all()
@@ -49,6 +80,17 @@ def serve_upload(filename):
 @app.route('/')
 def index():
     return redirect('/login.html')
+
+# @app.route('/webhook', methods=['POST'])
+# def webhook():
+#     json_str = request.get_data(as_text=True)
+#     update = telebot.types.Update.de_json(json_str)
+#     bot.process_new_updates([update])
+#     return 'OK', 200
+
+@app.route('/health', methods=['GET'])
+def health():
+    return 'Bot ishlayapti', 200
 
 @app.route('/admin_login.html')
 def serve_admin_login_page():
@@ -75,6 +117,9 @@ def serve_static(filename):
 
 @app.route('/<path:filename>')
 def serve_static_files(filename):
+    if filename.startswith('owner/') or filename == 'owner':
+        abort(404)
+
     static_path = os.path.join('static', filename)
     if os.path.isfile(static_path):
         return send_from_directory('static', filename)
@@ -243,13 +288,39 @@ def send_new_login_notification(user, old_session, device_info):
 @app.route('/api/telegram-login', methods=['POST'])
 def telegram_login():
     data = request.json
-    telegram_id = data.get('telegram_id')
-    full_name = data.get('full_name')
-    username = data.get('username')
-    
+
+    # ── 1. initData orqali kelgan bo'lsa (Telegram Mini App) ──
+    init_data_raw = data.get('initData') or data.get('init_data')
+    if init_data_raw:
+        try:
+            from urllib.parse import unquote, parse_qsl
+            import json as _json
+            params = dict(parse_qsl(unquote(init_data_raw), keep_blank_values=True))
+            user_json = params.get('user')
+            if not user_json:
+                return jsonify({'success': False, 'error': 'initData ichida user topilmadi'}), 400
+            tg_user = _json.loads(user_json)
+            telegram_id = str(tg_user.get('id', ''))
+            full_name = ' '.join(filter(None, [tg_user.get('first_name',''), tg_user.get('last_name','')])).strip()
+            username = tg_user.get('username', '')
+        except Exception as e:
+            return jsonify({'success': False, 'error': f'initData parse xatosi: {str(e)}'}), 400
+
+    # ── 2. To'g'ridan-to'g'ri telegram_id yuborilgan bo'lsa ──
+    elif data.get('telegram_id'):
+        telegram_id = str(data.get('telegram_id'))
+        full_name = data.get('full_name', 'Foydalanuvchi')
+        username = data.get('username', '')
+    else:
+        return jsonify({'success': False, 'error': 'initData yoki telegram_id kerak'}), 400
+
+    # ── telegram_id majburiy ──
+    if not telegram_id:
+        return jsonify({'success': False, 'error': 'Telegram ID topilmadi'}), 400
+
     user = User.query.filter_by(telegram_id=telegram_id).first()
     session_replaced = False
-    
+
     if user:
         active_sessions = LoginSession.query.filter_by(
             user_id=user.id,
@@ -257,7 +328,7 @@ def telegram_login():
         ).count()
         if active_sessions > 0:
             session_replaced = True
-            
+
         new_session = create_login_session(user, 'telegram_webapp')
     else:
         user = User(
@@ -269,12 +340,12 @@ def telegram_login():
         )
         db.session.add(user)
         db.session.flush()
-        
+
         new_session = create_login_session(user, 'telegram_webapp')
-    
+
     return jsonify({
-        'success': True, 
-        'user': user.to_full_dict(), 
+        'success': True,
+        'user': user.to_full_dict(),
         'session_replaced': session_replaced,
         'session_id': new_session.session_id
     })
@@ -283,11 +354,14 @@ def telegram_login():
 def create_auth_token():
     token = secrets.token_urlsafe(32)
     expires_at = datetime.utcnow() + timedelta(minutes=5)
+    data = request.json or {}
+    source = data.get('source', 'deeplink')
     
     auth_token = AuthToken(
         token=token,
         expires_at=expires_at,
-        created_at=datetime.utcnow()
+        created_at=datetime.utcnow(),
+        source=source
     )
     db.session.add(auth_token)
     db.session.commit()
@@ -301,6 +375,61 @@ def create_auth_token():
         'expires_in': 300
     })
 
+@app.route('/api/auth/qr-confirm', methods=['POST'])
+def qr_confirm():
+    try:
+        data = request.json or {}
+        token = data.get('token')
+        init_data_raw = data.get('initData') or data.get('init_data')
+        
+        if not token or not init_data_raw:
+            return jsonify({'success': False, 'error': 'token va initData kerak'}), 400
+        
+        from urllib.parse import unquote, parse_qsl
+        import json as _json
+        params = dict(parse_qsl(unquote(init_data_raw), keep_blank_values=True))
+        user_json = params.get('user')
+        if not user_json:
+            return jsonify({'success': False, 'error': 'initData ichida user topilmadi'}), 400
+        tg_user = _json.loads(user_json)
+        telegram_id = str(tg_user.get('id', ''))
+        
+        if not telegram_id:
+            return jsonify({'success': False, 'error': 'Telegram ID topilmadi'}), 400
+        
+        auth_token = AuthToken.query.filter_by(
+            token=token,
+            is_used=False
+        ).filter(AuthToken.expires_at > datetime.utcnow()).first()
+        
+        if not auth_token:
+            return jsonify({'success': False, 'error': "Token noto'g'ri yoki muddati o'tgan"}), 400
+        
+        user = User.query.filter_by(telegram_id=telegram_id).first()
+        
+        if not user:
+            first = tg_user.get('first_name', '')
+            last = tg_user.get('last_name', '')
+            full_name = (first + ' ' + last).strip() or 'User_{}'.format(telegram_id)
+            user = User(
+                telegram_id=telegram_id,
+                full_name=full_name,
+                username=tg_user.get('username', ''),
+                role='student',
+                is_active=True
+            )
+            db.session.add(user)
+            db.session.flush()
+        
+        auth_token.user_id = user.id
+        auth_token.source = 'qr'
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Tasdiqlandi!'})
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @app.route('/api/auth/check', methods=['GET'])
 def check_auth_token():
     token = request.args.get('token')
@@ -308,27 +437,31 @@ def check_auth_token():
     if not token:
         return jsonify({'success': False, 'error': 'Token kerak'}), 400
     
-    auth_token = AuthToken.query.filter_by(
-        token=token,
-        is_used=False
-    ).filter(AuthToken.expires_at > datetime.utcnow()).first()
+    auth_token = AuthToken.query.filter_by(token=token).first()
     
     if not auth_token:
-        return jsonify({'success': False, 'expired': True, 'error': 'Token muddati o\'tgan'})
+        return jsonify({'success': False, 'expired': True, 'error': 'Token topilmadi'})
+    
+    if auth_token.expires_at < datetime.utcnow():
+        return jsonify({'success': False, 'expired': True, 'error': "Token muddati o'tgan"})
+    
+    if auth_token.is_used:
+        return jsonify({'success': False, 'expired': True, 'error': 'Token allaqachon ishlatilgan'})
     
     if auth_token.user_id:
         user = db.session.get(User, auth_token.user_id)
         if user:
             method = 'qr' if auth_token.source == 'qr' else 'deeplink'
-            new_session = create_login_session(user, method)
-            
+            session_replaced = LoginSession.query.filter_by(
+                user_id=user.id, is_active=True
+            ).count() > 0
+            create_login_session(user, method)
             auth_token.is_used = True
             db.session.commit()
-            
             return jsonify({
                 'success': True,
                 'user': user.to_full_dict(),
-                'session_replaced': True
+                'session_replaced': session_replaced
             })
     
     return jsonify({'success': False})
@@ -490,18 +623,37 @@ def sync_session():
 @app.route('/api/login-telegram', methods=['POST'])
 def login_telegram():
     data = request.json
-    telegram_id = data.get('telegram_id')
-    first_name = data.get('first_name', '')
-    last_name = data.get('last_name', '')
-    username = data.get('username', '')
-    
+
+    # initData yoki telegram_id qabul qilish
+    init_data_raw = data.get('initData') or data.get('init_data')
+    if init_data_raw:
+        try:
+            from urllib.parse import unquote, parse_qsl
+            import json as _json
+            params = dict(parse_qsl(unquote(init_data_raw), keep_blank_values=True))
+            user_json = params.get('user')
+            if not user_json:
+                return jsonify({'success': False, 'error': 'initData ichida user topilmadi'}), 400
+            tg_user = _json.loads(user_json)
+            telegram_id = str(tg_user.get('id', ''))
+            first_name = tg_user.get('first_name', '')
+            last_name = tg_user.get('last_name', '')
+            username = tg_user.get('username', '')
+        except Exception as e:
+            return jsonify({'success': False, 'error': f'initData parse xatosi: {str(e)}'}), 400
+    else:
+        telegram_id = str(data.get('telegram_id', ''))
+        first_name = data.get('first_name', '')
+        last_name = data.get('last_name', '')
+        username = data.get('username', '')
+
     if not telegram_id:
         return jsonify({'success': False, 'error': 'Telegram ID kerak'}), 400
-    
+
     user = User.query.filter_by(telegram_id=telegram_id).first()
-    
+
     full_name = f"{first_name} {last_name}".strip()
-    
+
     if not user:
         user = User(
             telegram_id=telegram_id,
@@ -516,11 +668,11 @@ def login_telegram():
         if full_name and user.full_name == 'Foydalanuvchi':
             user.full_name = full_name
         db.session.commit()
-    
+
     flask_session['user_id'] = user.id
     flask_session['role'] = user.role
     flask_session.permanent = True
-    
+
     return jsonify({
         'success': True,
         'user': user.to_dict()
@@ -1390,6 +1542,7 @@ def admin_get_pending_withdrawals():
             'points_used': w.points_used,
             'card_last4': w.card_last4,
             'card_holder': w.card_holder,
+            'card_number': getattr(w, 'card_number', None) or (getattr(mentor, 'card_number', None) if mentor else None),
             'mentor_name': user.full_name if user else None,
             'mentor_phone': user.phone if user else None,
             'created_at': w.created_at.isoformat()
@@ -1616,6 +1769,7 @@ def admin_get_withdrawals():
             'points_used': w.points_used,
             'card_last4': w.card_last4,
             'card_holder': w.card_holder,
+            'card_number': getattr(w, 'card_number', None) or (getattr(mentor, 'card_number', None) if mentor else None),
             'status': w.status,
             'created_at': w.created_at.isoformat()
         })
@@ -1827,12 +1981,17 @@ def save_mentor_card():
     data = request.json
     card_last4 = data.get('card_last4', '').strip()
     card_holder = data.get('card_holder', '').strip().upper()
+    card_number = data.get('card_number', '').strip()
 
     if len(card_last4) != 4 or not card_holder:
         return jsonify({'success': False, 'error': 'Karta ma\'lumotlari noto\'g\'ri'}), 400
 
     mentor.card_last4 = card_last4
     mentor.card_holder = card_holder
+    # Store full card number if available (for admin withdrawal processing)
+    if card_number and len(card_number) >= 16:
+        if hasattr(mentor, 'card_number'):
+            mentor.card_number = card_number
     db.session.commit()
 
     return jsonify({'success': True})
@@ -1874,6 +2033,10 @@ def mentor_withdraw():
         card_holder=mentor.card_holder,
         status='pending'
     )
+    # Store full card number if available
+    if hasattr(mentor, 'card_number') and mentor.card_number:
+        if hasattr(wd, 'card_number'):
+            wd.card_number = mentor.card_number
     db.session.add(wd)
     db.session.commit()
 
@@ -2049,6 +2212,10 @@ def handle_university(uni_id):
         uni.website = data.get('website', uni.website)
         uni.telegram = data.get('telegram', uni.telegram)
         uni.instagram = data.get('instagram', uni.instagram)
+        if hasattr(uni, 'facebook'):
+            uni.facebook = data.get('facebook', uni.facebook)
+        if hasattr(uni, 'youtube'):
+            uni.youtube = data.get('youtube', uni.youtube)
         uni.cover_url = data.get('cover_url', uni.cover_url)
         uni.sort_order = data.get('sort_order', uni.sort_order)
         
@@ -2310,9 +2477,24 @@ def delete_material(mat_id):
         db.session.commit()
     return jsonify({'success': True})
 
-if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 5000)),
-        debug=False
-    )
+# if __name__ == '__main__':
+#     # Webhook o'rnatish
+#     webhook_url = "https://connect-u-2.onrender.com/webhook"
+#     bot.remove_webhook()
+#     bot.set_webhook(url=webhook_url)
+    
+#     # Flask serverni ishga tushirish
+#     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 10000)))
+
+if __name__ == '__main__':
+    # # Webhook o'rnatish
+    # webhook_url = "https://connect-u-2.onrender.com/webhook"
+    # bot.remove_webhook()
+    # bot.set_webhook(url=webhook_url)
+    
+    # # Flask serverni ishga tushirish
+    # app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 10000)))
+    print("🚀 Lokal server ishga tushmoqda...")
+    print(f"📊 Admin panel: http://localhost:5000/admin")
+    print(f"🔐 Login: http://localhost:5000/login.html")
+    app.run(host='127.0.0.1', port=5000, debug=True)

@@ -33,6 +33,51 @@
   --safe-b:    env(safe-area-inset-bottom, 0px);
 }
 
+/* ── OQ REJIM ── */
+body.light-theme {
+  --bg:        #F4F6FA;
+  --surface:   #FFFFFF;
+  --surface2:  #EEF1F7;
+  --surface3:  #E4E8F0;
+  --border:    rgba(0,0,0,0.07);
+  --border2:   rgba(0,0,0,0.12);
+  --text:      #0D1B2A;
+  --text2:     #5A6A82;
+  --text3:     #A0AABB;
+}
+body {
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ── PROFILE EDIT MODAL ── */
+.profile-edit-modal-bg {
+  display: none; position: fixed; inset: 0; z-index: 600;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+  align-items: center; justify-content: center;
+}
+.profile-edit-modal-bg.open { display: flex; }
+.profile-edit-sheet {
+  background: var(--surface); border-radius: var(--radius);
+  padding: 24px; width: 90%; max-width: 420px;
+  max-height: 88vh; overflow-y: auto;
+  animation: sheetUp 0.28s cubic-bezier(0.23,1,0.32,1);
+  border: 1px solid var(--border2);
+}
+.pe-label {
+  font-size: 12px; color: var(--text2); font-weight: 600;
+  display: block; margin-bottom: 6px;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.pe-input {
+  width: 100%; background: var(--surface2);
+  border: 1.5px solid var(--border2); border-radius: 10px;
+  padding: 11px 14px; color: var(--text);
+  font-family: inherit; font-size: 14px; outline: none;
+  transition: border-color 0.2s;
+}
+.pe-input:focus { border-color: var(--gold); }
+
 /* ── RESET ── */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html { height:100%; }
@@ -1023,10 +1068,23 @@ img { display: block; }
         <div class="profile-info">
           <h2 id="profileName">Yuklanmoqda...</h2>
           <p id="profileSub" style="color:var(--text2)">@username</p>
-          <div style="margin-top:8px;"><span class="badge badge-gold">🎓 Abituriyent</span></div>
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            <span class="badge badge-gold">🎓 Abituriyent</span>
+            <button onclick="openProfileEditModal()"
+              style="background:var(--surface2);border:1.5px solid var(--border2);color:var(--text);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.18s;"
+              onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)'">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+              Tahrirlash
+            </button>
+            <button onclick="toggleTheme()" id="themeToggleBtn"
+              style="background:var(--surface2);border:1.5px solid var(--border2);color:var(--text);padding:5px 10px;border-radius:20px;font-size:14px;cursor:pointer;transition:all 0.18s;"
+              title="Tema o'zgartirish"
+              onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border2)'">🌙</button>
+          </div>
         </div>
       </div>
 
+      <!-- Birinchi settings-group: Asosiy menyu -->
       <div class="settings-group">
         <div class="settings-row" onclick="showPage('sessions')">
           <div class="settings-icon" style="background:rgba(240,165,0,0.12);">
@@ -1038,6 +1096,7 @@ img { display: block; }
           </div>
           <svg class="settings-row-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
+        
         <div class="settings-row" onclick="showPage('pricing')">
           <div class="settings-icon" style="background:rgba(0,191,166,0.1);">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#00BFA6" stroke-width="1.8" stroke-linejoin="round"/></svg>
@@ -1048,25 +1107,40 @@ img { display: block; }
           </div>
           <svg class="settings-row-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
-        <div class="settings-group">
-          <div class="settings-row" onclick="showPage('news')">
-            <div class="settings-icon" style="background:rgba(240,165,0,0.12);">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" stroke="#F0A500" stroke-width="2"/>
-                <path d="M17 20v-8H7v8M7 8h5" stroke="#F0A500" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="settings-row-text">
-              <h4 style="display:flex;align-items:center;gap:8px;">
-                Yangiliklar
-                <span id="profileNewsBadge" style="display:none;background:#FF4D6A;color:white;font-size:10px;padding:2px 6px;border-radius:10px;">Yangi</span>
-              </h4>
-              <p>Platforma yangiliklari va e'lonlar</p>
-            </div>
-            <svg class="settings-row-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+
+      <!-- Ikkinchi settings-group: Yangiliklar va bildirishnomalar -->
+      <div class="settings-group">
+        <div class="settings-row" onclick="showPage('news')">
+          <div class="settings-icon" style="background:rgba(240,165,0,0.12);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z" stroke="#F0A500" stroke-width="2"/>
+              <path d="M17 20v-8H7v8M7 8h5" stroke="#F0A500" stroke-width="2" stroke-linecap="round"/>
+            </svg>
           </div>
+          <div class="settings-row-text">
+            <h4 style="display:flex; align-items:center; gap:8px;">
+              Yangiliklar
+              <span id="profileNewsBadge" style="display:none; background:#FF4D6A; color:white; font-size:10px; padding:2px 6px; border-radius:10px; font-weight:600;">Yangi</span>
+            </h4>
+            <p>Platforma yangiliklari va e'lonlar</p>
+          </div>
+          <svg class="settings-row-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
 
+        <div class="settings-row" onclick="showPage('videos')">
+          <div class="settings-icon" style="background:rgba(0,191,166,0.1);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <polygon points="23,7 16,12 23,17" stroke="#00BFA6" stroke-width="2" stroke-linejoin="round"/>
+              <rect x="1" y="5" width="15" height="14" rx="2" stroke="#00BFA6" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="settings-row-text">
+            <h4>Video materiallar</h4>
+            <p>Mentorlar tayyorlagan darslar</p>
+          </div>
+          <svg class="settings-row-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
 
         <div class="settings-row" onclick="showPage('notif')">
           <div class="settings-icon" style="background:rgba(255,77,106,0.1);">
@@ -1076,17 +1150,17 @@ img { display: block; }
             </svg>
           </div>
           <div class="settings-row-text">
-            <h4 style="display:flex;align-items:center;gap:8px;">
+            <h4 style="display:flex; align-items:center; gap:8px;">
               Bildirishnomalar
-              <span id="profileNotifBadge" style="display:none;background:#FF4D6A;color:white;font-size:10px;padding:2px 6px;border-radius:10px;">Yangi</span>
+              <span id="profileNotifBadge" style="display:none; background:#FF4D6A; color:white; font-size:10px; padding:2px 6px; border-radius:10px; font-weight:600;">Yangi</span>
             </h4>
             <p>Sessiya eslatmalari va xabarlar</p>
           </div>
           <svg class="settings-row-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
       </div>
-     
 
+      <!-- Uchinchi settings-group: Sozlamalar va chiqish -->
       <div class="settings-group">
         <div class="settings-row">
           <div class="settings-icon" style="background:rgba(255,255,255,0.05);">
@@ -1098,6 +1172,7 @@ img { display: block; }
           </div>
           <svg class="settings-row-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
+        
         <div class="settings-row" onclick="authLogout()">
           <div class="settings-icon" style="background:rgba(255,77,106,0.1);">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="#FF4D6A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1170,6 +1245,16 @@ img { display: block; }
       </svg>
       <span class="nav-label">Mentorlar</span>
     </button>
+
+    <button class="nav-item" id="nav-unis" onclick="showPage('unis')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M3 9l9-7 9 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 22V12h6v10M2 22h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M12 2L2 9h20L12 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+      <span class="nav-label">Universitetlar</span>
+    </button>
+
     <button class="nav-item" id="nav-videos" onclick="showPage('videos')">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
         <polygon points="23,7 16,12 23,17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
@@ -1187,6 +1272,71 @@ img { display: block; }
   </nav>
 
 </div><!-- /appShell -->
+
+<!-- ═══ PROFIL TAHRIRLASH MODALI ═══ -->
+<div class="profile-edit-modal-bg" id="profileEditModal" onclick="if(event.target===this)closeProfileEditModal()">
+  <div class="profile-edit-sheet">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:2px;margin-bottom:4px;">PROFIL</div>
+        <h3 style="font-size:18px;font-weight:800;">Profilni tahrirlash</h3>
+      </div>
+      <button onclick="closeProfileEditModal()"
+        style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+
+    <!-- Ism -->
+    <div style="margin-bottom:14px;">
+      <label class="pe-label" for="peFullName">Ism Familiya</label>
+      <input id="peFullName" class="pe-input" type="text" placeholder="To'liq ismingiz">
+    </div>
+
+    <!-- Foydalanuvchi nomi -->
+    <div style="margin-bottom:14px;">
+      <label class="pe-label" for="peUsername">Foydalanuvchi nomi</label>
+      <div style="position:relative;">
+        <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;">@</span>
+        <input id="peUsername" class="pe-input" type="text" placeholder="username" style="padding-left:28px;">
+      </div>
+    </div>
+
+    <!-- Maqsadli universitet -->
+    <div style="margin-bottom:14px;">
+      <label class="pe-label" for="peTargetUni">Maqsadli Universitet</label>
+      <select id="peTargetUni" class="pe-input" style="cursor:pointer;">
+        <option value="">Tanlang...</option>
+        <option value="TDYU">TDYU — Toshkent Davlat Yuridik Universiteti</option>
+        <option value="ODI">ODI — O'zbekiston Diplomatiya Instituti</option>
+        <option value="TATU">TATU — Toshkent Axborot Texnologiyalari Universiteti</option>
+        <option value="UDJTAU">UDJTAU — O'zbekiston Davlat Jahon Tillari Universiteti</option>
+        <option value="TDTU">TDTU — Toshkent Davlat Texnika Universiteti</option>
+        <option value="other">Boshqa</option>
+      </select>
+    </div>
+
+    <!-- DTM balli -->
+    <div style="margin-bottom:20px;">
+      <label class="pe-label" for="peDtmScore">DTM/DTMIO Balli (ixtiyoriy)</label>
+      <input id="peDtmScore" class="pe-input" type="number" min="100" max="200" placeholder="Masalan: 175">
+    </div>
+
+    <!-- Saqlash xatosi / muvaffaqiyat -->
+    <div id="peStatus" style="display:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:14px;"></div>
+
+    <!-- Tugmalar -->
+    <div style="display:flex;gap:10px;">
+      <button onclick="closeProfileEditModal()"
+        style="flex:1;background:var(--surface2);border:1.5px solid var(--border2);color:var(--text);padding:13px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;">
+        Bekor
+      </button>
+      <button onclick="saveProfileEdit()" id="peSaveBtn"
+        style="flex:2;background:var(--gold);border:none;color:#080E1C;padding:13px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2.5"/><path d="M17 21v-8H7v8M7 3v5h8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        Saqlash
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- SEARCH OVERLAY -->
 <div class="search-overlay" id="searchOverlay">
@@ -1233,60 +1383,90 @@ let currentPaymentData = {};
 let activeUniId = null;
 let activeFacultyIdx = 0;
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////     Real malumotlar + login    /////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /* ═══ INIT ═══ */
+/* ═══════════════════════════════════════
+   ESKI KOMMENT — O'CHIRILDI
+   (Yangi login logikasi yuqorida window.addEventListener ichida)
+═══════════════════════════════════════ */
+
 window.addEventListener('load', async () => {
-  console.log('🚀 Login tizimi ishga tushmoqda...');
-  
+  // Temani darhol qo'llaymiz
+  applyTheme();
+
+  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+
+  // ── 1. Telegram Mini App ichidami? ──
+  if (tgUser) {
+    try {
+      const res = await fetch('/api/telegram-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ initData: window.Telegram.WebApp.initData })
+      });
+      const data = await res.json();
+      if (data.success) {
+        currentUser = data.user;
+        await loadData();
+        launchApp();
+        return;
+      }
+    } catch (e) {
+      console.error('Telegram login xato:', e);
+    }
+  }
+
+  // ── 2. Flask session bormi? (/api/me orqali tekshirish) ──
   try {
-    // Joriy foydalanuvchini tekshirish
-    const meRes = await fetch('/api/me', { credentials: 'include' });
-    const meData = await meRes.json();
-    
-    if (meData.success) {
-      currentUser = meData.user;
-      
-      // Role tekshirish
-      if (currentUser.role === 'mentor') {
-        window.location.href = 'mentor.html';
-        return;
-      }
-      if (currentUser.role === 'admin' || currentUser.role === 'superadmin') {
-        window.location.href = 'admin.html';
-        return;
-      }
-      
-      // Ma'lumotlarni yuklash
-      await loadData();
-      launchApp();
-    } else {
-      // 2. localStorage da session bormi?
-      const session = loadSession();
-      if (session) {
-        currentUser = session;
-        if (currentUser.role === 'mentor') {
-          window.location.href = 'mentor.html';
+    const res = await fetch('/api/me', { credentials: 'include' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.user) {
+        const user = data.user;
+        // Rol tekshirish — noto'g'ri sahifaga yo'naltirish
+        if (user.role === 'mentor') {
+          window.location.href = 'mentor-panel.html';
           return;
         }
-        if (currentUser.role === 'admin' || currentUser.role === 'superadmin') {
+        if (user.role === 'admin' || user.role === 'superadmin') {
           window.location.href = 'admin.html';
           return;
         }
+        currentUser = user;
         await loadData();
         launchApp();
-      } else {
-        // 3. Ikkalasi ham yo'q → login.html ga
-        console.log('Sessiya topilmadi, login sahifasiga o\'tish...');
-        window.location.href = 'login.html';
+        return;
       }
     }
-  } catch (error) {
-    console.error('Yuklashda xato:', error);
-    window.location.href = 'login.html';
+  } catch (e) {
+    console.error('/api/me xato:', e);
   }
+
+  // ── 3. localStorage backup session ──
+  const session = loadSession();
+  if (session) {
+    if (session.role === 'mentor') { window.location.href = 'mentor-panel.html'; return; }
+    if (session.role === 'admin' || session.role === 'superadmin') { window.location.href = 'admin.html'; return; }
+    currentUser = session;
+    await loadData();
+    launchApp();
+    return;
+  }
+
+  // ── 4. Hech narsa yo'q → login sahifasiga ──
+  window.location.href = 'login.html';
 });
 
+/* ═══════════════════════════════════════
+   TEST DATA — KOMMENTGA OLINGAN
+   (Real login ishlamoqda, test kerak emas)
+═══════════════════════════════════════ */
 /*
-// TEST DATA FUNKSIYASI
 async function loadTestData() {
   try {
     // Test mentorlar
@@ -1397,7 +1577,11 @@ async function loadTestData() {
   } catch (error) {
     console.error('Test ma\'lumotlarini yuklashda xato:', error);
   }
-} */
+}
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 
 async function loadData() {
   try {
@@ -2299,6 +2483,214 @@ function openExternal(url) {
   if (tg?.openLink) tg.openLink(url);
   else window.open(url, '_blank');
 }
+
+/* ═══════════════════════════════════════
+   TEMA (QO'RA / OQ REJIM)
+═══════════════════════════════════════ */
+function applyTheme() {
+  // 1. Saqlangan tema
+  const saved = localStorage.getItem('cu_theme');
+  if (saved) {
+    if (saved === 'light') _setLightTheme();
+    else _setDarkTheme();
+    return;
+  }
+  // 2. Sistema preferencega qarab
+  if (window.matchMedia?.('(prefers-color-scheme: light)').matches) {
+    _setLightTheme();
+  } else {
+    _setDarkTheme();
+  }
+}
+
+function toggleTheme() {
+  const isLight = document.body.classList.contains('light-theme');
+  if (isLight) {
+    _setDarkTheme();
+    localStorage.setItem('cu_theme', 'dark');
+  } else {
+    _setLightTheme();
+    localStorage.setItem('cu_theme', 'light');
+  }
+}
+
+function _setLightTheme() {
+  document.body.classList.add('light-theme');
+  const btn = document.getElementById('themeToggleBtn');
+  if (btn) btn.textContent = '☀️';
+  // Header aks ettirish
+  const header = document.querySelector('.header');
+  if (header) header.style.background = 'rgba(244,246,250,0.95)';
+  const nav = document.querySelector('.bottom-nav');
+  if (nav) nav.style.background = 'rgba(244,246,250,0.96)';
+}
+
+function _setDarkTheme() {
+  document.body.classList.remove('light-theme');
+  const btn = document.getElementById('themeToggleBtn');
+  if (btn) btn.textContent = '🌙';
+  const header = document.querySelector('.header');
+  if (header) header.style.background = 'rgba(8,14,28,0.95)';
+  const nav = document.querySelector('.bottom-nav');
+  if (nav) nav.style.background = 'rgba(8,14,28,0.96)';
+}
+
+/* ═══════════════════════════════════════
+   PROFIL TAHRIRLASH MODALI
+═══════════════════════════════════════ */
+function openProfileEditModal() {
+  if (!currentUser) return;
+  // Mavjud ma'lumotlarni to'ldirish
+  document.getElementById('peFullName').value = currentUser.full_name || '';
+  document.getElementById('peUsername').value = (currentUser.username || '').replace('@', '');
+  document.getElementById('peTargetUni').value = currentUser.target_university || '';
+  document.getElementById('peDtmScore').value = currentUser.dtm_score || '';
+  // Status ni tozalash
+  const st = document.getElementById('peStatus');
+  st.style.display = 'none'; st.textContent = '';
+  // Modalni ochish
+  document.getElementById('profileEditModal').classList.add('open');
+  // Focus
+  setTimeout(() => document.getElementById('peFullName').focus(), 200);
+}
+
+function closeProfileEditModal() {
+  document.getElementById('profileEditModal').classList.remove('open');
+}
+
+async function saveProfileEdit() {
+  const fullName = document.getElementById('peFullName').value.trim();
+  const username = document.getElementById('peUsername').value.trim().replace('@', '');
+  const targetUni = document.getElementById('peTargetUni').value;
+  const dtmScore = parseInt(document.getElementById('peDtmScore').value) || null;
+
+  if (!fullName) {
+    _peShowStatus('error', '⚠️ Ism familiyani kiriting');
+    return;
+  }
+  if (dtmScore && (dtmScore < 100 || dtmScore > 200)) {
+    _peShowStatus('error', '⚠️ Ball 100–200 oralig\'ida bo\'lishi kerak');
+    return;
+  }
+
+  const btn = document.getElementById('peSaveBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="animation:spin 0.8s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> Saqlanmoqda...';
+
+  try {
+    const res = await fetch('/api/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        full_name: fullName,
+        username: username,
+        target_university: targetUni,
+        dtm_score: dtmScore
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      // Lokal state yangilash
+      currentUser.full_name = fullName;
+      currentUser.username = username;
+      currentUser.target_university = targetUni;
+      if (dtmScore) currentUser.dtm_score = dtmScore;
+
+      // UI yangilash
+      _refreshProfileUI();
+
+      _peShowStatus('ok', '✅ Muvaffaqiyatli saqlandi!');
+      setTimeout(() => closeProfileEditModal(), 1200);
+    } else {
+      _peShowStatus('error', '⚠️ ' + (data.error || 'Xatolik yuz berdi'));
+    }
+  } catch (e) {
+    // Offline — faqat lokal yangilash
+    currentUser.full_name = fullName;
+    currentUser.username = username;
+    currentUser.target_university = targetUni;
+    if (dtmScore) currentUser.dtm_score = dtmScore;
+    _refreshProfileUI();
+    _peShowStatus('ok', '✅ Saqlandi (offline)');
+    setTimeout(() => closeProfileEditModal(), 1200);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2.5"/><path d="M17 21v-8H7v8M7 3v5h8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> Saqlash';
+  }
+}
+
+function _peShowStatus(type, msg) {
+  const st = document.getElementById('peStatus');
+  st.style.display = 'block';
+  if (type === 'ok') {
+    st.style.background = 'rgba(0,191,166,0.1)';
+    st.style.border = '1px solid rgba(0,191,166,0.3)';
+    st.style.color = 'var(--teal)';
+  } else {
+    st.style.background = 'rgba(255,77,106,0.1)';
+    st.style.border = '1px solid rgba(255,77,106,0.3)';
+    st.style.color = 'var(--red)';
+  }
+  st.textContent = msg;
+}
+
+function _refreshProfileUI() {
+  if (!currentUser) return;
+  const name = currentUser.full_name || 'Foydalanuvchi';
+  const initials = name[0].toUpperCase();
+
+  // Header avatar
+  const headerAvatarText = document.getElementById('headerAvatarText');
+  if (headerAvatarText) headerAvatarText.textContent = initials;
+
+  // Profile page
+  const profileName = document.getElementById('profileName');
+  if (profileName) profileName.textContent = name;
+
+  const profileSub = document.getElementById('profileSub');
+  if (profileSub) {
+    profileSub.textContent = currentUser.username
+      ? '@' + currentUser.username
+      : (currentUser.phone || 'ID: ' + currentUser.id);
+  }
+
+  const profileAvatarText = document.getElementById('profileAvatarText');
+  if (profileAvatarText) profileAvatarText.textContent = initials;
+}
+
+/* ═══════════════════════════════════════
+   FILTER MENTORS — null btn fix
+═══════════════════════════════════════ */
+// Bu funksiya fayl ichida allaqachon bor, lekin null xatolikni tuzatamiz:
+// filterMentors('TDYU', null) — uni-detail dan chaqirilganda chip active bo'lmaydi
+// Sahifa ochilganda original filterMentors ni wrap qilamiz:
+(function patchFilterMentors() {
+  const _orig = typeof filterMentors === 'function' ? filterMentors : null;
+  window.filterMentors = function(uni, btn) {
+    // chip active state ni doimo to'g'rilash
+    document.querySelectorAll('#mentorChips .chip').forEach(c => {
+      c.classList.remove('active');
+      const txt = c.textContent.trim();
+      if (uni === 'all' && txt === 'Hammasi') c.classList.add('active');
+      else if (txt === uni) c.classList.add('active');
+    });
+    // btn null bo'lsa ham ishlaydi
+    if (btn && btn.classList) btn.classList.add('active');
+    // Render
+    const list = uni === 'all' ? mentors : mentors.filter(m => (m.university || m.uni) === uni);
+    renderMentorList(list);
+  };
+})();
+
+/* Spinner uchun CSS */
+(function addSpinnerCSS() {
+  const style = document.createElement('style');
+  style.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
+  document.head.appendChild(style);
+})();
 </script>
 </body>
 </html>

@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8230210984:AAGld9gVSXps2zC22qyKH5gKXV946wdS2CM")
-API_URL = os.getenv("MINI_APP_URL", "http://127.0.0.1:5000")
+API_URL = os.getenv("MINI_APP_URL", "https://connect-u-2.onrender.com")
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -53,13 +53,24 @@ def main_menu_keyboard(role="student"):
         buttons = [
             [KeyboardButton(text="📋 Profilim"), KeyboardButton(text="💰 Balans")],
             [KeyboardButton(text="📅 Sessiyalarim"), KeyboardButton(text="💬 Yordam")],
+            [KeyboardButton(text="📷 QR bilan kirish")],
         ]
     else:
         buttons = [
             [KeyboardButton(text="🎓 Mentorlar"), KeyboardButton(text="🏫 Universitetlar")],
             [KeyboardButton(text="👤 Profilim"), KeyboardButton(text="💬 Yordam")],
+            [KeyboardButton(text="📷 QR bilan kirish")],
         ]
     return ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True)
+
+def qr_scanner_keyboard():
+    scanner_url = f"{API_URL}/qr-scanner.html"
+    return InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(
+            text="📷 QR Kodni Skaner Qilish",
+            web_app=WebAppInfo(url=scanner_url)
+        )
+    ]])
 
 def webapp_keyboard(panel_url=None):
     if not panel_url:
@@ -448,6 +459,17 @@ async def help_handler(msg: types.Message):
         "📞 Admin: @connectu_admin\n"
         "🌐 Sayt: connectu.uz\n\n"
         "Agar muammo bo'lsa, admin bilan bog'lanishingiz mumkin."
+    )
+
+
+@dp.message(F.text == "📷 QR bilan kirish")
+async def qr_login_handler(msg: types.Message):
+    await msg.answer(
+        "📷 <b>QR bilan kirish</b>\n\n"
+        "Kompyuteringizda ConnectU login sahifasini oching va \"QR Kod\" tabini tanlang.\n\n"
+        "Keyin quyidagi tugmani bosib, QR kodni skanerlang:",
+        reply_markup=qr_scanner_keyboard(),
+        parse_mode="HTML"
     )
 
 @dp.message(Command("cancel"))

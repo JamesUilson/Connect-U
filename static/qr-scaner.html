@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ConnectU — QR Skaner</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#040810;--s1:#080F1E;--s2:#0D1628;
+  --border:rgba(255,255,255,0.08);
+  --gold:#F0A500;--teal:#00BFA6;--red:#FF4D6A;--green:#22C55E;
+  --text:#EEF2FF;--text2:#6B7FA0;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── SCREENS ── */
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;transition:opacity .3s;z-index:1}
+.screen.hidden{opacity:0;pointer-events:none}
+
+/* ── IDLE ── */
+#idleScreen{
+  background:radial-gradient(ellipse 70% 50% at 50% 60%,rgba(0,191,166,.07) 0%,transparent 70%),var(--bg);
+}
+.brand{text-align:center;margin-bottom:36px}
+.brand-name{font-size:26px;font-weight:800;letter-spacing:-1px}
+.brand-name em{color:var(--gold);font-style:normal}
+.brand-tag{font-size:10px;letter-spacing:3px;color:var(--text2);text-transform:uppercase;margin-top:4px}
+
+.scan-illus{
+  width:160px;height:160px;border-radius:20px;
+  background:var(--s1);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 28px;position:relative;overflow:hidden;
+}
+.scan-illus::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,191,166,.05) 0%,transparent 60%);
+}
+.scan-corners{position:absolute;inset:12px}
+.scan-corners::before,.scan-corners::after{
+  content:'';position:absolute;width:24px;height:24px;
+  border-color:var(--teal);border-style:solid;border-width:0;
+}
+.scan-corners::before{top:0;left:0;border-top-width:2px;border-left-width:2px;border-radius:3px 0 0 0}
+.scan-corners::after{bottom:0;right:0;border-bottom-width:2px;border-right-width:2px;border-radius:0 0 3px 0}
+.sc2::before{top:0;right:0;border-top-width:2px;border-right-width:2px;border-radius:0 3px 0 0}
+.sc2::after{bottom:0;left:0;border-bottom-width:2px;border-left-width:2px;border-radius:0 0 0 3px}
+.sc2{position:absolute;inset:12px}
+.qr-icon{font-size:52px;position:relative;z-index:1}
+
+.idle-title{font-size:17px;font-weight:700;text-align:center;margin-bottom:8px}
+.idle-hint{font-size:12px;color:var(--text2);text-align:center;line-height:1.7;margin-bottom:32px;max-width:260px}
+
+.btn-start{
+  width:100%;max-width:280px;padding:15px;border-radius:14px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--teal),#00906e);
+  color:white;font-size:15px;font-weight:700;font-family:'Sora',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform .15s,box-shadow .15s;
+}
+.btn-start:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,191,166,.3)}
+.btn-start:active{transform:scale(.97)}
+
+/* ── CAMERA ── */
+#cameraScreen{background:#000;padding:0}
+#video{
+  width:100%;height:100%;object-fit:cover;
+  position:absolute;inset:0;
+}
+.cam-overlay{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:2;pointer-events:none;
+}
+
+/* viewfinder */
+.viewfinder{
+  width:240px;height:240px;position:relative;
+}
+.vf-corner{position:absolute;width:32px;height:32px;border-color:white;border-style:solid;border-width:0}
+.vf-tl{top:0;left:0;border-top-width:3px;border-left-width:3px;border-radius:4px 0 0 0}
+.vf-tr{top:0;right:0;border-top-width:3px;border-right-width:3px;border-radius:0 4px 0 0}
+.vf-bl{bottom:0;left:0;border-bottom-width:3px;border-left-width:3px;border-radius:0 0 0 4px}
+.vf-br{bottom:0;right:0;border-bottom-width:3px;border-right-width:3px;border-radius:0 0 4px 0}
+
+/* scan line animation */
+.scan-line{
+  position:absolute;left:4px;right:4px;height:2px;top:0;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+  box-shadow:0 0 8px var(--teal);
+  animation:scanline 2s ease-in-out infinite;
+}
+@keyframes scanline{
+  0%{top:4px;opacity:1}
+  50%{top:calc(100% - 4px);opacity:1}
+  51%{opacity:0}
+  100%{top:4px;opacity:0}
+}
+
+/* dark vignette around viewfinder */
+.vignette{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to right,rgba(0,0,0,.7) 0%,transparent 25%,transparent 75%,rgba(0,0,0,.7) 100%),
+    linear-gradient(to bottom,rgba(0,0,0,.7) 0%,transparent 25%,transparent 75%,rgba(0,0,0,.7) 100%);
+  pointer-events:none;
+}
+
+.cam-hint{
+  margin-top:28px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.1);border-radius:10px;
+  padding:10px 18px;font-size:12px;color:rgba(255,255,255,.8);
+  pointer-events:none;
+}
+
+.btn-cam-cancel{
+  position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.15);border-radius:10px;
+  color:rgba(255,255,255,.7);font-size:13px;font-family:'Sora',sans-serif;
+  padding:10px 24px;cursor:pointer;z-index:3;pointer-events:all;
+}
+
+/* ── PROCESSING ── */
+#processingScreen{background:var(--bg)}
+.proc-card{background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;width:100%;max-width:300px}
+.spin{width:44px;height:44px;border-radius:50%;border:3px solid rgba(0,191,166,.15);border-top-color:var(--teal);animation:spin .7s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.proc-title{font-size:16px;font-weight:700;margin-bottom:6px}
+.proc-sub{font-size:12px;color:var(--text2)}
+
+/* ── SUCCESS ── */
+#successScreen{
+  background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(34,197,94,.07) 0%,transparent 70%),var(--bg);
+}
+.success-card{background:var(--s1);border:1px solid rgba(34,197,94,.15);border-radius:20px;padding:36px 24px;text-align:center;width:100%;max-width:300px}
+.check-circle{
+  width:72px;height:72px;border-radius:50%;
+  background:linear-gradient(135deg,var(--green),#16a34a);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;margin:0 auto 20px;
+  animation:pop .4s cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+.success-title{font-size:20px;font-weight:800;margin-bottom:6px}
+.success-sub{font-size:13px;color:var(--text2);line-height:1.6}
+.success-name{color:var(--teal);font-weight:700}
+
+/* ── ERROR ── */
+#errorScreen{background:var(--bg)}
+.err-card{background:var(--s1);border:1px solid rgba(255,77,106,.15);border-radius:20px;padding:32px 24px;text-align:center;width:100%;max-width:300px}
+.err-icon{font-size:48px;margin-bottom:16px}
+.err-title{font-size:17px;font-weight:700;margin-bottom:8px;color:var(--red)}
+.err-msg{font-size:12px;color:var(--text2);margin-bottom:24px;line-height:1.6}
+.btn-retry{
+  width:100%;padding:13px;border-radius:12px;border:none;cursor:pointer;
+  background:var(--s2);border:1px solid var(--border);
+  color:var(--text);font-size:14px;font-weight:600;font-family:'Sora',sans-serif;
+  transition:all .15s;margin-bottom:8px;
+}
+.btn-retry:hover{background:rgba(255,255,255,.05)}
+.btn-close{
+  width:100%;padding:12px;border-radius:12px;border:none;cursor:pointer;
+  background:none;color:var(--text2);font-size:13px;font-family:'Sora',sans-serif;cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- 1. IDLE -->
+<div class="screen" id="idleScreen">
+  <div class="brand">
+    <div class="brand-name">Connect<em>-U</em></div>
+    <div class="brand-tag">QR Login</div>
+  </div>
+  <div class="scan-illus">
+    <div class="scan-corners"></div>
+    <div class="sc2"></div>
+    <span class="qr-icon">📷</span>
+  </div>
+  <div class="idle-title">QR kodni skaner qiling</div>
+  <div class="idle-hint">Kompyuter ekranidagi QR kodni kamerangiz bilan skaner qiling va avtomatik login bo'ling.</div>
+  <button class="btn-start" onclick="startCamera()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+    Kamerani ochish
+  </button>
+</div>
+
+<!-- 2. CAMERA -->
+<div class="screen hidden" id="cameraScreen">
+  <video id="video" autoplay playsinline muted></video>
+  <div class="vignette"></div>
+  <div class="cam-overlay">
+    <div class="viewfinder">
+      <div class="vf-corner vf-tl"></div>
+      <div class="vf-corner vf-tr"></div>
+      <div class="vf-corner vf-bl"></div>
+      <div class="vf-corner vf-br"></div>
+      <div class="scan-line"></div>
+    </div>
+    <div class="cam-hint">ConnectU QR kodini ko'rsating</div>
+  </div>
+  <button class="btn-cam-cancel" onclick="stopCamera()">✕ Bekor qilish</button>
+  <canvas id="canvas" style="display:none"></canvas>
+</div>
+
+<!-- 3. PROCESSING -->
+<div class="screen hidden" id="processingScreen">
+  <div class="proc-card">
+    <div class="spin"></div>
+    <div class="proc-title">Tasdiqlanmoqda...</div>
+    <div class="proc-sub" id="procSub">QR ma'lumotlari tekshirilmoqda</div>
+  </div>
+</div>
+
+<!-- 4. SUCCESS -->
+<div class="screen hidden" id="successScreen">
+  <div class="success-card">
+    <div class="check-circle">✓</div>
+    <div class="success-title">Muvaffaqiyatli!</div>
+    <div class="success-sub">
+      Salom, <span class="success-name" id="succName">Foydalanuvchi</span>!<br>
+      Brauzeringizda avtomatik login bo'ldi.<br>
+      Bu oynani yopishingiz mumkin.
+    </div>
+  </div>
+</div>
+
+<!-- 5. ERROR -->
+<div class="screen hidden" id="errorScreen">
+  <div class="err-card">
+    <div class="err-icon">⚠️</div>
+    <div class="err-title">Xatolik</div>
+    <div class="err-msg" id="errMsg">Noma'lum xatolik</div>
+    <button class="btn-retry" onclick="retry()">🔄 Qayta urinish</button>
+    <button class="btn-close" onclick="closeApp()">Yopish</button>
+  </div>
+</div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+let stream = null;
+let scanTimer = null;
+let isProcessing = false;
+
+// ── INIT ──
+window.addEventListener('load', function() {
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    tg.setHeaderColor('#040810');
+    tg.setBackgroundColor('#040810');
+  }
+
+  // Agar Telegram initData yo'q bo'lsa — xato
+  if (!tg?.initData) {
+    showError('Bu sahifa faqat Telegram bot orqali ochilishi mumkin.');
+    return;
+  }
+
+  showScreen('idleScreen');
+});
+
+// ── CAMERA ──
+async function startCamera() {
+  try {
+    showScreen('cameraScreen');
+
+    // Orqa kamerani olishga harakat
+    const constraints = {
+      video: {
+        facingMode: { ideal: 'environment' },
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      }
+    };
+
+    stream = await navigator.mediaDevices.getUserMedia(constraints);
+    const video = document.getElementById('video');
+    video.srcObject = stream;
+    await video.play();
+
+    // QR scanning boshlash
+    startScanning();
+
+  } catch(e) {
+    let msg = 'Kamera ochilmadi.';
+    if (e.name === 'NotAllowedError') msg = 'Kamera ruxsati berilmagan. Telegramdagi sozlamalardan kamera ruxsatini bering.';
+    else if (e.name === 'NotFoundError') msg = 'Kamera topilmadi.';
+    showError(msg);
+  }
+}
+
+function stopCamera() {
+  clearInterval(scanTimer);
+  if (stream) {
+    stream.getTracks().forEach(t => t.stop());
+    stream = null;
+  }
+  showScreen('idleScreen');
+}
+
+// ── QR SCANNING ──
+function startScanning() {
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  scanTimer = setInterval(function() {
+    if (isProcessing || video.readyState !== video.HAVE_ENOUGH_DATA) return;
+
+    const vw = video.videoWidth;
+    const vh = video.videoHeight;
+    if (!vw || !vh) return;
+
+    // Faqat markaziy kvadratni crop qilamiz (viewfinder hududi)
+    const cropSize = Math.min(vw, vh) * 0.8;
+    const cropX = (vw - cropSize) / 2;
+    const cropY = (vh - cropSize) / 2;
+
+    canvas.width = cropSize;
+    canvas.height = cropSize;
+    ctx.drawImage(video, cropX, cropY, cropSize, cropSize, 0, 0, cropSize, cropSize);
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    if (typeof jsQR === 'undefined') return;
+
+    // Ikki usul bilan urinib ko'ramiz
+    let code = jsQR(imageData.data, imageData.width, imageData.height, {
+      inversionAttempts: 'attemptBoth'
+    });
+
+    if (code && code.data) {
+      handleQRData(code.data);
+    }
+  }, 150); // har 150ms da scan — tezroq
+}
+
+function handleQRData(qrText) {
+  if (isProcessing) return;
+
+  // ConnectU QR format: https://...?start=qr_TOKEN yoki to'g'ridan token
+  let token = null;
+
+  // t.me/...?start=qr_TOKEN
+  const tmeMatch = qrText.match(/[?&]start=qr_([A-Za-z0-9_-]+)/);
+  if (tmeMatch) {
+    token = tmeMatch[1];
+  }
+  
+  // To'g'ridan URL parametr: ?token=TOKEN
+  if (!token) {
+    const urlMatch = qrText.match(/[?&]token=([A-Za-z0-9_-]+)/);
+    if (urlMatch) token = urlMatch[1];
+  }
+  
+  // To'g'ridan token (agar faqat token bo'lsa)
+  if (!token && /^[A-Za-z0-9_-]{20,}$/.test(qrText.trim())) {
+    token = qrText.trim();
+  }
+
+  if (!token) {
+    // Bu ConnectU QR emas — davom etamiz
+    return;
+  }
+
+  isProcessing = true;
+  clearInterval(scanTimer);
+  stopStream();
+
+  confirmLogin(token);
+}
+
+function stopStream() {
+  if (stream) {
+    stream.getTracks().forEach(t => t.stop());
+    stream = null;
+  }
+}
+
+// ── API CALL ──
+async function confirmLogin(token) {
+  showScreen('processingScreen');
+  document.getElementById('procSub').textContent = 'Server bilan bog\'lanilmoqda...';
+
+  try {
+    const resp = await fetch('/api/auth/qr-confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        token: token,
+        initData: tg.initData
+      })
+    });
+
+    const data = await resp.json();
+
+    if (data.success) {
+      // User ma'lumotlarini ko'rsatish
+      const user = tg?.initDataUnsafe?.user;
+      const name = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : 'Foydalanuvchi';
+      document.getElementById('succName').textContent = name;
+
+      showScreen('successScreen');
+
+      // 3 soniyadan keyin yopish
+      setTimeout(function() {
+        if (tg) tg.close();
+      }, 3000);
+    } else {
+      showError(data.error || 'Tasdiqlashda xatolik yuz berdi');
+    }
+  } catch(e) {
+    showError('Server bilan bog\'lanib bo\'lmadi. Internet aloqasini tekshiring.');
+  }
+}
+
+// ── HELPERS ──
+function showScreen(id) {
+  ['idleScreen','cameraScreen','processingScreen','successScreen','errorScreen'].forEach(s => {
+    document.getElementById(s).classList.toggle('hidden', s !== id);
+  });
+}
+
+function showError(msg) {
+  isProcessing = false;
+  stopStream();
+  clearInterval(scanTimer);
+  document.getElementById('errMsg').textContent = msg;
+  showScreen('errorScreen');
+}
+
+function retry() {
+  isProcessing = false;
+  showScreen('idleScreen');
+}
+
+function closeApp() {
+  if (tg) tg.close();
+}
+</script>
+
+<!-- jsQR kutubxonasi (QR decode uchun) -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+
+</body>
+</html>
