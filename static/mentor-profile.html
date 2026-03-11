@@ -673,32 +673,55 @@ async function deleteCert(id) {
 /* ─── AVATAR / COVER ─── */
 async function handleAvatar(input) {
   const file = input.files[0]; if(!file) return;
+  // Preview
   const reader = new FileReader();
-  reader.onload = async e => {
-    try {
-      const d = await CU.API.post('/api/profile/avatar', {avatar_url: e.target.result});
-      if(d.success) {
-        const av = document.getElementById('pAvatar');
-        let img = av.querySelector('img');
-        if(!img) { img = document.createElement('img'); av.appendChild(img); }
-        img.src = d.avatar_url || e.target.result;
-        CU.toast('Rasm yuklandi');
-      } else CU.toast(d.error||'Xatolik','err');
-    } catch(e) { CU.toast('Yuklashda xato','err'); }
+  reader.onload = e => {
+    const av = document.getElementById('pAvatar');
+    let img = av.querySelector('img');
+    if(!img) { img = document.createElement('img'); av.appendChild(img); }
+    img.src = e.target.result;
   };
   reader.readAsDataURL(file);
+  // Server'ga multipart fayl sifatida yuklash
+  try {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    const res = await fetch('/api/profile/avatar-upload', {method:'POST', body:formData, credentials:'include'});
+    const d = await res.json();
+    if(d.success) {
+      const av = document.getElementById('pAvatar');
+      let img = av.querySelector('img');
+      if(!img) { img = document.createElement('img'); av.appendChild(img); }
+      img.src = d.avatar_url;
+      if(CU.currentUser) CU.currentUser.avatar_url = d.avatar_url;
+      CU.toast('Rasm saqlandi');
+    } else CU.toast(d.error||'Xatolik','err');
+  } catch(e) { CU.toast('Yuklashda xato','err'); }
 }
 
-function handleCover(input) {
+async function handleCover(input) {
   const file = input.files[0]; if(!file) return;
+  // Preview
   const reader = new FileReader();
   reader.onload = e => {
     const c = document.getElementById('profileCover');
     c.style.backgroundImage = `url(${e.target.result})`;
     c.style.backgroundSize = 'cover'; c.style.backgroundPosition = 'center';
-    CU.toast('Cover o\'zgartirildi');
   };
   reader.readAsDataURL(file);
+  // DBga saqlash
+  try {
+    const formData = new FormData();
+    formData.append('cover', file);
+    const res = await fetch('/api/profile/cover', {method:'POST', body:formData, credentials:'include'});
+    const d = await res.json();
+    if(d.success) {
+      if(CU.mentorData) CU.mentorData.cover_url = d.cover_url;
+      CU.toast('Cover saqlandi');
+    } else {
+      CU.toast(d.error || 'Saqlashda xato', 'err');
+    }
+  } catch(e) { CU.toast("Server bilan bog'lanib bo'lmadi", 'err'); }
 }
 
 /* ─── STUDENT ID UPLOAD ─── */
