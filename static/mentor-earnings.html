@@ -33,6 +33,16 @@
 .wds-meta{font-size:11px;color:var(--text2)}
 .wds-right{}
 
+/* Card type selector */
+.card-type-btn{
+  padding:9px;border:1.5px solid var(--border);border-radius:9px;
+  background:var(--s2);color:var(--text);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .15s;font-family:inherit;
+}
+.card-type-btn.selected{
+  border-color:var(--gold);background:var(--gold-d);color:var(--gold);
+}
+
 /* Monthly chart */
 .month-chart-wrap{padding:0 18px 0;margin-bottom:16px}
 .mc-bars{display:flex;align-items:flex-end;gap:6px;height:80px;margin-bottom:6px}
@@ -118,7 +128,7 @@
     <div style="font-family:'JetBrains Mono',monospace;font-size:17px;letter-spacing:3px;margin-bottom:10px;color:#fff;position:relative;z-index:1" id="cdNumber">•••• •••• •••• ••••</div>
     <div style="display:flex;justify-content:space-between;position:relative;z-index:1">
       <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#fff" id="cdHolder">KARTA EGASI</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.5);font-family:'JetBrains Mono',monospace">VISA / MC</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);font-weight:600;letter-spacing:1px;text-transform:uppercase" id="cdCardName"></div>
     </div>
   </div>
   <div style="padding:0 18px;margin-bottom:16px">
@@ -137,7 +147,7 @@
   <!-- Filter -->
   <div class="chips">
     <button class="chip active" onclick="filterTxns('all',this)">Hammasi</button>
-    <button class="chip" onclick="filterTxns('session_completed',this)">✓ Sessiyalar</button>
+    <button class="chip" onclick="filterTxns('session_completed',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Sessiyalar</button>
     <button class="chip" onclick="filterTxns('withdrawal',this)">↑ Yechimlar</button>
     <button class="chip" onclick="filterTxns('bonus',this)">🎁 Bonuslar</button>
   </div>
@@ -212,8 +222,18 @@
       <label class="ef-label">Karta egasi (lotincha)</label>
       <input class="ef-input" id="cardHolder" type="text" placeholder="AZIZ KARIMOV" style="text-transform:uppercase">
     </div>
+    <div class="ef-field">
+      <label class="ef-label">Karta turi</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px" id="cardTypeBtns">
+        <button type="button" class="card-type-btn" data-type="Humo" onclick="selectCardType(this)"><span style="display:inline-block;width:10px;height:10px;background:#F97316;border-radius:50%;vertical-align:middle;margin-right:3px"></span>Humo</button>
+        <button type="button" class="card-type-btn" data-type="Uzcard" onclick="selectCardType(this)"><span style="display:inline-block;width:10px;height:10px;background:#22C55E;border-radius:50%;vertical-align:middle;margin-right:3px"></span>Uzcard</button>
+        <button type="button" class="card-type-btn" data-type="Visa" onclick="selectCardType(this)"><span style="display:inline-block;width:10px;height:10px;background:#3B82F6;border-radius:50%;vertical-align:middle;margin-right:3px"></span>Visa</button>
+        <button type="button" class="card-type-btn" data-type="Mastercard" onclick="selectCardType(this)"><span style="display:inline-block;width:10px;height:10px;background:#EF4444;border-radius:50%;vertical-align:middle;margin-right:3px"></span>Mastercard</button>
+      </div>
+      <input type="hidden" id="cardName" value="">
+    </div>
     <div class="modal-btns">
-      <button class="btn btn-gold" onclick="saveCard()">💾 Saqlash</button>
+      <button class="btn btn-gold" onclick="saveCard()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="17,21 17,13 7,13 7,21" stroke="currentColor" stroke-width="2"/><polyline points="7,3 7,8 15,8" stroke="currentColor" stroke-width="2"/></svg> Saqlash</button>
       <button class="btn btn-ghost" onclick="CU.closeModal('cardModal')">Bekor qilish</button>
     </div>
   </div>
@@ -255,6 +275,8 @@ function renderEarnings() {
     const masked = '•••• •••• •••• ' + md.card_last4;
     ['cdNumber','wdCardNum'].forEach(id => document.getElementById(id).textContent = masked);
     ['cdHolder','wdCardHolder'].forEach(id => document.getElementById(id).textContent = md.card_holder || '—');
+    const cn = document.getElementById('cdCardName');
+    if(cn) cn.textContent = md.card_name || '';
   }
 
   renderMonthChart();
@@ -302,46 +324,100 @@ function renderWithdrawals(wds) {
     area.innerHTML = '<div style="font-size:13px;color:var(--text2);padding:4px 0">So\'rov yo\'q</div>'; 
     return; 
   }
-  const statusLabel = {pending:'⏳ Kutilmoqda',approved:'✓ Tasdiqlandi',completed:'✅ Amalga oshirildi',rejected:'✕ Rad etildi'};
+  const statusLabel = {pending:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Kutilmoqda',approved:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tasdiqlandi',completed:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Amalga oshirildi',rejected:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> Rad etildi'};
   const statusColor = {pending:'var(--gold)',approved:'var(--teal)',completed:'var(--green)',rejected:'var(--red)'};
-  area.innerHTML = `<div class="card"><div>` + wds.slice(0,5).map(w => `
-    <div class="txn-item" onclick="${w.check_url ? `openCheckViewer('${w.check_url}','${CU.fmt(w.amount)}')` : ''}">
+  // Store withdrawal data for check viewer
+  window._wdData = {};
+  wds.forEach(w => { window._wdData[w.id] = w; });
+
+  area.innerHTML = `<div class="card"><div>` + wds.slice(0,5).map(w => {
+    const hasCheck = !!(w.check_url);
+    const cardLabel = `•••• ${w.card_last4||'????'}${w.card_name?' · '+w.card_name:''}`;
+    return `<div class="txn-item" style="${hasCheck?'cursor:pointer':''}" ${hasCheck?`onclick="openCheckViewerById('${w.id}')"`:''}> 
       <div class="txn-left">
-        <div class="txn-icon" style="background:rgba(255,77,106,.1)">💸</div>
+        <div class="txn-icon" style="background:rgba(255,77,106,.1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" stroke-width="2"/><path d="M1 10h22" stroke="currentColor" stroke-width="2"/></svg></div>
         <div class="txn-info">
-          <h4>Pul yechish · •••• ${w.card_last4||'????'}</h4>
-          <p>${CU.fmtDateShort(w.created_at)} · <span style="color:${statusColor[w.status]||'var(--text2)'};">${statusLabel[w.status]||w.status}</span></p>
-          ${w.check_url ? '<p style="color:var(--teal);font-size:11px;margin-top:2px">📄 Chekni ko\'rish →</p>' : ''}
+          <h4>Pul yechish · ${cardLabel}</h4>
+          <p>${CU.fmtDateShort(w.created_at)} · <span style="color:${statusColor[w.status]||'var(--text2)'}">${statusLabel[w.status]||w.status}</span></p>
+          ${hasCheck ? '<p style="color:var(--teal);font-size:11px;margin-top:2px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Chekni ko\'rish →</p>' : '<p style="font-size:11px;color:var(--text3);margin-top:2px">Chek hali yuklanmagan</p>'}
         </div>
       </div>
       <div class="txn-minus">-${CU.fmt(w.amount)} so'm</div>
-    </div>`).join('') + `</div></div>`;
+    </div>`;
+  }).join('') + `</div></div>`;
 }
 
-function openCheckViewer(url, amount) {
+function openCheckViewerById(wdId) {
+  const w = window._wdData && window._wdData[wdId];
+  if(!w || !w.check_url) return;
+  openCheckViewer(w.check_url, CU.fmt(w.amount), CU.fmtDateShort(w.processed_at || w.created_at), w.card_last4);
+}
+
+function openCheckViewer(url, amount, date, cardLast4) {
   const body = document.getElementById('checkViewerBody');
-  const isImage = url.match(/\.(jpg|jpeg|png|gif|webp)/i);
+  const isImage = /\.(jpg|jpeg|png|gif|webp)/i.test(url);
+  const isPdf = /\.pdf/i.test(url);
+  const fullUrl = url.startsWith('http') ? url : (window.location.origin + url);
+  
   body.innerHTML = `
-    <div class="modal-title">📄 To'lov cheki</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Summa: ${amount} so'm</div>
-    ${isImage ? `<img src="${url}" style="width:100%;border-radius:10px;margin-bottom:12px">` : 
-    `<div style="padding:20px;background:var(--s2);border-radius:10px;text-align:center;margin-bottom:12px">
-      <div style="font-size:32px;margin-bottom:8px">📄</div>
-      <div style="font-size:13px;color:var(--text2)">PDF hujjat</div>
-    </div>`}
-    <div style="display:flex;gap:8px">
-      <a href="${url}" target="_blank" class="btn btn-teal" style="text-decoration:none;flex:1;justify-content:center">
+    <div style="font-size:17px;font-weight:800;margin-bottom:4px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> To'lov cheki</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:14px">
+      ${amount ? `<svg width='12' height='12' viewBox='0 0 24 24' fill='none'><line x1='12' y1='1' x2='12' y2='23' stroke='currentColor' stroke-width='2' stroke-linecap='round'/><path d='M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6' stroke='currentColor' stroke-width='2' stroke-linecap='round'/></svg> ${amount} so'm` : ''} ${cardLast4 ? ` · <svg width='12' height='12' viewBox='0 0 24 24' fill='none'><rect x='1' y='4' width='22' height='16' rx='2' stroke='currentColor' stroke-width='2'/><path d='M1 10h22' stroke='currentColor' stroke-width='2'/></svg> ****${cardLast4}` : ''} ${date ? ` · ${date}` : ''}
+    </div>
+    ${isImage
+      ? `<div style="border-radius:12px;overflow:hidden;margin-bottom:14px;border:1px solid var(--border)">
+           <img src="${fullUrl}" style="width:100%;display:block;max-height:60vh;object-fit:contain;background:#000">
+         </div>`
+      : isPdf
+        ? `<div style="background:var(--s2);border-radius:12px;padding:20px;text-align:center;margin-bottom:14px;border:1px solid var(--border)">
+             <div style="margin-bottom:10px"><svg width="48" height="48" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+             <div style="font-size:14px;font-weight:600;margin-bottom:4px">PDF hujjat</div>
+             <div style="font-size:12px;color:var(--text2)">Ko'rish uchun brauzerda oching</div>
+           </div>`
+        : `<div style="background:var(--s2);border-radius:12px;padding:20px;text-align:center;margin-bottom:14px">
+             <div style="font-size:40px">📎</div>
+           </div>`
+    }
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <a href="${fullUrl}" target="_blank" class="btn btn-teal" style="text-decoration:none;justify-content:center">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="15,3 21,3 21,9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        Ko'rish / Yuklab olish
+        Ko'rish
       </a>
-      <button class="btn btn-ghost" onclick="printCheck('${url}')">🖨 Chop etish</button>
+      <a href="${fullUrl}" download class="btn btn-ghost" style="text-decoration:none;justify-content:center">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Saqlash
+      </a>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn btn-ghost" onclick="shareCheck('${fullUrl}','${amount||''}')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="2"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Ulashish
+      </button>
+      <button class="btn btn-ghost" onclick="printCheck('${fullUrl}')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 6,2 18,2 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="6" y="14" width="12" height="8" rx="1" stroke="currentColor" stroke-width="2"/></svg>
+        Chop etish
+      </button>
     </div>`;
   CU.openModal('checkViewerModal');
 }
 
+async function shareCheck(url, amount) {
+  try {
+    if(navigator.share) {
+      await navigator.share({title: `ConnectU To'lov Cheki${amount?' — '+amount+' so\'m':''}`, url: url});
+    } else {
+      await navigator.clipboard.writeText(url);
+      CU.toast('Havola nusxalandi');
+    }
+  } catch(e) {
+    try { await navigator.clipboard.writeText(url); CU.toast('Havola nusxalandi'); } 
+    catch { CU.toast('Ulashib bo\'lmadi', 'err'); }
+  }
+}
+
 function printCheck(url) {
   const w = window.open(url, '_blank');
-  if(w) { w.focus(); setTimeout(()=>w.print(), 500); }
+  if(w) { w.focus(); setTimeout(()=>w.print(), 800); }
 }
 
 function filterTxns(f, btn) {
@@ -351,7 +427,7 @@ function filterTxns(f, btn) {
 }
 
 const txnIcons = {
-  session_completed:{icon:'✓',bg:'rgba(34,197,94,.12)',label:'Sessiya yakunlandi'},
+  session_completed:{icon:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',bg:'rgba(34,197,94,.12)',label:'Sessiya yakunlandi'},
   bonus:{icon:'🎁',bg:'rgba(240,165,0,.12)',label:'Bonus'},
   withdrawal:{icon:'↑',bg:'rgba(255,77,106,.12)',label:'Pul yechildi'},
   penalty:{icon:'!',bg:'rgba(255,77,106,.12)',label:'Jarima'},
@@ -362,7 +438,7 @@ function renderTxns(f) {
   let list = _allTxns;
   if(f !== 'all') list = list.filter(p=>p.reason===f);
   const el = document.getElementById('txnList');
-  if(!list.length) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">💳</div>Tranzaksiya yo\'q</div>'; return; }
+  if(!list.length) { el.innerHTML = '<div class="empty-state"><div class="empty-state-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" stroke-width="2"/><path d="M1 10h22" stroke="currentColor" stroke-width="2"/></svg></div>Tranzaksiya yo\'q</div>'; return; }
   el.innerHTML = list.map(p => {
     const cfg = txnIcons[p.reason] || {icon:'•',bg:'rgba(255,255,255,.06)',label:p.reason||'Tranzaksiya'};
     return `<div class="txn-item">
@@ -391,9 +467,15 @@ async function submitWithdraw() {
   if(!CU.mentorData?.card_last4) { CU.toast('Avval karta raqamini kiriting', 'err'); CU.closeModal('withdrawModal'); CU.openModal('cardModal'); return; }
   try {
     const d = await CU.API.post('/api/mentor/withdraw', {amount:amt});
-    if(d.success) { CU.closeModal('withdrawModal'); CU.toast('So\'rov yuborildi ✓'); }
+    if(d.success) { CU.closeModal('withdrawModal'); CU.toast('So\'rov yuborildi'); }
     else CU.toast(d.error||'Xatolik','err');
   } catch(e) { CU.toast('Server xatosi','err'); }
+}
+
+function selectCardType(btn) {
+  document.querySelectorAll('#cardTypeBtns .card-type-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('cardName').value = btn.dataset.type;
 }
 
 function fmtCard(el) {
@@ -404,18 +486,22 @@ function fmtCard(el) {
 async function saveCard() {
   const raw = document.getElementById('cardNumber').value.replace(/\s/g,'');
   const holder = document.getElementById('cardHolder').value.toUpperCase().trim();
+  const cardName = document.getElementById('cardName').value;
   if(raw.length < 16 || !holder) { CU.toast('Ma\'lumotlarni to\'liq kiriting', 'err'); return; }
   try {
-    const d = await CU.API.post('/api/mentor/card', {card_number:raw, card_last4:raw.slice(-4), card_holder:holder});
+    const d = await CU.API.post('/api/mentor/card', {card_number:raw, card_last4:raw.slice(-4), card_holder:holder, card_name:cardName});
     if(d.success) {
       if(!CU.mentorData) CU.mentorData = {};
       CU.mentorData.card_last4 = raw.slice(-4);
       CU.mentorData.card_holder = holder;
+      CU.mentorData.card_name = cardName;
       const masked = '•••• •••• •••• ' + raw.slice(-4);
-      ['cdNumber','wdCardNum'].forEach(id => document.getElementById(id).textContent = masked);
-      ['cdHolder','wdCardHolder'].forEach(id => document.getElementById(id).textContent = holder);
+      ['cdNumber','wdCardNum'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = masked; });
+      ['cdHolder','wdCardHolder'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = holder; });
+      const cn = document.getElementById('cdCardName');
+      if(cn) cn.textContent = cardName;
       CU.closeModal('cardModal');
-      CU.toast('Karta saqlandi ✓');
+      CU.toast('Karta saqlandi');
     } else CU.toast(d.error||'Xatolik','err');
   } catch(e) { CU.toast('Server xatosi','err'); }
 }

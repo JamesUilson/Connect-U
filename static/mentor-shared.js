@@ -349,24 +349,31 @@ CU.closeModal = function(id) {
 
 /* ─── SESSION HELPERS ─── */
 CU.sessionBadge = function(status) {
+  const clockSvg = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  const checkSvg = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const starSvg  = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:3px"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2"/></svg>';
+  const xSvg     = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';
   const m = {
-    pending:'<span class="badge b-amber">⏳ Kutilmoqda</span>',
-    confirmed:'<span class="badge b-teal">✓ Tasdiqlangan</span>',
-    completed:'<span class="badge b-green">★ Tugallandi</span>',
-    cancelled:'<span class="badge b-red">✕ Bekor</span>'
+    pending:   '<span class="badge b-gold">'   + clockSvg + 'Kutilmoqda</span>',
+    confirmed: '<span class="badge b-teal">'   + checkSvg + 'Tasdiqlangan</span>',
+    completed: '<span class="badge b-green">'  + starSvg  + 'Tugallandi</span>',
+    cancelled: '<span class="badge b-red">'    + xSvg     + 'Bekor</span>',
+    in_progress: '<span class="badge b-purple">' + checkSvg + 'Jarayonda</span>',
   };
   return m[status] || '';
 };
 
 CU.sessionTypeLabel = function(type) {
-  return type === 'individual' ? '👤 Individual' : type === 'group' ? '👥 Guruh' : (type||'').toUpperCase();
+  const userSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>';
+  const groupSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:3px"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  return type === 'individual' ? userSvg + 'Individual' : type === 'group' ? groupSvg + 'Guruh' : (type||'').toUpperCase();
 };
 
 CU.confirmSession = async function(id, onDone) {
   if(CU._demoMode) {
     const s = CU.sessions.find(x=>x.id===id);
     if(s) s.status = 'confirmed';
-    CU.toast('✓ Sessiya tasdiqlandi');
+    CU.toast('Sessiya tasdiqlandi');
     if(onDone) onDone();
     return;
   }
@@ -375,7 +382,7 @@ CU.confirmSession = async function(id, onDone) {
     if(d.success) {
       const s = CU.sessions.find(x=>x.id===id);
       if(s) s.status = 'confirmed';
-      CU.toast('✓ Sessiya tasdiqlandi');
+      CU.toast('Sessiya tasdiqlandi');
       if(onDone) onDone();
     } else CU.toast(d.error||'Xatolik','err');
   } catch(e) { CU.toast('Server xatosi','err'); }
@@ -398,6 +405,20 @@ CU.rejectSession = async function(id, onDone) {
       if(onDone) onDone();
     } else CU.toast(d.error||'Xatolik','err');
   } catch(e) { CU.toast('Server xatosi','err'); }
+};
+
+/* ─── AUTH HEADERS ─── */
+CU.authHeaders = function() {
+  /* Session cookie based — qo'shimcha header shart emas,
+     lekin Telegram WebApp bo'lsa initData ham yuboramiz */
+  const headers = {};
+  try {
+    const tg = window.Telegram?.WebApp;
+    if (tg?.initData) {
+      headers['X-Telegram-InitData'] = tg.initData;
+    }
+  } catch(e) {}
+  return headers;
 };
 
 /* ─── NAVIGATION ─── */

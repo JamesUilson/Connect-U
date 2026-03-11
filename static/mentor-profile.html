@@ -105,13 +105,13 @@
 
   <!-- Verify banners -->
   <div id="bannerPending" class="verify-banner" style="background:rgba(240,165,0,.1);border:1px solid rgba(240,165,0,.3);display:none;margin:0 18px 12px">
-    <div class="vb-icon" style="background:rgba(240,165,0,.15)">⚠️</div>
+    <div class="vb-icon" style="background:rgba(240,165,0,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
     <div class="vb-text"><h4 id="bannerTitle">Verifikatsiya talab qilinadi</h4><p id="bannerMsg">3 kun ichida guvohnomangizni yuklang</p></div>
     <button class="vb-action" onclick="switchTab('docs')">Yuklash →</button>
   </div>
   <div id="bannerVerified" class="verify-banner" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);display:none;margin:0 18px 12px">
-    <div class="vb-icon" style="background:rgba(34,197,94,.15)">✅</div>
-    <div class="vb-text"><h4 style="color:var(--green)">✓ Profil tasdiqlangan</h4><p>Mentorlar ro'yxatida ko'rinasiz</p></div>
+    <div class="vb-icon" style="background:rgba(34,197,94,.15)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="vb-text"><h4 style="color:var(--green)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Profil tasdiqlangan</h4><p>Mentorlar ro'yxatida ko'rinasiz</p></div>
   </div>
 
   <!-- TABS -->
@@ -119,7 +119,7 @@
     <button class="ptab active" onclick="switchTab('info')" id="tab-info">📋 Ma'lumot</button>
     <button class="ptab" onclick="switchTab('grid')" id="tab-grid">⊞ Postlar</button>
     <button class="ptab" onclick="switchTab('docs')" id="tab-docs">📂 Hujjatlar</button>
-    <button class="ptab" onclick="switchTab('news')" id="tab-news">📢 Yangiliklar</button>
+    <button class="ptab" onclick="switchTab('news')" id="tab-news"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Yangiliklar</button>
   </div>
 
   <!-- TAB: INFO -->
@@ -140,7 +140,7 @@
       <div class="il-row"><span class="il-label">Yo'nalish</span><span class="il-val" id="ilFaculty">—</span></div>
       <div class="il-row"><span class="il-label">Kurs</span><span class="il-val" id="ilYear">—</span></div>
       <div class="il-row"><span class="il-label">GPA</span><span class="il-val" id="ilGpa">—</span></div>
-      <div class="il-row"><span class="il-label">Reyting</span><span class="il-val" id="ilRating">5.0 ★</span></div>
+      <div class="il-row"><span class="il-label">Reyting</span><span class="il-val" id="ilRating">5.0 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2"/></svg></span></div>
       <div class="il-row"><span class="il-label">Jami sessiyalar</span><span class="il-val" id="ilSess">0</span></div>
     </div>
     <!-- Platform settings -->
@@ -148,17 +148,17 @@
     <div class="platform-section">
       <!-- Platform settings -->
       <div class="ps-row">
-        <span class="ps-row-label">🌙 Tema</span>
+        <span class="ps-row-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Tema</span>
         <button class="settings-toggle" id="themeToggleBtn" data-on="false" onclick="CU.toggleTheme()"></button>
       </div>
       <div class="ps-row" style="cursor:default">
-        <span class="ps-row-label" style="flex:1">🔔 Bildirishnomalar</span>
+        <span class="ps-row-label" style="flex:1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Bildirishnomalar</span>
         <button class="settings-toggle on">
-          <span class="theme-icon">🔔</span>
+          <span class="theme-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </button>
       </div>
       <div class="ps-row" style="cursor:default">
-        <span class="ps-row-label" style="flex:1">👁 Profil ko'rinishi</span>
+        <span class="ps-row-label" style="flex:1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg> Profil ko'rinishi</span>
         <span class="badge b-green">Ochiq</span>
       </div>
     </div>
@@ -188,7 +188,7 @@
     <!-- Grid filter -->
     <div class="chips" style="padding:10px 18px">
       <button class="chip active" onclick="filterGrid('videos',this)">▶️ Videolar</button>
-      <button class="chip" onclick="filterGrid('certs',this)">🏆 Sertifikatlar</button>
+      <button class="chip" onclick="filterGrid('certs',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M6 9H4.5a2.5 2.5 0 010-5H6M18 9h1.5a2.5 2.5 0 000-5H18M4 22h16M8 22v-4M16 22v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18 2H6v7a6 6 0 0012 0V2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Sertifikatlar</button>
     </div>
     <div id="igGridContainer" class="ig-grid" style="padding:0"></div>
     <div style="height:20px"></div>
@@ -227,8 +227,8 @@
     <div style="height:14px"></div>
     <!-- Sub tabs -->
     <div style="display:flex;gap:8px;padding:0 18px;margin-bottom:14px">
-      <button class="chip active" onclick="switchNews('news',this)">📢 Yangiliklar</button>
-      <button class="chip" onclick="switchNews('notifs',this)">🔔 Bildirishnomalar</button>
+      <button class="chip active" onclick="switchNews('news',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Yangiliklar</button>
+      <button class="chip" onclick="switchNews('notifs',this)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Bildirishnomalar</button>
     </div>
     <div id="newsPanel">
       <div id="newsList" style="padding:0 18px"></div>
@@ -272,7 +272,7 @@
     <div class="modal-handle"></div>
     <div class="modal-top">
       <div class="modal-title">Profilni tahrirlash</div>
-      <button class="modal-close-btn" onclick="CU.closeModal('profileEditModal')">✕</button>
+      <button class="modal-close-btn" onclick="CU.closeModal('profileEditModal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></button>
     </div>
     <div class="ef-field" style="margin-top:8px">
       <label class="ef-label">To'liq ism</label>
@@ -302,7 +302,7 @@
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">
       <button class="btn btn-ghost" onclick="CU.closeModal('profileEditModal')">Bekor</button>
-      <button class="btn btn-gold" onclick="saveProfileEdit()">💾 Saqlash</button>
+      <button class="btn btn-gold" onclick="saveProfileEdit()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="17,21 17,13 7,13 7,21" stroke="currentColor" stroke-width="2"/><polyline points="7,3 7,8 15,8" stroke="currentColor" stroke-width="2"/></svg> Saqlash</button>
     </div>
   </div>
 </div>
@@ -332,7 +332,7 @@
       <input type="file" id="certFileInput" accept="image/*,.pdf" style="display:none" onchange="previewCertFile(this)">
     </div>
     <div class="modal-btns">
-      <button class="btn btn-gold" onclick="addCert()">✓ Qo'shish</button>
+      <button class="btn btn-gold" onclick="addCert()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Qo'shish</button>
       <button class="btn btn-ghost" onclick="CU.closeModal('certModal')">Bekor qilish</button>
     </div>
   </div>
@@ -343,9 +343,9 @@
 let _gridMode = 'videos';
 let _newsMode = 'news';
 let _demoNotifs = [
-  {id:'n1',icon:'✓',iconBg:'rgba(34,197,94,.12)',title:'Sessiyangiz tasdiqlandi',desc:'Robiya Teshaboeva sessiyang ni tasdiqladi',time:new Date(Date.now()-3600000*2).toISOString(),read:false},
-  {id:'n2',icon:'💰',iconBg:'rgba(0,191,166,.12)',title:'Balans to\'ldirildi',desc:'+8,000 so\'m sessiya uchun qo\'shildi',time:new Date(Date.now()-86400000).toISOString(),read:false},
-  {id:'n3',icon:'📢',iconBg:'rgba(240,165,0,.12)',title:'Yangi yangilik',desc:'Platforma yangiligi: to\'lov tizimi yangilandi',time:new Date(Date.now()-86400000*2).toISOString(),read:true},
+  {id:'n1',icon:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',iconBg:'rgba(34,197,94,.12)',title:'Sessiyangiz tasdiqlandi',desc:'Robiya Teshaboeva sessiyang ni tasdiqladi',time:new Date(Date.now()-3600000*2).toISOString(),read:false},
+  {id:'n2',icon:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',iconBg:'rgba(0,191,166,.12)',title:'Balans to\'ldirildi',desc:'+8,000 so\'m sessiya uchun qo\'shildi',time:new Date(Date.now()-86400000).toISOString(),read:false},
+  {id:'n3',icon:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',iconBg:'rgba(240,165,0,.12)',title:'Yangi yangilik',desc:'Platforma yangiligi: to\'lov tizimi yangilandi',time:new Date(Date.now()-86400000*2).toISOString(),read:true},
 ];
 
 window.addEventListener('load', () => {
@@ -390,14 +390,14 @@ function renderProfile() {
   document.getElementById('ilFaculty').textContent = md.faculty || '—';
   document.getElementById('ilYear').textContent = md.year ? md.year+'-kurs' : '—';
   document.getElementById('ilGpa').textContent = md.gpa || '—';
-  document.getElementById('ilRating').textContent = (md.rating||5.0).toFixed(1) + ' ★';
+  document.getElementById('ilRating').innerHTML = (md.rating||5.0).toFixed(1) + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2"/></svg>';
   document.getElementById('ilSess').textContent = md.total_sessions || 0;
   const bioEl = document.getElementById('bioDisplay');
   if(bioEl) bioEl.textContent = md.bio || '—';
 
   // Verify badge
   if(md.is_verified) {
-    document.getElementById('pVerifyBadge').innerHTML = '<span class="badge b-green">✓ Tasdiqlangan</span>';
+    document.getElementById('pVerifyBadge').innerHTML = '<span class="badge b-green"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tasdiqlangan</span>';
     document.getElementById('bannerVerified').style.display = 'flex';
     document.getElementById('bannerPending').style.display = 'none';
   }
@@ -427,7 +427,7 @@ function updateVerifyBanners(data) {
   } else if(data.student_id_url) {
     document.getElementById('bannerPending').style.display = 'flex';
     document.getElementById('bannerVerified').style.display = 'none';
-    document.getElementById('bannerTitle').textContent = '⏳ Tekshiruv kutilmoqda';
+    document.getElementById('bannerTitle').textContent = 'Tekshiruv kutilmoqda';
     document.getElementById('bannerMsg').textContent = 'Guvohnoma yuklandi, admin tekshirishi kutilmoqda';
   } else {
     document.getElementById('bannerPending').style.display = 'flex';
@@ -471,30 +471,30 @@ function renderGrid() {
   const container = document.getElementById('igGridContainer');
   if(_gridMode === 'videos') {
     if(!CU.videos.length) {
-      container.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text2)"><div style="font-size:32px;margin-bottom:8px">🎬</div>Video yo\'q</div>';
+      container.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text2)"><div style="margin-bottom:8px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="2.18" stroke="currentColor" stroke-width="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M17 7h5M2 17h5M17 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>Video yo\'q</div>';
       return;
     }
     container.innerHTML = CU.videos.map(v => {
       const thumb = v.thumbnail || CU.ytThumb(v.url||'');
       return `<div class="ig-cell" onclick="${v.url?`window.open('${v.url}','_blank')`:''}">
-        ${thumb ? `<img src="${thumb}" loading="lazy">` : '<div class="ig-cell-empty">🎬</div>'}
+        ${thumb ? `<img src="${thumb}" loading="lazy">` : '<div class="ig-cell-empty"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="2.18" stroke="currentColor" stroke-width="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M17 7h5M2 17h5M17 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>'}
         <div class="ig-overlay">
           <div style="display:flex;align-items:center;gap:6px;color:#fff;font-size:12px;font-weight:600">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
             ${CU.fmt(v.views||0)}
           </div>
         </div>
-        ${v.access==='premium'?'<div class="ig-prem">⭐</div>':''}
+        ${v.access==='premium'?'<div class="ig-prem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>':''}
       </div>`;
     }).join('') + (CU.videos.length < 9 ? `<div class="ig-cell ig-cell-empty" onclick="CU.navTo('videos')" style="background:var(--s3)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" opacity=".4"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></div>` : '');
   } else {
     if(!CU.certificates.length) {
-      container.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text2)"><div style="font-size:32px;margin-bottom:8px">🏆</div>Sertifikat yo\'q</div>';
+      container.innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text2)"><div style="margin-bottom:8px"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M6 9H4.5a2.5 2.5 0 010-5H6M18 9h1.5a2.5 2.5 0 000-5H18M4 22h16M8 22v-4M16 22v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M18 2H6v7a6 6 0 0012 0V2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Sertifikat yo\'q</div>';
       return;
     }
     container.innerHTML = CU.certificates.map(c => `
       <div class="ig-cell ig-cell-empty" style="background:var(--s2);flex-direction:column;gap:4px;padding:8px">
-        <div style="font-size:24px">🏆</div>
+        <div><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M6 9H4.5a2.5 2.5 0 010-5H6M18 9h1.5a2.5 2.5 0 000-5H18M4 22h16M8 22v-4M16 22v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M18 2H6v7a6 6 0 0012 0V2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
         <div style="font-size:9px;font-weight:700;text-align:center;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical">${CU.escHtml(c.title)}</div>
         <div style="font-size:9px;color:var(--text2)">${c.issuer||''}</div>
       </div>`).join('') + (CU.certificates.length < 9 ? `<div class="ig-cell ig-cell-empty" onclick="CU.openModal('certModal')" style="background:var(--s3)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" opacity=".4"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></div>` : '');
@@ -523,10 +523,10 @@ async function renderNews() {
   } catch(e) { news = CU._demoNews(); }
   _newsLoaded = true;
   const catLabel = {update:'Yangilanish',event:'Tadbir',urgent:'Muhim',general:'Umumiy'};
-  const catIcon = {update:'🔄',event:'📅',urgent:'⚠️',general:'📢'};
+  const catIcon = {update:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="23,4 23,10 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',event:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',urgent:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',general:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'};
   el.innerHTML = news.map(n => `
     <div class="news-mini ${n.priority==='critical'?'p-critical':n.priority==='high'?'p-high':''}" onclick="${n.link?`window.open('${n.link}','_blank')`:''}" style="background:var(--s1);border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer">
-      <div class="nm-tag">${catIcon[n.category]||'📢'} ${catLabel[n.category]||'Yangilik'}</div>
+      <div class="nm-tag">${catIcon[n.category]||'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'} ${catLabel[n.category]||'Yangilik'}</div>
       <div class="nm-title">${CU.escHtml(n.title)}</div>
       <div class="nm-desc">${CU.escHtml(n.content||'')}</div>
       <div class="nm-time">${CU.timeAgo(n.created_at)}</div>
@@ -535,14 +535,14 @@ async function renderNews() {
 
 function renderNotifs() {
   const notifs = [..._demoNotifs, ...(CU.sessions.filter(s=>s.status==='pending').map(s=>({
-    id:'sess_'+s.id,icon:'📅',iconBg:'rgba(240,165,0,.12)',
+    id:'sess_'+s.id,icon:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',iconBg:'rgba(240,165,0,.12)',
     title:'Yangi sessiya so\'rovi',desc:(s.student_name||'Talaba') + ' · ' + CU.sessionTypeLabel(s.session_type),
     time:s.created_at||new Date().toISOString(),read:false
   })))];
   document.getElementById('notifsList').innerHTML = notifs.length
     ? notifs.map(n => `
       <div class="notif-mini ${!n.read?'unread':''}">
-        <div class="ni-icon" style="background:${n.iconBg||'rgba(255,255,255,.06)'}">${n.icon||'🔔'}</div>
+        <div class="ni-icon" style="background:${n.iconBg||'rgba(255,255,255,.06)'}">${n.icon||'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'}</div>
         <div class="ni-body">
           <div class="ni-title">${CU.escHtml(n.title)}</div>
           <div class="ni-desc">${CU.escHtml(n.desc||'')}</div>
@@ -550,7 +550,7 @@ function renderNotifs() {
         </div>
         ${!n.read?'<div class="ni-dot"></div>':''}
       </div>`).join('')
-    : '<div class="empty-state"><div class="empty-state-icon">🔔</div>Bildirishnoma yo\'q</div>';
+    : '<div class="empty-state"><div class="empty-state-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Bildirishnoma yo\'q</div>';
 }
 
 /* ─── PROFILE EDIT ─── */
@@ -582,7 +582,7 @@ async function saveProfileEdit() {
       Object.assign(CU.mentorData, {university:body.university,faculty:body.faculty,year:body.year,gpa:body.gpa,bio:body.bio});
       renderProfile();
       CU.closeModal('profileEditModal');
-      CU.toast('Profil yangilandi ✓');
+      CU.toast('Profil yangilandi');
     } else CU.toast(d.error||'Xatolik','err');
   } catch(e) {
     // Offline apply
@@ -591,7 +591,7 @@ async function saveProfileEdit() {
     Object.assign(CU.mentorData, {university:body.university,faculty:body.faculty,year:body.year,gpa:body.gpa,bio:body.bio});
     renderProfile();
     CU.closeModal('profileEditModal');
-    CU.toast('Profil yangilandi ✓');
+    CU.toast('Profil yangilandi');
   }
 }
 
@@ -611,7 +611,7 @@ function renderCertsList() {
           </div>
         </div>
       </div>`).join('')
-    : '<div class="empty-state" style="padding:24px"><div class="empty-state-icon">🏆</div>Sertifikat yo\'q</div>';
+    : '<div class="empty-state" style="padding:24px"><div class="empty-state-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M6 9H4.5a2.5 2.5 0 010-5H6M18 9h1.5a2.5 2.5 0 000-5H18M4 22h16M8 22v-4M16 22v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M18 2H6v7a6 6 0 0012 0V2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>Sertifikat yo\'q</div>';
 }
 
 function previewCertFile(input) {
@@ -619,7 +619,7 @@ function previewCertFile(input) {
   const zone = document.getElementById('certFileZone');
   const status = document.getElementById('certFileStatus');
   if(file) {
-    status.textContent = '✓ ' + file.name + ' (' + Math.round(file.size/1024) + ' KB)';
+    status.textContent = file.name + ' (' + Math.round(file.size/1024) + ' KB)';
     status.style.color = 'var(--green)';
     zone.style.borderColor = 'var(--green)';
   }
@@ -657,7 +657,7 @@ async function addCert() {
       document.getElementById('certFileStatus').textContent = '📎 Fayl tanlash (JPG, PNG, PDF)';
       document.getElementById('certFileStatus').style.color = 'var(--text2)';
       document.getElementById('certFileZone').style.borderColor = 'var(--border2)';
-      CU.toast('Sertifikat qo\'shildi ✓');
+      CU.toast('Sertifikat qo\'shildi');
     } else CU.toast(d.error||'Xatolik','err');
   } catch(e) { CU.toast('Server xatosi','err'); }
 }
@@ -682,7 +682,7 @@ async function handleAvatar(input) {
         let img = av.querySelector('img');
         if(!img) { img = document.createElement('img'); av.appendChild(img); }
         img.src = d.avatar_url || e.target.result;
-        CU.toast('Rasm yuklandi ✓');
+        CU.toast('Rasm yuklandi');
       } else CU.toast(d.error||'Xatolik','err');
     } catch(e) { CU.toast('Yuklashda xato','err'); }
   };
@@ -696,7 +696,7 @@ function handleCover(input) {
     const c = document.getElementById('profileCover');
     c.style.backgroundImage = `url(${e.target.result})`;
     c.style.backgroundSize = 'cover'; c.style.backgroundPosition = 'center';
-    CU.toast('Cover o\'zgartirildi ✓');
+    CU.toast('Cover o\'zgartirildi');
   };
   reader.readAsDataURL(file);
 }
@@ -711,10 +711,10 @@ async function uploadStudentId(input) {
     const res = await fetch('/api/mentor/upload-student-id', {method:'POST', body:formData, credentials:'include'});
     const data = await res.json();
     if(data.success) {
-      CU.toast('✅ Guvohnoma yuklandi!');
+      CU.toast('Guvohnoma yuklandi!');
       const vd = await CU.loadVerificationStatus();
       if(vd) { updateVerifyBanners(vd); updateStudentIdZone(vd.student_id_url ? 'pending' : 'none', vd.days_left); }
-    } else { updateStudentIdZone('none'); CU.toast('❌ ' + (data.error||'Xato'), 'err'); }
+    } else { updateStudentIdZone('none'); CU.toast('Xato: ' + (data.error||'Xato'), 'err'); }
   } catch(e) { updateStudentIdZone('none'); CU.toast('Server bilan bog\'lanib bo\'lmadi','err'); }
 }
 
@@ -722,9 +722,9 @@ function updateStudentIdZone(status, daysLeft) {
   const zone = document.getElementById('studentIdZone');
   if(!zone) return;
   const cfg = {
-    verified:{icon:'✓',color:'var(--green)',bg:'rgba(34,197,94,.05)',border:'var(--green)',title:'✓ Guvohnoma tasdiqlangan',sub:'Admin tekshiruvidan o\'tgan',statusHtml:'<span style="color:var(--green);font-weight:700">✓ Tasdiqlangan</span>',clickable:false},
-    pending:{icon:'⏳',color:'var(--gold)',bg:'rgba(240,165,0,.05)',border:'var(--gold)',title:'⏳ Guvohnoma yuklangan',sub:'Admin tekshiruvi kutilmoqda',statusHtml:`<span style="color:var(--gold);font-weight:700">Kutilmoqda${daysLeft!==undefined?' · '+daysLeft+' kun':''}</span>`,clickable:false},
-    none:{icon:'📄',color:'var(--gold)',bg:'var(--s1)',border:'var(--border2)',title:'Talaba guvohnomasi',sub:'JPG, PNG yoki PDF · 5 MB gacha',statusHtml:'<span style="color:var(--red);font-weight:700">✕ Yuklanmagan</span>',clickable:true}
+    verified:{icon:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',color:'var(--green)',bg:'rgba(34,197,94,.05)',border:'var(--green)',title:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Guvohnoma tasdiqlangan',sub:'Admin tekshiruvidan o\'tgan',statusHtml:'<span style="color:var(--green);font-weight:700"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Tasdiqlangan</span>',clickable:false},
+    pending:{icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',color:'var(--gold)',bg:'rgba(240,165,0,.05)',border:'var(--gold)',title:'Guvohnoma yuklangan',sub:'Admin tekshiruvi kutilmoqda',statusHtml:`<span style="color:var(--gold);font-weight:700">Kutilmoqda${daysLeft!==undefined?' · '+daysLeft+' kun':''}</span>`,clickable:false},
+    none:{icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',color:'var(--gold)',bg:'var(--s1)',border:'var(--border2)',title:'Talaba guvohnomasi',sub:'JPG, PNG yoki PDF · 5 MB gacha',statusHtml:'<span style="color:var(--red);font-weight:700"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg> Yuklanmagan</span>',clickable:true}
   };
   const c = cfg[status] || cfg.none;
   zone.style.borderColor = c.border; zone.style.background = c.bg;
@@ -741,7 +741,7 @@ async function uploadCV(input) {
   try {
     const res = await fetch('/api/mentor/documents', {method:'POST', body:formData, credentials:'include'});
     const d = await res.json();
-    if(d.success) CU.toast('CV yuklandi ✓'); else CU.toast(d.error||'Xatolik','err');
+    if(d.success) CU.toast('CV yuklandi'); else CU.toast(d.error||'Xatolik','err');
   } catch(e) { CU.toast('Yuklashda xato','err'); }
 }
 </script>

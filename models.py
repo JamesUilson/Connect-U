@@ -106,7 +106,19 @@ class MentorProfile(db.Model):
     # To'lov kartasi
     card_last4 = db.Column(db.String(4))
     card_holder = db.Column(db.String(200))
+    card_name = db.Column(db.String(50))        # Humo, Uzcard, Visa, Mastercard
     card_token = db.Column(db.String(500))  # Payme/Click token
+    
+    # Narxlar
+    individual_price = db.Column(db.Integer, default=8000)
+    group_price = db.Column(db.Integer, default=2000)
+    
+    # Kutilayotgan balans (to'lanmagan sessiyalar)
+    pending_balance = db.Column(db.Integer, default=0)
+    
+    # Fanlar va tillar (JSON)
+    subjects = db.Column(db.Text)    # JSON array: ["Matematika", "Fizika"]
+    languages = db.Column(db.Text)   # JSON array: ["Uzbek", "Russian"]
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -138,6 +150,15 @@ class MentorProfile(db.Model):
                                  foreign_keys='Withdrawal.mentor_id')
     
     def to_dict(self):
+        import json as _json
+        subjects = []
+        languages = []
+        try:
+            subjects = _json.loads(self.subjects) if self.subjects else []
+        except: pass
+        try:
+            languages = _json.loads(self.languages) if self.languages else []
+        except: pass
         return {
             'id': self.id,
             'user_id': self.user_id,
@@ -147,12 +168,20 @@ class MentorProfile(db.Model):
             'bio': self.bio,
             'gpa': float(self.gpa) if self.gpa else None,
             'is_verified': self.is_verified,
+            'verified_at': self.verified_at.isoformat() if self.verified_at else None,
+            'student_id_url': self.student_id_url,
             'rating': float(self.rating) if self.rating else 5.0,
             'total_sessions': self.total_sessions,
             'total_reviews': self.total_reviews,
-            'balance': self.balance,
+            'balance': self.balance or 0,
+            'pending_balance': self.pending_balance or 0,
+            'individual_price': self.individual_price or 8000,
+            'group_price': self.group_price or 2000,
             'card_last4': self.card_last4,
-            'card_holder': self.card_holder
+            'card_holder': self.card_holder,
+            'card_name': self.card_name or '',
+            'subjects': subjects,
+            'languages': languages,
         }
 
 
@@ -236,9 +265,24 @@ class MentorPoint(db.Model):
     mentor_id = db.Column(db.String(36), db.ForeignKey('mentor_profiles.id', ondelete='CASCADE'), nullable=False)
     session_id = db.Column(db.String(36), db.ForeignKey('sessions.id'))
     points = db.Column(db.Integer, nullable=False)
-    reason = db.Column(db.String(20))  # session_completed, bonus, withdrawal, penalty, refund
+    reason = db.Column(db.String(50))       # session_completed, bonus, withdrawal, penalty, refund
+    reason_text = db.Column(db.String(200)) # "Sessiya yakunlandi", "Pul yechildi"
+    description = db.Column(db.String(300)) # "Individual sessiya — Bobur T."
     balance_after = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'mentor_id': self.mentor_id,
+            'session_id': self.session_id,
+            'points': self.points,
+            'reason': self.reason,
+            'reason_text': self.reason_text or '',
+            'description': self.description or '',
+            'balance_after': self.balance_after,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
 
 
 class Withdrawal(db.Model):
@@ -250,7 +294,9 @@ class Withdrawal(db.Model):
     points_used = db.Column(db.Integer, nullable=False)
     card_last4 = db.Column(db.String(4))
     card_holder = db.Column(db.String(200))
-    status = db.Column(db.String(20), default='pending')  # pending, approved, processing, paid, rejected
+    card_name = db.Column(db.String(50))        # Humo, Uzcard, Visa, Mastercard
+    check_url = db.Column(db.String(500))        # Admin yuklagan to'lov cheki
+    status = db.Column(db.String(20), default='pending')  # pending, approved, completed, rejected
     admin_note = db.Column(db.Text)
     processed_by = db.Column(db.String(36), db.ForeignKey('users.id'))
     processed_at = db.Column(db.DateTime)
@@ -261,6 +307,22 @@ class Withdrawal(db.Model):
     processed_by_user = db.relationship('User', 
                                        foreign_keys=[processed_by],
                                        backref='processed_withdrawals')
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'mentor_id': self.mentor_id,
+            'amount': self.amount,
+            'points_used': self.points_used,
+            'card_last4': self.card_last4,
+            'card_holder': self.card_holder,
+            'card_name': self.card_name or '',
+            'check_url': self.check_url or None,
+            'status': self.status,
+            'admin_note': self.admin_note,
+            'processed_at': self.processed_at.isoformat() if self.processed_at else None,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
 
 
 class Payment(db.Model):
@@ -470,9 +532,15 @@ class AuthToken(db.Model):
 
 
 class News(db.Model):
+    __tablename__ = 'news'
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     title = db.Column(db.String(255), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(50), default='general')  # general, update, event, urgent
+    priority = db.Column(db.String(20), default='normal')   # normal, high, critical
+    link = db.Column(db.String(500))        # Tashqi havola
+    image_url = db.Column(db.String(500))   # Rasm
+    target = db.Column(db.String(20), default='all')  # all, mentor, student
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
@@ -480,14 +548,26 @@ class News(db.Model):
             'id': self.id,
             'title': self.title,
             'content': self.content,
-            'created_at': self.created_at.isoformat()
+            'category': self.category or 'general',
+            'priority': self.priority or 'normal',
+            'link': self.link or '',
+            'image_url': self.image_url or '',
+            'target': self.target or 'all',
+            'created_at': self.created_at.isoformat() if self.created_at else None
         }
 
 class Material(db.Model):
+    __tablename__ = 'materials'
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     title = db.Column(db.String(255), nullable=False)
-    material_type = db.Column(db.String(50), nullable=False) # 'link' or 'file'
+    material_type = db.Column(db.String(50), nullable=False)  # link, file, video, youtube
     url = db.Column(db.String(500), nullable=False)
+    mentor_id = db.Column(db.String(36), db.ForeignKey('mentor_profiles.id', ondelete='SET NULL'), nullable=True)
+    access_type = db.Column(db.String(20), default='free')   # free, premium
+    thumbnail = db.Column(db.String(500))
+    description = db.Column(db.Text)
+    views = db.Column(db.Integer, default=0)
+    likes = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
@@ -495,6 +575,14 @@ class Material(db.Model):
             'id': self.id,
             'title': self.title,
             'type': self.material_type,
+            'material_type': self.material_type,
             'url': self.url,
-            'created_at': self.created_at.isoformat()
+            'mentor_id': self.mentor_id,
+            'access_type': self.access_type or 'free',
+            'access': self.access_type or 'free',
+            'thumbnail': self.thumbnail or '',
+            'description': self.description or '',
+            'views': self.views or 0,
+            'likes': self.likes or 0,
+            'created_at': self.created_at.isoformat() if self.created_at else None
         }

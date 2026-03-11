@@ -90,8 +90,8 @@
   <!-- Filter chips -->
   <div class="chips">
     <button class="chip active" onclick="filterVids('all',this)">Hammasi</button>
-    <button class="chip" onclick="filterVids('free',this)">✓ Bepul</button>
-    <button class="chip" onclick="filterVids('premium',this)">⭐ Premium</button>
+    <button class="chip" onclick="filterVids('free',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Bepul</button>
+    <button class="chip" onclick="filterVids('premium',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Premium</button>
   </div>
 
   <!-- My videos grid -->
@@ -101,7 +101,7 @@
   <!-- Upload zone if empty -->
   <div id="uploadZoneArea" style="display:none;margin:0 18px 20px">
     <div class="upload-zone-purple" onclick="CU.openModal('videoAddModal')">
-      <div style="font-size:40px;margin-bottom:10px">🎬</div>
+      <div style="margin-bottom:10px"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="2.18" stroke="currentColor" stroke-width="1.5"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M17 7h5M2 17h5M17 17h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
       <div style="font-size:15px;font-weight:700;margin-bottom:4px">Birinchi videongizni qo'shing</div>
       <div style="font-size:13px;color:var(--text2)">YouTube yoki Telegram video linkini kiriting</div>
     </div>
@@ -109,7 +109,7 @@
 
   <!-- Top videos leaderboard -->
   <div class="sr" style="margin-top:8px">
-    <div class="sr-t">🏆 Top videolar</div>
+    <div class="sr-t">Top videolar</div>
     <span style="font-size:12px;color:var(--text2)">Ko'rishlar bo'yicha</span>
   </div>
   <div class="card" style="margin:0 18px 16px;padding:0 16px">
@@ -151,15 +151,15 @@
     <div class="modal-handle"></div>
     <div class="modal-top">
       <div class="modal-title">Video qo'shish</div>
-      <button class="modal-close-btn" onclick="CU.closeModal('videoAddModal')">✕</button>
+      <button class="modal-close-btn" onclick="CU.closeModal('videoAddModal')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></button>
     </div>
     <div class="modal-sub">Bepul yoki premium video joylang</div>
     <!-- Access type -->
     <div style="margin-bottom:16px">
       <div class="ef-label">Ko'rish huquqi</div>
       <div style="display:flex;gap:8px">
-        <div class="target-chip active" id="vaFree" onclick="setAccess('free',this)" style="flex:1;justify-content:center">✓ Bepul (hammaga)</div>
-        <div class="target-chip" id="vaPrem" onclick="setAccess('premium',this)" style="flex:1;justify-content:center">⭐ Premium</div>
+        <div class="target-chip active" id="vaFree" onclick="setAccess('free',this)" style="flex:1;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Bepul (hammaga)</div>
+        <div class="target-chip" id="vaPrem" onclick="setAccess('premium',this)" style="flex:1;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Premium</div>
       </div>
     </div>
     <div class="ef-field">
@@ -184,7 +184,7 @@
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">
       <button class="btn btn-ghost" onclick="CU.closeModal('videoAddModal')">Bekor</button>
-      <button class="btn btn-gold" onclick="saveVideo()">💾 Saqlash</button>
+      <button class="btn btn-gold" onclick="saveVideo()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="17,21 17,13 7,13 7,21" stroke="currentColor" stroke-width="2"/><polyline points="7,3 7,8 15,8" stroke="currentColor" stroke-width="2"/></svg> Saqlash</button>
     </div>
   </div>
 </div>
@@ -242,15 +242,15 @@ function renderVideoGrid(list) {
     const thumb = v.thumbnail || CU.ytThumb(v.url||'');
     return `<div class="mv-card" onclick="openVideoDetail('${v.id}')">
       <div class="mv-thumb">
-        ${thumb ? `<img src="${thumb}" loading="lazy" alt="">` : `<div style="font-size:28px;z-index:1">🎬</div>`}
+        ${thumb ? `<img src="${thumb}" loading="lazy" alt="">` : `<div style="z-index:1"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="2.18" stroke="currentColor" stroke-width="1.5"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M17 7h5M2 17h5M17 17h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>`}
         <div class="mv-overlay"><div class="mv-play"><svg width="10" height="12" viewBox="0 0 24 24" fill="#040810"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-        ${v.access==='premium'?'<div class="mv-prem-tag">⭐ PRO</div>':''}
+        ${v.access==='premium'?'<div class="mv-prem-tag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> PRO</div>':''}
       </div>
       <div class="mv-body">
         <div class="mv-title">${CU.escHtml(v.title)}</div>
         <div class="mv-stats">
-          <span>👁 ${CU.fmt(v.views||0)}</span>
-          <span>❤️ ${v.likes||0}</span>
+          <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg> ${CU.fmt(v.views||0)}</span>
+          <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> ${v.likes||0}</span>
         </div>
       </div>
     </div>`;
@@ -265,10 +265,10 @@ function renderTopVideos() {
         const thumb = v.thumbnail || CU.ytThumb(v.url||'');
         return `<div class="top-vid-item">
           <div class="tvi-rank">${medals[i]||i+1}</div>
-          <div class="tvi-thumb">${thumb?`<img src="${thumb}" loading="lazy">`:'<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:16px">🎬</div>'}</div>
+          <div class="tvi-thumb">${thumb?`<img src="${thumb}" loading="lazy">`:'<div style="display:flex;align-items:center;justify-content:center;height:100%;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><rect x="2" y="2" width="20" height="20" rx="2.18" stroke="currentColor" stroke-width="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M17 7h5M2 17h5M17 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>'}</div>
           <div class="tvi-info">
             <div class="tvi-title">${CU.escHtml(v.title)}</div>
-            <div class="tvi-stats"><span>👁 ${CU.fmt(v.views||0)}</span><span>❤️ ${v.likes||0}</span><span>${v.access==='premium'?'⭐ Premium':'✓ Bepul'}</span></div>
+            <div class="tvi-stats"><span><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg> ${CU.fmt(v.views||0)}</span><span><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> ${v.likes||0}</span><span>${v.access==='premium'?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Premium':'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Bepul'}</span></div>
           </div>
         </div>`;
       }).join('')
@@ -281,14 +281,14 @@ function openVideoDetail(id) {
   const thumb = v.thumbnail || CU.ytThumb(v.url||'');
   document.getElementById('videoDetailBody').innerHTML = `
     <div class="vd-thumb">
-      ${thumb?`<img src="${thumb}" alt="">`:'<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px">🎬</div>'}
+      ${thumb?`<img src="${thumb}" alt="">`:'<div style="display:flex;align-items:center;justify-content:center;height:100%;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="2.18" stroke="currentColor" stroke-width="1.5"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M17 7h5M2 17h5M17 17h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>'}
       ${v.url?`<div class="vd-play-overlay" onclick="window.open('${v.url}','_blank')"><div class="vd-play-btn"><svg width="16" height="18" viewBox="0 0 24 24" fill="#040810"><polygon points="5,3 19,12 5,21"/></svg></div></div>`:''}
     </div>
     <div class="modal-title">${CU.escHtml(v.title)}</div>
     <div style="display:flex;gap:8px;margin:8px 0 14px;flex-wrap:wrap">
-      <span class="badge ${v.access==='premium'?'b-gold':'b-teal'}">${v.access==='premium'?'⭐ Premium':'✓ Bepul'}</span>
-      <span class="badge b-gray">👁 ${CU.fmt(v.views||0)} ko'rish</span>
-      <span class="badge b-gray">❤️ ${v.likes||0} like</span>
+      <span class="badge ${v.access==='premium'?'b-gold':'b-teal'}">${v.access==='premium'?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Premium':'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;flex-shrink:0"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Bepul'}</span>
+      <span class="badge b-gray"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="vertical-align:middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg> ${CU.fmt(v.views||0)} ko'rish</span>
+      <span class="badge b-gray"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="vertical-align:middle"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> ${v.likes||0} like</span>
     </div>
     ${v.description?`<p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">${CU.escHtml(v.description)}</p>`:''}
     <div class="info-list" style="margin:0 0 16px">
@@ -343,14 +343,14 @@ async function saveVideo() {
       CU.closeModal('videoAddModal');
       ['mvTitle','mvUrl','mvThumb','mvDesc'].forEach(id=>document.getElementById(id).value='');
       document.getElementById('mvThumbPrev').style.display = 'none';
-      CU.toast('Video qo\'shildi ✓');
+      CU.toast('Video qo\'shildi');
     } else CU.toast(d.error||'Xatolik','err');
   } catch(e) {
     // Offline/demo rejim
     CU.videos.unshift({id:Date.now()+'',title,url,thumbnail:thumb,access:_access,access_type:_access,views:0,likes:0,description:desc,created_at:new Date().toISOString()});
     renderAll();
     CU.closeModal('videoAddModal');
-    CU.toast('Video qo\'shildi ✓');
+    CU.toast('Video qo\'shildi');
   }
 }
 

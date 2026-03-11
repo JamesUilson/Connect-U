@@ -58,6 +58,12 @@ admin.add_view(ModelView(Payment, db.session, name="To'lovlar", endpoint="super_
 
 with app.app_context():
     db.create_all()
+    # Yangi ustunlarni qo'shish (mavjud baza uchun migration)
+    try:
+        from db_migrate import run_migrations
+        run_migrations()
+    except Exception as _mig_err:
+        print(f"Migration warning: {_mig_err}")
 
 BOT_TOKEN = Config.BOT_TOKEN
 MINI_APP_URL = Config.MINI_APP_URL
@@ -1011,8 +1017,8 @@ def get_mentor_detail(mentor_id):
     mentor_dict['total_sessions'] = mentor.total_sessions or 0
     mentor_dict['total_reviews'] = mentor.total_reviews or 0
     mentor_dict['is_verified'] = mentor.is_verified
-    mentor_dict['individual_price'] = getattr(mentor, 'individual_price', None) or 8000
-    mentor_dict['group_price'] = getattr(mentor, 'group_price', None) or 2000
+    mentor_dict['individual_price'] = mentor.individual_price or 8000
+    mentor_dict['group_price'] = mentor.group_price or 2000
 
     sessions = Session.query.filter_by(mentor_id=mentor.id, status='completed')\
         .order_by(Session.created_at.desc()).limit(5).all()
@@ -1046,9 +1052,9 @@ def get_mentor_detail(mentor_id):
         mentor_dict['videos'] = []
         for v in videos:
             v_dict = v.to_dict()
-            v_dict['likes'] = getattr(v, 'likes', 0) or 0
-            v_dict['views'] = getattr(v, 'views', 0) or 0
-            v_dict['access_type'] = getattr(v, 'access_type', 'free') or 'free'
+            v_dict['likes'] = v.likes or 0
+            v_dict['views'] = v.views or 0
+            v_dict['access_type'] = v.access_type or 'free'
             mentor_dict['videos'].append(v_dict)
     except:
         mentor_dict['videos'] = []
@@ -1270,8 +1276,8 @@ def complete_session(session_id):
         return jsonify({'success': False, 'error': "Sessiya tasdiqlanmagan"}), 400
 
     mentor = user.mentor_profile
-    ind_price = getattr(mentor, 'individual_price', None) or 8000
-    grp_price = getattr(mentor, 'group_price', None) or 2000
+    ind_price = mentor.individual_price or 8000
+    grp_price = mentor.group_price or 2000
     price = ind_price if s.session_type == 'individual' else grp_price
 
     s.status = 'completed'
@@ -1282,10 +1288,15 @@ def complete_session(session_id):
     mentor.total_sessions = (mentor.total_sessions or 0) + 1
 
     # Points history
+    student_user = db.session.get(User, s.student_id)
+    student_name = student_user.full_name if student_user else "Talaba"
+    stype_label = "Individual" if s.session_type == 'individual' else "Guruh"
     db.session.add(MentorPoint(
         mentor_id=mentor.id,
         points=price,
         reason='session_completed',
+        reason_text='Sessiya yakunlandi',
+        description=f'{stype_label} sessiya — {student_name}',
         balance_after=mentor.balance,
         session_id=s.id
     ))
@@ -1502,15 +1513,14 @@ def mentor_points():
     }
     points = MentorPoint.query.filter_by(mentor_id=mentor.id)\
         .order_by(MentorPoint.created_at.desc()).limit(100).all()
-    return jsonify({'success': True, 'points': [{
-        'id': p.id,
-        'points': p.points,
-        'reason': p.reason,
-        'reason_text': reason_map.get(p.reason, p.reason or 'Tranzaksiya'),
-        'balance_after': p.balance_after,
-        'session_id': p.session_id,
-        'created_at': p.created_at.isoformat() if p.created_at else None
-    } for p in points]})
+    result = []
+    for p in points:
+        d = p.to_dict()
+        # reason_text yo'q bo'lsa map dan olish
+        if not d.get('reason_text'):
+            d['reason_text'] = reason_map.get(p.reason, p.reason or 'Tranzaksiya')
+        result.append(d)
+    return jsonify({'success': True, 'points': result})
 
 # ── FIX: Sertifikat fayl yuklash ──
 @app.route('/api/mentor/certificates', methods=['GET'])
@@ -1632,10 +1642,12 @@ def save_mentor_card():
     if not card_holder:
         return jsonify({'success': False, 'error': "Karta egasi nomini kiriting"}), 400
 
+    card_name = data.get('card_name', '').strip()
     mentor.card_last4 = card_last4
     mentor.card_holder = card_holder
+    mentor.card_name = card_name
     db.session.commit()
-    return jsonify({'success': True, 'card_last4': card_last4, 'card_holder': card_holder})
+    return jsonify({'success': True, 'card_last4': card_last4, 'card_holder': card_holder, 'card_name': card_name})
 
 @app.route('/api/mentor/withdraw', methods=['POST'])
 def mentor_withdraw():
@@ -1663,6 +1675,7 @@ def mentor_withdraw():
         points_used=amount,
         card_last4=mentor.card_last4,
         card_holder=mentor.card_holder,
+        card_name=mentor.card_name or '',
         status='pending'
     )
     db.session.add(wd)
@@ -1713,7 +1726,7 @@ def mentor_withdrawal_history():
         'card_holder': w.card_holder,
         'status': w.status,
         'admin_note': w.admin_note,
-        'check_url': getattr(w, 'check_url', None),
+        'check_url': w.check_url,
         'processed_at': w.processed_at.isoformat() if w.processed_at else None,
         'created_at': w.created_at.isoformat() if w.created_at else None
     } for w in withdrawals]})
@@ -1809,8 +1822,8 @@ def mentor_dashboard():
 
     def session_to_dict(s):
         student = db.session.get(User, s.student_id)
-        ind_price = getattr(mentor, 'individual_price', None) or 8000
-        grp_price = getattr(mentor, 'group_price', None) or 2000
+        ind_price = mentor.individual_price or 8000
+        grp_price = mentor.group_price or 2000
         price = ind_price if s.session_type == 'individual' else grp_price
         return {
             'id': s.id, 'session_type': s.session_type, 'status': s.status,
@@ -1831,7 +1844,7 @@ def mentor_dashboard():
             vq = vq.filter(Material.mentor_id == mentor.id)
         videos = vq.all()
         videos_count = len(videos)
-        total_views = sum(getattr(v, 'views', 0) or 0 for v in videos)
+        total_views = sum(v.views or 0 for v in videos)
     except:
         pass
 
@@ -1884,11 +1897,11 @@ def get_mentor_videos():
     result = []
     for v in videos:
         d = v.to_dict()
-        v_access = getattr(v, 'access_type', 'free') or 'free'
+        v_access = v.access_type or 'free'
         d['access_type'] = v_access
         d['access'] = v_access
-        d['likes'] = getattr(v, 'likes', 0) or 0
-        d['views'] = getattr(v, 'views', 0) or 0
+        d['likes'] = v.likes or 0
+        d['views'] = v.views or 0
         # Thumbnail avtomatik
         if not d.get('thumbnail') and d.get('url'):
             import re
@@ -2008,13 +2021,13 @@ def get_news_filtered():
     result = []
     for n in news_list:
         n_dict = n.to_dict()
-        n_target = getattr(n, 'target', None)
+        n_target = n.target
         if target and n_target and n_target != 'all' and n_target != target:
             continue
-        n_dict['category'] = getattr(n, 'category', 'general') or 'general'
-        n_dict['priority'] = getattr(n, 'priority', 'normal') or 'normal'
-        n_dict['image_url'] = getattr(n, 'image_url', '') or ''
-        n_dict['link'] = getattr(n, 'link', '') or ''
+        n_dict['category'] = n.category or 'general'
+        n_dict['priority'] = n.priority or 'normal'
+        n_dict['image_url'] = n.image_url or ''
+        n_dict['link'] = n.link or ''
         n_dict['target'] = n_target or 'all'
         result.append(n_dict)
     return jsonify({'success': True, 'news': result})
@@ -2025,13 +2038,13 @@ def get_materials():
     result = []
     for m in mats:
         d = m.to_dict()
-        d['access_type'] = getattr(m, 'access_type', 'free') or 'free'
+        d['access_type'] = m.access_type or 'free'
         d['access'] = d['access_type']
-        d['views'] = getattr(m, 'views', 0) or 0
-        d['likes'] = getattr(m, 'likes', 0) or 0
-        d['thumbnail'] = getattr(m, 'thumbnail', '') or ''
-        d['description'] = getattr(m, 'description', '') or ''
-        d['mentor_id'] = getattr(m, 'mentor_id', None)
+        d['views'] = m.views or 0
+        d['likes'] = m.likes or 0
+        d['thumbnail'] = m.thumbnail or ''
+        d['description'] = m.description or ''
+        d['mentor_id'] = m.mentor_id
         if not d['thumbnail'] and d.get('url'):
             import re
             ym = re.search(r'(?:youtube\.com/watch\?v=|youtu\.be/)([^&\s]+)', d['url'])
@@ -2125,8 +2138,13 @@ def admin_get_mentors():
     for m in mentors:
         u = db.session.get(User, m.user_id)
         if u:
-            result.append({**m.to_dict(), 'full_name': u.full_name, 'phone': u.phone,
-                           'telegram_id': u.telegram_id, 'is_active': u.is_active})
+            result.append({
+                **m.to_dict(),
+                'full_name': u.full_name, 'phone': u.phone,
+                'telegram_id': u.telegram_id, 'is_active': u.is_active,
+                'avatar_url': u.avatar_url,
+                'student_id_url': m.student_id_url,
+            })
     return jsonify({'success': True, 'mentors': result})
 
 @app.route('/api/admin/mentors/pending', methods=['GET'])
@@ -2139,8 +2157,12 @@ def admin_get_pending_mentors():
     for m in mentors:
         u = db.session.get(User, m.user_id)
         if u:
-            result.append({**m.to_dict(), 'full_name': u.full_name,
-                           'phone': u.phone, 'telegram_id': u.telegram_id})
+            result.append({
+                **m.to_dict(), 'full_name': u.full_name,
+                'phone': u.phone, 'telegram_id': u.telegram_id,
+                'avatar_url': u.avatar_url,
+                'student_id_url': m.student_id_url,
+            })
     return jsonify({'success': True, 'mentors': result})
 
 @app.route('/api/admin/mentors/verify', methods=['GET'])
@@ -2156,6 +2178,8 @@ def admin_get_verify_mentors():
             result.append({
                 **m.to_dict(), 'full_name': u.full_name, 'phone': u.phone,
                 'telegram_id': u.telegram_id,
+                'avatar_url': u.avatar_url,
+                'student_id_url': m.student_id_url,
                 'created_at': u.created_at.isoformat()
             })
     return jsonify({'success': True, 'mentors': result})
@@ -2202,7 +2226,7 @@ def admin_get_mentor_detail(mentor_id):
         'withdrawals': [{
             'id': w.id, 'amount': w.amount, 'status': w.status,
             'created_at': w.created_at.isoformat() if w.created_at else None,
-            'check_url': getattr(w, 'check_url', None)
+            'check_url': w.check_url
         } for w in withdrawals]
     })
 
@@ -2303,7 +2327,7 @@ def admin_get_withdrawals():
             'card_holder': w.card_holder,
             'status': w.status,
             'admin_note': w.admin_note,
-            'check_url': getattr(w, 'check_url', None),
+            'check_url': w.check_url,
             'processed_at': w.processed_at.isoformat() if w.processed_at else None,
             'created_at': w.created_at.isoformat() if w.created_at else None
         })
@@ -2344,14 +2368,19 @@ def admin_approve_withdrawal(wd_id):
     if not wd:
         abort(404)
     wd.status = 'approved'
-    if hasattr(wd, 'processed_by'):
-        wd.processed_by = admin_user.id
+    wd.processed_by = admin_user.id
     wd.processed_at = datetime.utcnow()
     mentor = db.session.get(MentorProfile, wd.mentor_id)
     if mentor:
         mentor.balance = (mentor.balance or 0) - wd.points_used
-        db.session.add(MentorPoint(mentor_id=wd.mentor_id, points=-wd.points_used,
-                                   reason='withdrawal', balance_after=mentor.balance))
+        db.session.add(MentorPoint(
+            mentor_id=wd.mentor_id,
+            points=-wd.points_used,
+            reason='withdrawal',
+            reason_text='Pul yechildi',
+            description=f'Pul yechish — •••• {wd.card_last4}',
+            balance_after=mentor.balance
+        ))
     db.session.commit()
     user = db.session.get(User, mentor.user_id) if mentor else None
     if user:
@@ -2382,6 +2411,10 @@ def admin_upload_check(wd_id):
     if not wd:
         abort(404)
     
+    # Har qanday status uchun chek yuklash mumkin (pending, approved, completed)
+    if wd.status == 'rejected':
+        return jsonify({'success': False, 'error': "Rad etilgan so'rovga chek yuklab bo'lmaydi"}), 400
+    
     check_url = None
     
     # Fayl yuklash
@@ -2402,11 +2435,9 @@ def admin_upload_check(wd_id):
         return jsonify({'success': False, 'error': 'Chek fayli yoki URL kerak'}), 400
     
     # check_url ni saqlaymiz
-    if hasattr(wd, 'check_url'):
-        wd.check_url = check_url
+    wd.check_url = check_url
     wd.status = 'completed'
-    if hasattr(wd, 'processed_by'):
-        wd.processed_by = admin_user.id
+    wd.processed_by = admin_user.id
     wd.processed_at = datetime.utcnow()
     db.session.commit()
     
@@ -2443,8 +2474,7 @@ def admin_reject_withdrawal(wd_id):
     data = request.json or {}
     wd.status = 'rejected'
     wd.admin_note = data.get('reason', '')
-    if hasattr(wd, 'processed_by'):
-        wd.processed_by = admin_user.id
+    wd.processed_by = admin_user.id
     wd.processed_at = datetime.utcnow()
     db.session.commit()
     

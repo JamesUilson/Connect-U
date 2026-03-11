@@ -1156,7 +1156,10 @@ async function loadMentors() {
 function renderMentors(list) {
   document.getElementById('mentorsTable').innerHTML = list.length
     ? list.map(function(m) {
-        return '<tr><td><div class="td-name"><div class="td-avatar" style="background:' + strColor(m.full_name) + '">' + (m.full_name||'M')[0] + '</div><div class="td-info"><h4>' + (m.full_name||'—') + '</h4><p>' + (m.faculty||'') + '</p></div></div></td>' +
+        var avatarHtml = m.avatar_url
+          ? '<div class="td-avatar" style="background:'+strColor(m.full_name)+';overflow:hidden;position:relative"><img src="'+m.avatar_url+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0" onerror="this.remove()"><span>'+((m.full_name||'M')[0])+'</span></div>'
+          : '<div class="td-avatar" style="background:'+strColor(m.full_name)+'">'+((m.full_name||'M')[0])+'</div>';
+        return '<tr><td><div class="td-name">'+avatarHtml+'<div class="td-info"><h4>' + (m.full_name||'—') + '</h4><p>' + (m.faculty||'') + '</p></div></div></td>' +
           '<td>' + (m.university||'—') + '</td><td>' + (m.rating ? '★ '+m.rating : '—') + '</td><td style="color:var(--gold)">' + fmt(m.balance||0) + ' so\'m</td><td>' + (m.total_sessions||0) + '</td>' +
           '<td>' + (m.is_verified ? '<span class="badge b-green">✓ Tasdiqlangan</span>' : '<span class="badge b-gold">⏳ Kutilmoqda</span>') + '</td>' +
           '<td><button class="btn btn-ghost btn-sm" onclick="openMentorModal(\'' + m.id + '\')">Ko\'rish</button></td></tr>';
@@ -1175,16 +1178,54 @@ function openMentorModal(id) {
   currentMentorId = id;
   var m = allMentors.find(function(x) { return x.id === id; });
   if (!m) return;
-  document.getElementById('mentorModalBody').innerHTML =
-    '<div style="font-size:13px;line-height:1.8">' +
-    '<p><b>Ismi:</b> ' + (m.full_name||'—') + '</p>' +
-    '<p><b>Universitet:</b> ' + (m.university||'—') + '</p>' +
-    '<p><b>Fakultet:</b> ' + (m.faculty||'—') + '</p>' +
-    '<p><b>Telefon:</b> ' + (m.phone||'—') + '</p>' +
-    '<p><b>Telegram ID:</b> ' + (m.telegram_id||'—') + '</p>' +
-    '<p><b>Balans:</b> <span style="color:var(--gold)">' + fmt(m.balance||0) + ' so\'m</span></p>' +
-    '<p><b>Sessiyalar:</b> ' + (m.total_sessions||0) + '</p>' +
-    '</div>';
+  document.getElementById('mentorModalBody').innerHTML = `
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;padding:14px;background:var(--s2);border-radius:10px">
+      <div style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;background:${strColor(m.full_name)};display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff">
+        ${m.avatar_url ? `<img src="${m.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.style.display='none'">` : (m.full_name||'M')[0]}
+      </div>
+      <div style="flex:1">
+        <div style="font-size:16px;font-weight:700">${escHtml(m.full_name||'—')}</div>
+        <div style="font-size:12px;color:var(--text2)">${m.university||'—'} · ${m.faculty||'—'}</div>
+        <div style="font-size:12px;color:var(--text2)">📞 ${m.phone||'—'}</div>
+      </div>
+      ${m.is_verified ? '<span class="badge b-green" style="flex-shrink:0">✓ Tasdiqlangan</span>' : '<span class="badge b-gold" style="flex-shrink:0">⏳ Kutilmoqda</span>'}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+      <div style="background:var(--s2);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:16px;font-weight:800;color:var(--gold)">${fmt(m.balance||0)}</div>
+        <div style="font-size:10px;color:var(--text2)">Balans</div>
+      </div>
+      <div style="background:var(--s2);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:16px;font-weight:800;color:var(--teal)">${m.total_sessions||0}</div>
+        <div style="font-size:10px;color:var(--text2)">Sessiya</div>
+      </div>
+      <div style="background:var(--s2);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:16px;font-weight:800;color:var(--green)">${m.rating ? '★ '+m.rating : '—'}</div>
+        <div style="font-size:10px;color:var(--text2)">Reyting</div>
+      </div>
+    </div>
+    ${m.bio ? `<div style="padding:10px 12px;background:var(--s2);border-radius:8px;font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:12px">${escHtml(m.bio)}</div>` : ''}
+    <div style="font-size:12px;line-height:1.8;color:var(--text2)">
+      ${m.year ? `<div>📚 <b>${m.year}-kurs</b></div>` : ''}
+      ${m.gpa ? `<div>📊 GPA: <b>${m.gpa}</b></div>` : ''}
+      ${m.telegram_id ? `<div>✈️ Telegram ID: <b>${m.telegram_id}</b></div>` : ''}
+      ${(m.subjects && m.subjects.length) ? `<div>📖 Fanlar: <b>${m.subjects.join(', ')}</b></div>` : ''}
+      ${(m.languages && m.languages.length) ? `<div>🌐 Tillar: <b>${m.languages.join(', ')}</b></div>` : ''}
+      ${m.individual_price ? `<div>💰 Individual: <b>${fmt(m.individual_price)} so'm</b></div>` : ''}
+      ${m.group_price ? `<div>👥 Guruh: <b>${fmt(m.group_price)} so'm</b></div>` : ''}
+    </div>
+    ${(m.card_last4) ? `
+    <div style="margin-top:12px;background:linear-gradient(135deg,#1A2A4A,#0D1A30);border-radius:10px;padding:14px">
+      <div style="font-family:monospace;font-size:14px;letter-spacing:2px;color:#fff;margin-bottom:4px">•••• •••• •••• ${m.card_last4}</div>
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;color:rgba(255,255,255,.6)">${m.card_holder||'—'}</div>
+    </div>` : ''}
+    ${m.student_id_url ? `
+    <div style="margin-top:12px">
+      <div style="font-size:11px;font-weight:700;color:var(--text2);letter-spacing:1px;margin-bottom:6px">TALABALIK GUVOHNOMASI</div>
+      ${/\.(jpg|jpeg|png|gif|webp)$/i.test(m.student_id_url)
+        ? `<div style="border-radius:8px;overflow:hidden;border:1px solid var(--border)"><img src="${m.student_id_url}" style="width:100%;max-height:180px;object-fit:contain;display:block;background:#000" onerror="this.parentElement.innerHTML='<div style=padding:10px;color:var(--red)>❌ Yuklanmadi</div>'"></div>`
+        : `<a href="${m.student_id_url}" target="_blank" class="btn btn-ghost" style="font-size:12px">📄 Guvohnomani ochish</a>`}
+    </div>` : ''}`;
   openModal('mentorModal');
 }
 function approveMentor() { verifyMentor(currentMentorId, false); closeModal('mentorModal'); }
@@ -1237,16 +1278,27 @@ function filterVerify(filter, btn) {
 function openDocModal(id) {
   currentDocMentorId = id;
   var m = allVerifyMentors.find(function(x) { return x.id === id; });
-  if (!m || !m.student_id_url) return;
-  var isImg = /\.(jpg|jpeg|png|gif|webp)$/i.test(m.student_id_url);
-  var isPdf = /\.pdf$/i.test(m.student_id_url);
-  document.getElementById('docModalBody').innerHTML =
-    '<div style="margin-bottom:16px;display:flex;gap:10px;align-items:center">' +
-    '<div class="td-avatar" style="width:40px;height:40px;background:' + strColor(m.full_name) + '">' + (m.full_name||'M')[0] + '</div>' +
-    '<div><h4>' + m.full_name + '</h4><p style="color:var(--text2)">' + (m.university||'') + ' · ' + (m.faculty||'') + '</p></div></div>' +
-    (isImg ? '<div class="img-preview"><img src="' + m.student_id_url + '" alt="Guvohnoma"/></div>' : '') +
-    (isPdf ? '<iframe class="doc-frame" src="' + m.student_id_url + '"></iframe>' : '') +
-    (!isImg && !isPdf ? '<a href="' + m.student_id_url + '" target="_blank" class="btn btn-ghost">Faylni ochish</a>' : '');
+  if (!m) return;
+  var isImg = m.student_id_url && /\.(jpg|jpeg|png|gif|webp)$/i.test(m.student_id_url);
+  var isPdf = m.student_id_url && /\.pdf$/i.test(m.student_id_url);
+  document.getElementById('docModalBody').innerHTML = `
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px">
+      <div style="width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;background:${strColor(m.full_name)};display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff">
+        ${m.avatar_url ? `<img src="${m.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.style.display='none'">` : (m.full_name||'M')[0]}
+      </div>
+      <div>
+        <h4 style="font-size:14px;font-weight:700">${escHtml(m.full_name||'—')}</h4>
+        <p style="color:var(--text2);font-size:12px">${m.university||''} · ${m.faculty||''} ${m.year ? '· '+m.year+'-kurs' : ''}</p>
+        ${m.phone ? `<p style="color:var(--text2);font-size:11px">📞 ${m.phone}</p>` : ''}
+      </div>
+    </div>
+    ${m.bio ? `<div style="padding:8px 10px;background:var(--s2);border-radius:8px;font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:10px">${escHtml(m.bio)}</div>` : ''}
+    ${m.student_id_url ? `
+    <div style="font-size:11px;font-weight:700;color:var(--text2);letter-spacing:1px;margin-bottom:8px">TALABALIK GUVOHNOMASI</div>
+    ${isImg ? `<div class="img-preview"><img src="${m.student_id_url}" alt="Guvohnoma" style="max-height:240px;object-fit:contain" onerror="this.parentElement.innerHTML='<div style=padding:12px;color:var(--red)>❌ Rasm yuklanmadi</div>'"/></div>`
+      : isPdf ? `<iframe class="doc-frame" src="${m.student_id_url}"></iframe>`
+      : `<a href="${m.student_id_url}" target="_blank" class="btn btn-ghost">Faylni ochish →</a>`}` : `
+    <div style="padding:16px;text-align:center;color:var(--text2);font-size:13px">Guvohnoma yuklanmagan</div>`}`;
   openModal('docModal');
 }
 async function verifyMentor(id, fromModal) {
@@ -1323,13 +1375,14 @@ function renderWithdrawals(filter) {
           <div class="wd-info" style="flex:1">
             <div class="wd-name">${w.mentor_name||'—'}</div>
             <div class="wd-meta">${w.mentor_phone||'—'} · ${formatDate(w.created_at)}</div>
-            <div class="wd-card-num" style="font-size:12px;color:var(--text2);margin:3px 0">💳 **** ${w.card_last4||'????'} | ${w.card_holder||'—'}</div>
+            <div class="wd-card-num" style="font-size:12px;color:var(--text2);margin:3px 0">💳 **** ${w.card_last4||'????'} | ${w.card_holder||'—'}${w.card_name?' · <span style="color:var(--gold);font-weight:700">'+escHtml(w.card_name||'')+'</span>':''}</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
               <button class="btn btn-xs" style="background:rgba(59,130,246,.1);color:#60A5FA;border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px" onclick="viewMentorDetail('${w.mentor_id}')">👤 Mentor ma'lumoti</button>
               ${isPending ? `<button class="btn btn-xs" style="background:rgba(34,197,94,.15);color:#4ade80;border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px" onclick="approveWD('${w.id}','${w.mentor_id}')">✓ Tasdiqlash</button>` : ''}
               ${isPending ? `<button class="btn btn-xs" style="background:rgba(239,68,68,.1);color:#f87171;border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px" onclick="rejectWD('${w.id}')">✕ Rad</button>` : ''}
-              ${!isPending && !isDone ? '' : isDone && !w.check_url ? `<button class="btn btn-xs" style="background:rgba(245,158,11,.1);color:var(--gold);border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px" onclick="openCheckUpload('${w.id}')">📄 Chek yuklash</button>` : ''}
-              ${w.check_url ? `<a href="${w.check_url}" target="_blank" style="background:rgba(0,191,166,.1);color:var(--teal);border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px;text-decoration:none;display:inline-flex;align-items:center;gap:4px">📄 Chekni ko'rish</a>` : ''}
+              ${(isDone || w.status === 'approved') && !w.check_url ? `<button class="btn btn-xs" style="background:rgba(245,158,11,.1);color:var(--gold);border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px" onclick="openCheckUpload('${w.id}')">📄 Chek yuklash</button>` : ''}
+              ${w.check_url ? `<button onclick="adminViewCheck('${w.check_url.replace(/'/g,"\\'")}','${fmt(w.amount)}')" style="background:rgba(0,191,166,.1);color:var(--teal);border:1px solid rgba(0,191,166,.2);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px;display:inline-flex;align-items:center;gap:4px">📄 Chekni ko'rish</button>` : ''}
+              ${w.check_url ? `<button onclick="openCheckUpload('${w.id}')" style="background:rgba(240,165,0,.08);color:var(--gold);border:1px solid rgba(240,165,0,.2);padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px">🔄 Chek almashtirish</button>` : ''}
             </div>
           </div>
           <div class="wd-amount" style="text-align:right;flex-shrink:0">
@@ -1383,7 +1436,26 @@ async function viewMentorDetail(mentorId) {
       <div style="font-size:12px;font-weight:700;color:var(--text2);letter-spacing:1px;margin-bottom:8px">KARTA MA'LUMOTI</div>
       <div style="background:linear-gradient(135deg,#1A2A4A,#0D1A30);border-radius:12px;padding:16px;margin-bottom:16px">
         <div style="font-family:monospace;font-size:15px;letter-spacing:2px;color:#fff;margin-bottom:6px">•••• •••• •••• ${m.card_last4||'????'}</div>
-        <div style="font-size:12px;font-weight:600;text-transform:uppercase;color:rgba(255,255,255,.7)">${m.card_holder||'—'}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:12px;font-weight:600;text-transform:uppercase;color:rgba(255,255,255,.7)">${m.card_holder||'—'}</div>
+          ${m.card_name ? `<div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:1px;text-transform:uppercase">${escHtml(m.card_name)}</div>` : ''}
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:var(--text2);letter-spacing:1px;margin-bottom:8px">POYACHISH TARIXI</div>
+      <div style="background:var(--s2);border-radius:8px;overflow:hidden;margin-bottom:8px">
+        ${withdrawals.length ? withdrawals.slice(0,5).map(w=>{
+          const stColor = w.status==='completed'?'var(--green)':w.status==='approved'?'var(--teal)':w.status==='rejected'?'var(--red)':'var(--gold)';
+          const stLabel = {pending:'⏳ Kutilmoqda',approved:'✓ Tasdiqlandi',completed:'✅ Amalga oshdi',rejected:'✕ Rad'}[w.status]||w.status;
+          const hasCheck = !!w.check_url;
+          return `<div style="padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center;gap:8px">
+            <div style="flex:1">
+              <div style="font-size:12px;font-weight:700">${fmt(w.amount)} so'm</div>
+              <div style="font-size:11px;color:var(--text2)">${formatDate(w.created_at)} · <span style="color:${stColor}">${stLabel}</span></div>
+              <div style="font-size:11px;color:var(--text2)">💳 ****${w.card_last4||'?'}${w.card_holder?' · '+w.card_holder:''}</div>
+            </div>
+            ${hasCheck ? `<a href="${w.check_url}" target="_blank" style="background:rgba(0,191,166,.12);color:var(--teal);border:1px solid rgba(0,191,166,.2);padding:5px 10px;border-radius:7px;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0">📄 Chek</a>` : ''}
+          </div>`;
+        }).join('') : `<div style="padding:12px;text-align:center;color:var(--text2);font-size:12px">Yechim yo\`q</div>`}
       </div>
     `;
     openModal('mentorDetailModal');
@@ -1854,6 +1926,10 @@ function strColor(str) {
   var colors = ['#1e3a6e','#2d1b69','#1a3a2a','#3a1a2a','#6e1e3a'];
   return colors[Math.abs(hash) % colors.length];
 }
+function escHtml(s) {
+  if(!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 function statusBadge(status) {
   var map = {
     pending: '<span class="badge b-gold">Kutilmoqda</span>',
@@ -1871,6 +1947,15 @@ function statusBadge(status) {
     <div style="font-size:18px;font-weight:800;margin-bottom:12px">👤 Mentor ma'lumoti</div>
     <div id="mentorDetailBody"></div>
     <button onclick="closeModal('mentorDetailModal')" style="width:100%;padding:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px">Yopish</button>
+  </div>
+</div>
+
+<!-- ADMIN CHECK VIEWER MODAL -->
+<div class="modal-overlay" id="adminCheckViewModal" onclick="if(event.target===this)closeModal('adminCheckViewModal')" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);align-items:flex-end">
+  <div style="width:100%;max-width:600px;margin:0 auto;background:#080F1E;border-radius:20px 20px 0 0;border-top:1px solid rgba(255,255,255,.06);padding:0 18px 32px;max-height:90vh;overflow-y:auto">
+    <div style="width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:14px auto 18px"></div>
+    <div id="adminCheckViewBody"></div>
+    <button onclick="closeModal('adminCheckViewModal')" style="width:100%;padding:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px">Yopish</button>
   </div>
 </div>
 
@@ -1908,6 +1993,76 @@ function previewCheck(input) {
     reader.readAsDataURL(file);
   } else {
     prev.innerHTML = `<div style="padding:12px;background:rgba(255,255,255,.06);border-radius:8px;text-align:center;margin-bottom:10px;font-size:13px">📄 ${file.name} (${Math.round(file.size/1024)} KB)</div>`;
+  }
+}
+
+function adminViewCheck(url, amount) {
+  const fullUrl = url.startsWith('http') ? url : (window.location.origin + url);
+  const isImage = /\.(jpg|jpeg|png|gif|webp)/i.test(url);
+
+  const el = document.getElementById('adminCheckViewBody');
+  if(!el) { window.open(fullUrl, '_blank'); return; }
+
+  // Saqlash uchun global
+  window._checkViewUrl = fullUrl;
+
+  el.innerHTML = `
+    <div style="font-size:16px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:8px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      To'lov cheki
+    </div>
+    ${amount ? `<div style="font-size:13px;color:var(--text2);margin-bottom:14px">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle"><line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      ${amount} so'm
+    </div>` : ''}
+    ${isImage
+      ? `<div style="border-radius:12px;overflow:hidden;margin-bottom:14px;border:1px solid rgba(255,255,255,.08)">
+           <img src="${fullUrl}" style="width:100%;display:block;max-height:55vh;object-fit:contain;background:#000" onerror="this.parentElement.innerHTML='<div style=padding:20px;text-align:center;color:#888>Rasm yuklanmadi</div>'">
+         </div>`
+      : `<div style="background:var(--s3);border-radius:12px;padding:28px;text-align:center;margin-bottom:14px">
+           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" style="opacity:.4;margin-bottom:10px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+           <div style="font-size:14px;font-weight:600;margin-bottom:4px">PDF hujjat</div>
+           <div style="font-size:12px;color:#888">Ko'rish uchun oching</div>
+         </div>`
+    }
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <a href="${fullUrl}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--teal-d);border:1px solid rgba(0,191,166,.2);border-radius:9px;color:var(--teal);font-size:13px;font-weight:600;text-decoration:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="15,3 21,3 21,9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Ko'rish
+      </a>
+      <a href="${fullUrl}" download style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:#fff;font-size:13px;font-weight:600;text-decoration:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Saqlash
+      </a>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button onclick="adminShareCheck(window._checkViewUrl)" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:#fff;font-size:13px;font-weight:600;cursor:pointer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="2"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Ulashish
+      </button>
+      <button onclick="adminPrintCheck(window._checkViewUrl)" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:#fff;font-size:13px;font-weight:600;cursor:pointer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,9 6,2 18,2 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2" stroke="currentColor" stroke-width="2"/><rect x="6" y="14" width="12" height="8" stroke="currentColor" stroke-width="2"/></svg>
+        Chop etish
+      </button>
+    </div>`;
+  openModal('adminCheckViewModal');
+}
+
+function adminPrintCheck(url) {
+  const w = window.open(url, '_blank');
+  if(w) { w.addEventListener('load', () => { try { w.print(); } catch(e){} }); }
+}
+
+async function adminShareCheck(url) {
+  try {
+    if(navigator.share) {
+      await navigator.share({title: "ConnectU To'lov Cheki", url});
+    } else {
+      await navigator.clipboard.writeText(url);
+      showToast('Havola nusxalandi ✓');
+    }
+  } catch(e) {
+    try { await navigator.clipboard.writeText(url); showToast('Nusxalandi ✓'); } catch {}
   }
 }
 
