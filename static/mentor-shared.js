@@ -44,7 +44,8 @@ CU.API = {
   }
 };
 
-/* ─── DEMO USER ─── */
+/* ─── DEMO DATA — faqat local test uchun (production'da ishlatilmaydi) ─── */
+/*
 CU._demoUser = function() {
   return {
     id: 'demo_mentor_1',
@@ -122,6 +123,7 @@ CU._demoNews = function() {
     {id:'n3',title:'⚠️ Profil to\'ldirilmagan mentorlar',content:'30% dan kam to\'ldirilgan profil 3 kun ichida archivga o\'tkaziladi.',category:'urgent',priority:'critical',created_at:new Date(Date.now()-86400000*3).toISOString()},
   ];
 };
+*/
 
 /* ─── AUTH ─── */
 CU.init = async function(onSuccess) {
@@ -137,27 +139,22 @@ CU.init = async function(onSuccess) {
     }
 
     if(!d || !d.success) {
-      /* Backend yo'q — demo rejimda ishlaymiz */
-      CU._demoMode = true;
-      CU.currentUser = CU._demoUser();
-      CU.mentorData = CU.currentUser.mentor_profile;
-      CU.sessions = CU._demoSessions();
-      CU.pointsHistory = CU._demoPoints();
-      CU.certificates = [];
-      CU._verifyData = {success:true, status:'verified', is_verified:true, student_id_url:'/demo', days_left: 0};
-    } else {
-      CU._demoMode = false;
-      CU.currentUser = d.user;
-      if(CU.currentUser.role !== 'mentor') { location.href='/abuturyent.html'; return; }
-      if(CU.currentUser.mentor_profile) CU.mentorData = CU.currentUser.mentor_profile;
-
-      await Promise.allSettled([
-        CU.loadSessions(),
-        CU.loadPoints(),
-        CU.loadCertificates(),
-        CU.loadVerificationStatus(),
-      ]);
+      /* Sessiya yo'q yoki muddati o'tgan — login sahifasiga yo'naltiramiz */
+      location.href = '/login.html';
+      return;
     }
+
+    CU._demoMode = false;
+    CU.currentUser = d.user;
+    if(CU.currentUser.role !== 'mentor') { location.href='/abuturyent.html'; return; }
+    if(CU.currentUser.mentor_profile) CU.mentorData = CU.currentUser.mentor_profile;
+
+    await Promise.allSettled([
+      CU.loadSessions(),
+      CU.loadPoints(),
+      CU.loadCertificates(),
+      CU.loadVerificationStatus(),
+    ]);
 
     CU.applyTheme();
 
@@ -170,29 +167,13 @@ CU.init = async function(onSuccess) {
 
   } catch(e) {
     console.error('Init error:', e);
-    /* Xato bo'lsa demo rejimda */
-    CU._demoMode = true;
-    CU.currentUser = CU._demoUser();
-    CU.mentorData = CU.currentUser.mentor_profile;
-    CU.sessions = CU._demoSessions();
-    CU.pointsHistory = CU._demoPoints();
-    CU.certificates = [];
-    CU._verifyData = {success:true, status:'verified', is_verified:true, student_id_url:'/demo', days_left: 0};
-
-    CU.applyTheme();
-    if(onSuccess) onSuccess();
-
-    const ls = document.getElementById('loadingScreen');
-    const shell = document.getElementById('appShell');
-    if(ls) ls.style.display = 'none';
-    if(shell) shell.style.display = 'flex';
+    /* Tarmoq xatosi yoki server javob bermasa — login ga yo'naltir */
+    location.href = '/login.html';
   }
 };
 
 CU.logout = async function() {
-  if(!CU._demoMode) {
-    try { await fetch('/api/logout',{method:'POST',credentials:'include'}); } catch(e){}
-  }
+  try { await fetch('/api/logout',{method:'POST',credentials:'include'}); } catch(e){}
   location.href = '/login.html';
 };
 
@@ -232,10 +213,10 @@ CU.loadVideos = async function() {
     if(d.success) {
       CU.videos = d.videos || [];
     } else {
-      CU.videos = CU._demoVideos();
+      CU.videos = [];
     }
   } catch(e) {
-    CU.videos = CU._demoVideos();
+    CU.videos = [];
   }
 };
 
@@ -370,13 +351,6 @@ CU.sessionTypeLabel = function(type) {
 };
 
 CU.confirmSession = async function(id, onDone) {
-  if(CU._demoMode) {
-    const s = CU.sessions.find(x=>x.id===id);
-    if(s) s.status = 'confirmed';
-    CU.toast('Sessiya tasdiqlandi');
-    if(onDone) onDone();
-    return;
-  }
   try {
     const d = await CU.API.post(`/api/sessions/${id}/confirm`, {});
     if(d.success) {
@@ -389,13 +363,6 @@ CU.confirmSession = async function(id, onDone) {
 };
 
 CU.rejectSession = async function(id, onDone) {
-  if(CU._demoMode) {
-    const s = CU.sessions.find(x=>x.id===id);
-    if(s) s.status = 'cancelled';
-    CU.toast('Rad etildi');
-    if(onDone) onDone();
-    return;
-  }
   try {
     const d = await CU.API.post(`/api/sessions/${id}/reject`, {});
     if(d.success) {
