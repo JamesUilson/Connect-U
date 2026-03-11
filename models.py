@@ -86,6 +86,9 @@ class MentorProfile(db.Model):
     bio = db.Column(db.Text)
     gpa = db.Column(db.Numeric(3, 2))
     
+    # Profil rasmlari
+    cover_url = db.Column(db.String(500))       # Cover/banner rasmi
+
     # Hujjatlar
     student_id_url = db.Column(db.String(500))
     student_id_uploaded_at = db.Column(db.DateTime, nullable=True)  # 🔥 Yangi!
@@ -170,6 +173,7 @@ class MentorProfile(db.Model):
             'is_verified': self.is_verified,
             'verified_at': self.verified_at.isoformat() if self.verified_at else None,
             'student_id_url': self.student_id_url,
+            'cover_url': self.cover_url or '',
             'rating': float(self.rating) if self.rating else 5.0,
             'total_sessions': self.total_sessions,
             'total_reviews': self.total_reviews,
