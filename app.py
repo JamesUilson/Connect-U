@@ -77,6 +77,7 @@ os.makedirs(os.path.join(UPLOAD_FOLDER, 'avatars'), exist_ok=True)
 os.makedirs(os.path.join(UPLOAD_FOLDER, 'materials'), exist_ok=True)
 os.makedirs(os.path.join(UPLOAD_FOLDER, 'certificates'), exist_ok=True)
 os.makedirs(os.path.join(UPLOAD_FOLDER, 'checks'), exist_ok=True)
+os.makedirs(os.path.join(UPLOAD_FOLDER, 'covers'), exist_ok=True)
 
 @app.route('/uploads/<path:filename>')
 def serve_upload(filename):
@@ -651,7 +652,9 @@ def get_me():
             'pending_balance': mp.pending_balance or 0 if hasattr(mp, 'pending_balance') else 0,
             'card_last4': mp.card_last4,
             'card_holder': mp.card_holder,
+            'card_name': getattr(mp, 'card_name', '') or '',
             'student_id_url': mp.student_id_url,
+            'cover_url': getattr(mp, 'cover_url', '') or '',
             'individual_price': ind_price,
             'group_price': grp_price,
             # Subjects va languages (agar model da bo'lsa)
@@ -1112,6 +1115,61 @@ def upload_avatar():
     if not avatar_url:
         return jsonify({'success': False, 'error': 'Avatar URL kerak'}), 400
     user.avatar_url = avatar_url
+    db.session.commit()
+    return jsonify({'success': True, 'avatar_url': user.avatar_url})
+
+@app.route('/api/profile/cover', methods=['POST'])
+def upload_cover():
+    """Mentor cover rasmini yuklash (multipart/form-data yoki base64 JSON)"""
+    user = get_current_user()
+    if not user or user.role != 'mentor':
+        return jsonify({'success': False, 'error': "Ruxsat yo'q"}), 403
+    if not user.mentor_profile:
+        return jsonify({'success': False, 'error': 'Mentor profil topilmadi'}), 404
+
+    cover_url = None
+
+    # Multipart fayl yuklash
+    if request.content_type and 'multipart' in request.content_type:
+        f = request.files.get('cover')
+        if f and f.filename:
+            ext = f.filename.rsplit('.', 1)[-1].lower() if '.' in f.filename else 'jpg'
+            if ext not in {'png', 'jpg', 'jpeg', 'gif', 'webp'}:
+                return jsonify({'success': False, 'error': "Faqat rasm fayllari (PNG, JPG, WEBP)"}), 400
+            folder = os.path.join(UPLOAD_FOLDER, 'covers')
+            os.makedirs(folder, exist_ok=True)
+            filename = secure_filename(f"cover_{user.id}.{ext}")
+            f.save(os.path.join(folder, filename))
+            cover_url = f"/uploads/covers/{filename}"
+    else:
+        # Base64 JSON
+        data = request.get_json(force=True, silent=True) or {}
+        cover_url = data.get('cover_url', '').strip()
+
+    if not cover_url:
+        return jsonify({'success': False, 'error': 'Cover rasm kerak'}), 400
+
+    user.mentor_profile.cover_url = cover_url
+    db.session.commit()
+    return jsonify({'success': True, 'cover_url': cover_url})
+
+@app.route('/api/profile/avatar-upload', methods=['POST'])
+def upload_avatar_file():
+    """Avatar rasmini fayl sifatida yuklash (multipart/form-data)"""
+    user = get_current_user()
+    if not user:
+        return jsonify({'success': False, 'error': 'Kirilmagan'}), 401
+    f = request.files.get('avatar')
+    if not f or not f.filename:
+        return jsonify({'success': False, 'error': "Fayl yo'q"}), 400
+    ext = f.filename.rsplit('.', 1)[-1].lower() if '.' in f.filename else 'jpg'
+    if ext not in {'png', 'jpg', 'jpeg', 'gif', 'webp'}:
+        return jsonify({'success': False, 'error': "Faqat rasm fayllari"}), 400
+    folder = os.path.join(UPLOAD_FOLDER, 'avatars')
+    os.makedirs(folder, exist_ok=True)
+    filename = secure_filename(f"avatar_{user.id}.{ext}")
+    f.save(os.path.join(folder, filename))
+    user.avatar_url = f"/uploads/avatars/{filename}"
     db.session.commit()
     return jsonify({'success': True, 'avatar_url': user.avatar_url})
 
