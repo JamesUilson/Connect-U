@@ -2218,16 +2218,34 @@ function renderFacultyDetail(u, idx) {
   if (!u.faculties || !u.faculties[idx]) return;
   
   const f = u.faculties[idx];
-  const years = f.stats && f.stats.length ? f.stats.map(s => `${s.year}:${s.max_score || 0}`) : ['2022:0', '2023:0', '2024:0'];
-  
-  const maxScore = Math.max(...years.map(y => parseInt(y.split(':')[1]) || 0));
-  const barsHtml = years.map((y, i) => {
-    const [yr, sc] = y.split(':');
-    const h = maxScore ? Math.round((parseInt(sc) / maxScore) * 100) : 10;
+  const stats = f.stats && f.stats.length ? f.stats.sort((a,b) => a.year - b.year) : [];
+
+  // Oxirgi yil statistikasi (2024 yoki eng so'nggi)
+  const latestStat = stats.length ? stats[stats.length - 1] : null;
+  const applicants = latestStat && latestStat.applicants ? latestStat.applicants.toLocaleString() : '—';
+  const latestYear = latestStat ? latestStat.year : '2024';
+  const minScore = latestStat && latestStat.min_score ? latestStat.min_score : null;
+  const maxScore2 = latestStat && latestStat.max_score ? latestStat.max_score : null;
+  const ballDiapazon = (minScore && maxScore2) ? minScore + ' – ' + maxScore2 : (maxScore2 ? maxScore2 : '—');
+
+  // Raqobat darajasi = arizalar / kvota
+  let raqobat = '—';
+  if (latestStat && latestStat.applicants && f.quota) {
+    const r = (latestStat.applicants / f.quota).toFixed(1);
+    raqobat = r + 'x';
+  }
+
+  // Ball dinamikasi chart
+  const chartYears = stats.length ? stats : [
+    {year:2022,max_score:0},{year:2023,max_score:0},{year:2024,max_score:0}
+  ];
+  const maxSc = Math.max(...chartYears.map(s => s.max_score || 0));
+  const barsHtml = chartYears.map((s, i) => {
+    const h = maxSc ? Math.round(((s.max_score || 0) / maxSc) * 100) : 10;
     return `<div class="year-bar-wrap">
-      <div class="year-score">${sc}</div>
-      <div class="year-bar${i === years.length - 1 ? ' current' : ''}" style="height:${h}%"></div>
-      <div class="year-label">${yr}</div>
+      <div class="year-score">${s.max_score || 0}</div>
+      <div class="year-bar${i === chartYears.length - 1 ? ' current' : ''}" style="height:${Math.max(h,6)}%"></div>
+      <div class="year-label">${s.year}</div>
     </div>`;
   }).join('');
 
@@ -2236,18 +2254,18 @@ function renderFacultyDetail(u, idx) {
       <img class="faculty-img" src="${f.cover_url || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&q=80'}" alt="${f.name}" loading="lazy">
       <div class="fd-header">
         <div class="fd-title">${f.name}</div>
-        <div class="fd-desc">${f.description || 'Ma\'lumot yo\'q'}</div>
+        <div class="fd-desc">${f.description || "Ma'lumot yo'q"}</div>
       </div>
 
       <div class="stats-2col">
         <div class="stat-card-sm"><div class="val">${f.quota || '—'}</div><div class="lbl">Kvota (o'rin soni)</div></div>
-        <div class="stat-card-sm"><div class="val">—</div><div class="lbl">2024 ariza berganlar</div></div>
-        <div class="stat-card-sm"><div class="val">—</div><div class="lbl">Ball diapazoni</div></div>
-        <div class="stat-card-sm"><div class="val" style="color:var(--teal)">—</div><div class="lbl">Raqobat darajasi</div></div>
+        <div class="stat-card-sm"><div class="val">${applicants}</div><div class="lbl">${latestYear} ariza berganlar</div></div>
+        <div class="stat-card-sm"><div class="val">${ballDiapazon}</div><div class="lbl">Ball diapazoni</div></div>
+        <div class="stat-card-sm"><div class="val" style="color:var(--teal)">${raqobat}</div><div class="lbl">Raqobat darajasi</div></div>
       </div>
 
       <div style="margin-bottom:16px;">
-        <div class="section-label" style="padding:0;">BALL DINAMIKASI (3 YIL)</div>
+        <div class="section-label" style="padding:0;">BALL DINAMIKASI (${chartYears.length} YIL)</div>
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-top:8px;">
           <div class="year-chart">${barsHtml}</div>
         </div>
