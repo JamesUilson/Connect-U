@@ -1579,14 +1579,35 @@ function renderFaculties() {
     return;
   }
   el.innerHTML = currentUniFaculties.map(function(f, idx) {
-    return '<div style="background:var(--s2);border-radius:var(--r-sm);padding:12px;margin-bottom:8px">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-weight:600">' + f.name + '</span>' +
-      '<button class="btn btn-red btn-sm" onclick="removeFaculty(' + idx + ')" style="padding:2px 8px">✕</button></div>' +
-      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">' +
-      '<div>Kvota: <input type="number" class="f-input" value="' + (f.quota||'') + '" onchange="updateFaculty(' + idx + ',\'quota\',this.value)" style="width:80px;padding:4px 6px"></div>' +
-      '<div>Bandlik %: <input type="number" class="f-input" value="' + (f.employment_pct||'') + '" onchange="updateFaculty(' + idx + ',\'employment_pct\',this.value)" style="width:80px;padding:4px 6px"></div>' +
-      '<div>Maosh (M): <input type="number" class="f-input" value="' + (f.avg_salary_mln||'') + '" onchange="updateFaculty(' + idx + ',\'avg_salary_mln\',this.value)" style="width:80px;padding:4px 6px"></div>' +
-      '</div></div>';
+    // Yillik stats (2022, 2023, 2024)
+    var statsYears = [2022, 2023, 2024];
+    var statsHtml = statsYears.map(function(yr) {
+      var st = (f.stats || []).find(function(s){ return s.year === yr || s.year === String(yr); }) || {};
+      return '<div style="background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:10px 8px">' +
+        '<div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:8px;text-align:center">' + yr + '</div>' +
+        '<div style="display:flex;flex-direction:column;gap:6px;font-size:11px">' +
+        '<div style="display:flex;align-items:center;gap:4px"><span style="color:var(--text2);flex:1">Min ball:</span><input type="number" class="f-input" value="' + (st.min_score||'') + '" placeholder="0" oninput="updateStat(' + idx + ',' + yr + ',\'min_score\',this.value)" style="width:64px;padding:3px 5px;font-size:11px"></div>' +
+        '<div style="display:flex;align-items:center;gap:4px"><span style="color:var(--text2);flex:1">Max ball:</span><input type="number" class="f-input" value="' + (st.max_score||'') + '" placeholder="0" oninput="updateStat(' + idx + ',' + yr + ',\'max_score\',this.value)" style="width:64px;padding:3px 5px;font-size:11px"></div>' +
+        '<div style="display:flex;align-items:center;gap:4px"><span style="color:var(--text2);flex:1">Arizalar:</span><input type="number" class="f-input" value="' + (st.applicants||'') + '" placeholder="0" oninput="updateStat(' + idx + ',' + yr + ',\'applicants\',this.value)" style="width:64px;padding:3px 5px;font-size:11px"></div>' +
+        '</div></div>';
+    }).join('');
+
+    return '<div style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:10px">' +
+      // Sarlavha + o'chirish
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">' +
+        '<span style="font-weight:600;font-size:13px">' + f.name + '</span>' +
+        '<button class="btn btn-red btn-sm" onclick="removeFaculty(' + idx + ')" style="padding:2px 8px">✕</button>' +
+      '</div>' +
+      // Asosiy ma'lumotlar
+      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px">' +
+        '<div style="display:flex;flex-direction:column;gap:4px"><span style="color:var(--text2)">Kvota</span><input type="number" class="f-input" value="' + (f.quota||'') + '" placeholder="0" oninput="updateFaculty(' + idx + ',\'quota\',this.value)" style="padding:5px 8px;font-size:12px"></div>' +
+        '<div style="display:flex;flex-direction:column;gap:4px"><span style="color:var(--text2)">Bandlik %</span><input type="number" class="f-input" value="' + (f.employment_pct||'') + '" placeholder="0" oninput="updateFaculty(' + idx + ',\'employment_pct\',this.value)" style="padding:5px 8px;font-size:12px"></div>' +
+        '<div style="display:flex;flex-direction:column;gap:4px"><span style="color:var(--text2)">Maosh (M so\'m)</span><input type="number" class="f-input" value="' + (f.avg_salary_mln||'') + '" placeholder="0" step="0.1" oninput="updateFaculty(' + idx + ',\'avg_salary_mln\',this.value)" style="padding:5px 8px;font-size:12px"></div>' +
+      '</div>' +
+      // Yillik statistika
+      '<div style="font-size:11px;font-weight:600;color:var(--text2);letter-spacing:1px;margin-bottom:6px">📊 BALL DINAMIKASI VA ARIZALAR</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">' + statsHtml + '</div>' +
+      '</div>';
   }).join('');
 }
 function addFaculty() {
@@ -1605,6 +1626,13 @@ function addFaculty() {
 function removeFaculty(idx) { currentUniFaculties.splice(idx, 1); renderFaculties(); }
 function updateFaculty(idx, field, value) {
   currentUniFaculties[idx][field] = field === 'avg_salary_mln' ? parseFloat(value) : parseInt(value);
+}
+function updateStat(facultyIdx, year, field, value) {
+  if (!currentUniFaculties[facultyIdx].stats) currentUniFaculties[facultyIdx].stats = [];
+  var stats = currentUniFaculties[facultyIdx].stats;
+  var st = stats.find(function(s){ return s.year === year || s.year === String(year); });
+  if (!st) { st = { year: year }; stats.push(st); }
+  st[field] = parseInt(value) || 0;
 }
 async function saveUni() {
   var uniData = {
@@ -1631,11 +1659,37 @@ async function saveUni() {
       var facultyId = faculty.id && !faculty.id.toString().startsWith('new_') ? faculty.id : null;
       var facultyUrl = facultyId ? '/api/faculties/' + facultyId : '/api/universities/' + uniId + '/faculties';
       var facultyMethod = facultyId ? 'PUT' : 'POST';
-      await fetch(facultyUrl, { method: facultyMethod, headers: {'Content-Type':'application/json'}, body: JSON.stringify(faculty), credentials: 'include' });
+      var fRes = await fetch(facultyUrl, { method: facultyMethod, headers: {'Content-Type':'application/json'}, body: JSON.stringify(faculty), credentials: 'include' });
+      var fData = await fRes.json();
+      // Stats saqlash
+      var realFacultyId = (fData.faculty && fData.faculty.id) || facultyId;
+      if (realFacultyId && faculty.stats && faculty.stats.length) {
+        for (var j = 0; j < faculty.stats.length; j++) {
+          var st = faculty.stats[j];
+          if (!st.year) continue;
+          // POST yoki PUT — har ikkalasini urinib ko'ramiz
+          await fetch('/api/faculties/' + realFacultyId + '/stats', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(st),
+            credentials: 'include'
+          }).then(function(r){ return r.json(); }).then(function(sd){
+            if (!sd.success && sd.error && sd.error.indexOf('mavjud') !== -1) {
+              // Allaqachon bor — PUT bilan yangilaymiz
+              return fetch('/api/faculties/' + realFacultyId + '/stats', {
+                method: 'PUT',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify(st),
+                credentials: 'include'
+              });
+            }
+          }).catch(function(){});
+        }
+      }
     }
     closeModal('uniModal');
     await loadUniversities();
-    showToast('✅ Muvaffaqiyatli saqlandi');
+    showToast('\u2705 Muvaffaqiyatli saqlandi');
   } catch (e) { showToast('Xatolik yuz berdi', 'err'); }
 }
 async function deleteUni(id) {
